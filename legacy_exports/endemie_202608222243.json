@@ -1,0 +1,8745 @@
+{
+"endemie": [
+	{
+		"zone_id" : 1,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 1,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 1,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : null,
+		"datefin" : null
+	},
+	{
+		"zone_id" : 1,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 2,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 2,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 2,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 2,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 3,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 3,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 3,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 3,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 4,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 4,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 4,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 4,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 5,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 5,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 5,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 5,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 6,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 6,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 6,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 6,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 7,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 7,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 7,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 7,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 8,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 8,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 8,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 8,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 9,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 9,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 9,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 9,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 10,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 10,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 10,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 10,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 11,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 11,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 11,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 11,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 12,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 12,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 12,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 12,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 13,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 13,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 13,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 13,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 14,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 14,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 14,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 14,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 15,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 15,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 15,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 15,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 16,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 16,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 16,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 16,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 17,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 17,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 17,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 17,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 17,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 18,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 18,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 18,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 18,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 19,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 19,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 19,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 19,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 20,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 20,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 20,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 20,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 21,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 21,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 21,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 21,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 21,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 21,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 22,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 23,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 24,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 25,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 25,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 25,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 26,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 26,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 26,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 27,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 27,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 27,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 27,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 28,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 28,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 28,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 28,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 29,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 29,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 29,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 29,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 30,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 30,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 30,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 30,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 31,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 31,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 31,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 31,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 32,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 32,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 32,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 32,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 33,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 35,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 35,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 35,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 35,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 36,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 36,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 36,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 36,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 37,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 37,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 37,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 37,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 37,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 38,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 38,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 38,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 38,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 38,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 39,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 39,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 39,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 39,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 39,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 40,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 40,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 40,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 40,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 40,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 41,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 41,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 41,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 41,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 42,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 42,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 42,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 42,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 43,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 43,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 43,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 43,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 43,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 44,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 44,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 44,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 44,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 44,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 45,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 46,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 46,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 46,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 46,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 46,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 47,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 47,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 47,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 47,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 47,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 48,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 48,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 48,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 48,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 49,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 49,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 49,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 49,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 49,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 50,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 50,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 50,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 50,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 50,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 51,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 51,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 51,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 51,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 52,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 52,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 52,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 52,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 54,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 54,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 54,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 54,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 57,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 57,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 57,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 57,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 57,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 58,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 58,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 58,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 58,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 59,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 59,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 59,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 59,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 59,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 60,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 60,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 61,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 61,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 61,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 62,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 62,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 63,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 63,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 64,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 64,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 64,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 64,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 64,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 65,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 65,
+		"conduiteatenir_code" : "TYP_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 66,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 66,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 67,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 67,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 68,
+		"conduiteatenir_code" : "IIM_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 69,
+		"conduiteatenir_code" : "IIM_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 70,
+		"conduiteatenir_code" : "IIM_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-06-13T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 71,
+		"conduiteatenir_code" : "FJ_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 72,
+		"conduiteatenir_code" : "FJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 73,
+		"conduiteatenir_code" : "FJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 75,
+		"conduiteatenir_code" : "FJ_3",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 76,
+		"conduiteatenir_code" : "FJ_3",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 77,
+		"conduiteatenir_code" : "FJ_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 78,
+		"conduiteatenir_code" : "FJ_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 79,
+		"conduiteatenir_code" : "FJ_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 80,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 82,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 84,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 84,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 84,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 85,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 86,
+		"conduiteatenir_code" : "EJ_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-02T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 86,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 87,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-02T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 88,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 88,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 89,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 89,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 89,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 91,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 91,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 91,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 92,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 92,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 92,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 93,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 93,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 93,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 93,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 95,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 95,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 95,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 130,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 130,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 130,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 131,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 131,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 131,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 133,
+		"conduiteatenir_code" : "EJ_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 183,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 184,
+		"conduiteatenir_code" : "EAT_OC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 185,
+		"conduiteatenir_code" : "EAT_2",
+		"datedeb" : "2021-08-09T12:41:17.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 185,
+		"conduiteatenir_code" : "EAT_RC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 186,
+		"conduiteatenir_code" : "EAT_1B",
+		"datedeb" : "2021-08-11T08:59:14.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 186,
+		"conduiteatenir_code" : "EAT_OR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 187,
+		"conduiteatenir_code" : "EAT_1B",
+		"datedeb" : "2021-08-11T08:59:14.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 187,
+		"conduiteatenir_code" : "EAT_OR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 190,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 190,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 191,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 191,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 192,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 192,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 193,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 193,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 194,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 194,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 196,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 196,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 196,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 197,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 197,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 198,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 198,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 199,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 199,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 199,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 259,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 260,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 261,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 262,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "2020-02-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 262,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2020-02-10T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 263,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 264,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 264,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 264,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-08-01T01:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 264,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 265,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 265,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 265,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 266,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 267,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 268,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 269,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "2020-02-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 269,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2020-02-10T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 269,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 269,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-08-01T01:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 270,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 270,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 270,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2018-12-16T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 271,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 272,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 273,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 274,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 275,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 276,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 277,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 278,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "2020-02-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 278,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2020-02-10T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 280,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 281,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 282,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 283,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 284,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 285,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 286,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-05-21T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 287,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 288,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 290,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 290,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 291,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 292,
+		"conduiteatenir_code" : "P_T1_AM",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 293,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 294,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 295,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 296,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 296,
+		"conduiteatenir_code" : "P_T3_P",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 297,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 298,
+		"conduiteatenir_code" : "P_T1_AM",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 299,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 300,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 336,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 336,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 336,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 336,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 337,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 337,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 338,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 338,
+		"conduiteatenir_code" : "P_T3_P",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 339,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 339,
+		"conduiteatenir_code" : "P_T3_P",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 340,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 340,
+		"conduiteatenir_code" : "P_T3_P",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 341,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 342,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-05-21T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 343,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 344,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 345,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 346,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 347,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 348,
+		"conduiteatenir_code" : "P_T2_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2018-06-11T01:09:11.000Z"
+	},
+	{
+		"zone_id" : 349,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2020-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 350,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2020-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 351,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2020-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 352,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 353,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2020-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 354,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 355,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 356,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 357,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 358,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 359,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 360,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 361,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 362,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 362,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 363,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 364,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 364,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 365,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 366,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 367,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 368,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 369,
+		"conduiteatenir_code" : "P_T2_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 370,
+		"conduiteatenir_code" : "P_T2_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 371,
+		"conduiteatenir_code" : "P_T2_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 372,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 373,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 374,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 375,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 376,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 377,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 379,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 380,
+		"conduiteatenir_code" : "P_T3_NOV",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 385,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 386,
+		"conduiteatenir_code" : "P_T3_JUI",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 387,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 387,
+		"conduiteatenir_code" : "P_T3",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 388,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 388,
+		"conduiteatenir_code" : "P_T3",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 389,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 390,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 391,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 392,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 393,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 394,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-01-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 395,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 396,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 397,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 398,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 399,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 399,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 400,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 401,
+		"conduiteatenir_code" : "P_T3_P_R",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 402,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 402,
+		"conduiteatenir_code" : "P_T3_SEP",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 403,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 404,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 405,
+		"conduiteatenir_code" : "P_T1_MAI",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 406,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 406,
+		"conduiteatenir_code" : "P_T3_MAI_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 407,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 407,
+		"conduiteatenir_code" : "P_T3_MAI_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 408,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 409,
+		"conduiteatenir_code" : "P_T1_MAI",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 410,
+		"conduiteatenir_code" : "P_T1_MAI",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 411,
+		"conduiteatenir_code" : "P_T1_MAI",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 412,
+		"conduiteatenir_code" : "P_T1_MAI",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 414,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2019-05-21T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 418,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 419,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 422,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 423,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 423,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 424,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 424,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 424,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 424,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 424,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 424,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 425,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 425,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 425,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 425,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 425,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 426,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 426,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 426,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 427,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 427,
+		"conduiteatenir_code" : "P_NOPALU",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 427,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 427,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 427,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 428,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 429,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 430,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 430,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 430,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 430,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 430,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 430,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2017-01-01T01:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 431,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 431,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-06-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 431,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 431,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 432,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 432,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 433,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 433,
+		"conduiteatenir_code" : "ZIK_CAT4",
+		"datedeb" : "2016-07-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 434,
+		"conduiteatenir_code" : "ZIK_CAT4",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 435,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 435,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 435,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 435,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 435,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 436,
+		"conduiteatenir_code" : "P_NOPALU",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 436,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 436,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 437,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 437,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 437,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 438,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 439,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 440,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 440,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 440,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 440,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 441,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 441,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 442,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 442,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 442,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 443,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 443,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 443,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 443,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 443,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 443,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 443,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 444,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 444,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 445,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 446,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 446,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 446,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 446,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-03-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 447,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 447,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 447,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 447,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 447,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 448,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 449,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 449,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 449,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 449,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 450,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 450,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 450,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 451,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 451,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 451,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 451,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2015-12-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 452,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 452,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 452,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 453,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 453,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 453,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 453,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 454,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 454,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 454,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 454,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 454,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2015-05-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 455,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 455,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 455,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 455,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 456,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 456,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 456,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 457,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 457,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 457,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 457,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 457,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 457,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 458,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 458,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 458,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 458,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 458,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 458,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 459,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 459,
+		"conduiteatenir_code" : "ZIK_SPO",
+		"datedeb" : "2016-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 460,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 460,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 460,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 460,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 460,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 460,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 461,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 461,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 461,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 461,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 461,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 461,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 462,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 462,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 462,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 463,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 463,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 463,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 463,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 463,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 464,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 464,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-03-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 464,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 464,
+		"conduiteatenir_code" : "ZIK_SPO",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 465,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 465,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 465,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 465,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 465,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 466,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 466,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 467,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 468,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 468,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 469,
+		"conduiteatenir_code" : "FJ_CO",
+		"datedeb" : "2019-07-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 469,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 469,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 469,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 469,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2015-10-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 469,
+		"conduiteatenir_code" : "ZIK_2",
+		"datedeb" : "2016-07-26T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 469,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 469,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2016-08-26T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 470,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 470,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 470,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 471,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 471,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 471,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 471,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 471,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 472,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 472,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 472,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 472,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 472,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 473,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 473,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 473,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 474,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 474,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 474,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 474,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 475,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 475,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 475,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 475,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 476,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 476,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 476,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 476,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2016-02-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 477,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 477,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 477,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 477,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 477,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 477,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 478,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 478,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 478,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 479,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 479,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 479,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 479,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-03-01T10:19:34.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 479,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 479,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 480,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 481,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 481,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 481,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 481,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 481,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 482,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 482,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 483,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 483,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 483,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 483,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 483,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 483,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 484,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 484,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 484,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 484,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 484,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 484,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 485,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 485,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 485,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 486,
+		"conduiteatenir_code" : "FJ_EC",
+		"datedeb" : "2019-07-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 486,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 486,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 486,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 486,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 486,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 486,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2015-12-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 487,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 487,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 487,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 487,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 488,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 489,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 489,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 490,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 490,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 491,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 491,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 491,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 491,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 492,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 492,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 493,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 493,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 494,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 494,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 494,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2015-05-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 494,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 495,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 497,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 497,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 497,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 497,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 497,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 498,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 498,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 498,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 498,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 499,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 499,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 499,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 499,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 500,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 500,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 500,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 500,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 500,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 501,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 502,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 502,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 502,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-07-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 503,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 503,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 503,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 504,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 504,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 504,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 504,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 505,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 506,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 506,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 506,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 506,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 506,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2015-12-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 507,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 507,
+		"conduiteatenir_code" : "EBO",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 507,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 507,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 507,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 507,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 508,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 508,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 508,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 508,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 508,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-07-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 509,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 509,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 509,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 509,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 510,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 510,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 510,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 510,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2015-12-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 511,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 511,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 511,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 511,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 512,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 512,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 512,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 512,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 512,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 512,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 512,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 513,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 513,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 513,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 513,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 513,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2015-12-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 514,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 514,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 514,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 515,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 515,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 515,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 516,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 516,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 516,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 516,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 516,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 517,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 517,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 517,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 517,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 517,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2014-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 517,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 517,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 517,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2016-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 518,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 518,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 518,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 518,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 518,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 518,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 519,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 519,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 519,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 519,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 519,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 519,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 519,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 520,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 521,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 522,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 522,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 523,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 524,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 524,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2016-02-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 525,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 525,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 526,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 526,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 526,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 526,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 526,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 527,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 527,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 527,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 528,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 528,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 528,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 528,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 528,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2019-07-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 529,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 529,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 529,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 529,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 530,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 531,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 531,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 531,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 531,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 532,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 532,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 532,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 532,
+		"conduiteatenir_code" : "P_T3_A_NR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 532,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 532,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 532,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 532,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 533,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 533,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 533,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 533,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 534,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 534,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 535,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 535,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 535,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 535,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 535,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 535,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 536,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 536,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 536,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 536,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 536,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 537,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 537,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 537,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 537,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 537,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 538,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 538,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 539,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 539,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 540,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 541,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 541,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 541,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 543,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 543,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 543,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 543,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2016-12-15T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 544,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2016-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 545,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 545,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 545,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 545,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 545,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 546,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 546,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 546,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 546,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2015-05-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 546,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-09-15T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 546,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-12-15T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 547,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 547,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 547,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 547,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 547,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 548,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 549,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 550,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 550,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 550,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 550,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 550,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 551,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 551,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-02-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 552,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 552,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 552,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 552,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 553,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 553,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 554,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 554,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 554,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 554,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 555,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 556,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 556,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 556,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 556,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 556,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2015-11-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 557,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 557,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 557,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 558,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 558,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 558,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 559,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 560,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 560,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 560,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 560,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 561,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 561,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 561,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 562,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 562,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 562,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 562,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 562,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 563,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 563,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 563,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 563,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 563,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 564,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 564,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 564,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 564,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 564,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 564,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 565,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 565,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 565,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 565,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 566,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 566,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 567,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 567,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 567,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 567,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 567,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 568,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 568,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 568,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 568,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 568,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 569,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 569,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 569,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 569,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 569,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 570,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 570,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 570,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 570,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 570,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 570,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 570,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 571,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 571,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 572,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 572,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 573,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 574,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 574,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2015-05-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 574,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 574,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 575,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "2018-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 575,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "2018-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 575,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 576,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 576,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 576,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 576,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 577,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 577,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 577,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 577,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 577,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 577,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 578,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 578,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 578,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 578,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 579,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 579,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 579,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 579,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 579,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 579,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 579,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 580,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 580,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-11-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 581,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 581,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 581,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 581,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 581,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2015-12-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 582,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 582,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 582,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 582,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-04-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 582,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 582,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 583,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 583,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 583,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 583,
+		"conduiteatenir_code" : "ZIK_CAT4",
+		"datedeb" : "2015-11-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 584,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 584,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 585,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 585,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 585,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 585,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 585,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 585,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 585,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2016-05-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 586,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 587,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 588,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 588,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 589,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 589,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2015-12-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 590,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 591,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 591,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 591,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 591,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 591,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 592,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 592,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 592,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 592,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 592,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 592,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 593,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 593,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-03-01T10:19:34.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 593,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 593,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 594,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 595,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 596,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 596,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 596,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 596,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 597,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 598,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 598,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 598,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 598,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 599,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 599,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 599,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 599,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 599,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 600,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 600,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 600,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 601,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 601,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-05-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 601,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 601,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 602,
+		"conduiteatenir_code" : "POL_1",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 602,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 602,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 602,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2016-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 603,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 603,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 604,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 604,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 604,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-03-01T00:00:01.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 605,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 605,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 606,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 606,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 607,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 607,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 608,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 608,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 608,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2015-02-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 609,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 609,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2015-05-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 609,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-10-15T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 610,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 610,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 610,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 610,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2015-11-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 611,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2014-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 612,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 612,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2014-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 612,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 612,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 613,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 613,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 613,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 614,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 614,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 614,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 614,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 614,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 615,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 615,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 615,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 616,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 616,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 616,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 616,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 617,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 617,
+		"conduiteatenir_code" : "EBO",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 617,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 617,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 617,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 617,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 618,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 618,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 618,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2016-07-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 619,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 619,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 620,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 620,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 620,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 621,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 621,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 621,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 621,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 621,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 622,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 622,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 622,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 622,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 623,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 623,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 623,
+		"conduiteatenir_code" : "P_NAPUPALU",
+		"datedeb" : "2017-10-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 623,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-10-10T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 623,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 623,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 623,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 623,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 624,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 624,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 625,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 625,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 626,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 626,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 626,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 626,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2015-11-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 627,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 627,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 627,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 627,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 628,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 628,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 629,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 629,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 629,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 629,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 630,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 630,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 630,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 631,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 631,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 631,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 631,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 632,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 632,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 632,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 632,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 632,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 632,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 633,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 633,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 633,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 633,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 633,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 634,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 634,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 634,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 634,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 634,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 635,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 635,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 635,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 635,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 635,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 635,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 635,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 635,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2014-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 636,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 636,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 636,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 637,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 637,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 637,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 637,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 637,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 638,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 639,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 639,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2016-02-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 640,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 640,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 640,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-02-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 640,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 640,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 641,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 641,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 641,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 641,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 642,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 642,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 642,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 642,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 643,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 643,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 644,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 644,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-07-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 644,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 644,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 645,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 645,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 645,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 645,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 646,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 646,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 647,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 647,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 647,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 648,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 648,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 648,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 649,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 649,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 649,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 649,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 649,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-09T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 649,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 650,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 650,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 650,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 650,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 650,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2015-11-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 651,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 652,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 652,
+		"conduiteatenir_code" : "ZIK_CAT_D",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 652,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2016-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 653,
+		"conduiteatenir_code" : "GA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 653,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 653,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 653,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 653,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-02-15T11:27:30.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 653,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-09-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 653,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2016-10-15T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 654,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 655,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 655,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 655,
+		"conduiteatenir_code" : "MRC",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 655,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 655,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 655,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 656,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 656,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 656,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 656,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 656,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 657,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 657,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 657,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 657,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 657,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 658,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 658,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 658,
+		"conduiteatenir_code" : "ZIK_CAT5",
+		"datedeb" : "2016-02-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 660,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 661,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2017-04-06T01:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 663,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 665,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 666,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 667,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 667,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 668,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 668,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 668,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 669,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 671,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 672,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 672,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 672,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 672,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 673,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 673,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 674,
+		"conduiteatenir_code" : "TB_PLUS",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 674,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 675,
+		"conduiteatenir_code" : "HB_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 675,
+		"conduiteatenir_code" : "RAG",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 675,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 676,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 677,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 677,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 677,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 678,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 678,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 678,
+		"conduiteatenir_code" : "HA_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 678,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 678,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 680,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2016-08-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 680,
+		"conduiteatenir_code" : "ZIK_SPO",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 681,
+		"conduiteatenir_code" : "EJ_1",
+		"datedeb" : "1995-05-02T01:09:11.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 683,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2016-11-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 683,
+		"conduiteatenir_code" : "ZIK_SPO",
+		"datedeb" : "2016-10-01T01:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 684,
+		"conduiteatenir_code" : "ZIK_SPO",
+		"datedeb" : "2016-12-01T01:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 685,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 686,
+		"conduiteatenir_code" : "FJ_EPI",
+		"datedeb" : "2017-01-02T01:09:11.000Z",
+		"datefin" : "2019-07-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 687,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 688,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 689,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 690,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 691,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 692,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 693,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 694,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 695,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 697,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2017-04-06T01:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 698,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 699,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 700,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2017-04-06T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 701,
+		"conduiteatenir_code" : "PES_1",
+		"datedeb" : "2017-10-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 702,
+		"conduiteatenir_code" : "PES_POT",
+		"datedeb" : "2017-10-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 703,
+		"conduiteatenir_code" : "TYP_2",
+		"datedeb" : "2017-10-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 704,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "2017-10-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 705,
+		"conduiteatenir_code" : "CHI_1",
+		"datedeb" : "2017-10-10T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 707,
+		"conduiteatenir_code" : "FJ_EPI",
+		"datedeb" : "2017-02-28T00:00:00.000Z",
+		"datefin" : "2019-07-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 708,
+		"conduiteatenir_code" : "FJ_EPI",
+		"datedeb" : "2017-02-28T00:00:00.000Z",
+		"datefin" : "2019-07-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 709,
+		"conduiteatenir_code" : "EJ_4",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 710,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 711,
+		"conduiteatenir_code" : "EJ_4",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 712,
+		"conduiteatenir_code" : "EJ_4",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 713,
+		"conduiteatenir_code" : "EJ_3",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 714,
+		"conduiteatenir_code" : "EJ_4",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 715,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 716,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 717,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 718,
+		"conduiteatenir_code" : "EJ_4",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 730,
+		"conduiteatenir_code" : "EJ_4",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 731,
+		"conduiteatenir_code" : "EJ_6",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 732,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 733,
+		"conduiteatenir_code" : "EJ_4",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 734,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 735,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 736,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : "2017-08-01T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 737,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : "2017-08-02T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 738,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : "2017-08-02T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 739,
+		"conduiteatenir_code" : "EJ_100",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 740,
+		"conduiteatenir_code" : "EJ_11",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 742,
+		"conduiteatenir_code" : "EJ_4",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 743,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 744,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 746,
+		"conduiteatenir_code" : "EJ_5",
+		"datedeb" : "2017-08-02T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 747,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 748,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 749,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 750,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 751,
+		"conduiteatenir_code" : "ZIK_CAT3",
+		"datedeb" : "2018-08-08T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 752,
+		"conduiteatenir_code" : "CHO_1",
+		"datedeb" : "2018-08-23T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 759,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 759,
+		"conduiteatenir_code" : "ZIK_CAT1",
+		"datedeb" : "2018-11-26T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 760,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 761,
+		"conduiteatenir_code" : "P_T1_A",
+		"datedeb" : "2018-12-16T00:00:00.000Z",
+		"datefin" : "2019-05-21T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 762,
+		"conduiteatenir_code" : "P_NOPALU_2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 764,
+		"conduiteatenir_code" : "DEN_1",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 765,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 765,
+		"conduiteatenir_code" : "ZIK_CAT4",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 766,
+		"conduiteatenir_code" : "ZIK_1",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 766,
+		"conduiteatenir_code" : "ZIK_CAT4",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 767,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 768,
+		"conduiteatenir_code" : "ZIK_CAT2",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2019-06-11T00:00:00.000Z"
+	},
+	{
+		"zone_id" : 769,
+		"conduiteatenir_code" : "ZIK_CAT_F",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 772,
+		"conduiteatenir_code" : "EAT_OC",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 773,
+		"conduiteatenir_code" : "EAT_2",
+		"datedeb" : "2021-08-09T12:41:17.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 773,
+		"conduiteatenir_code" : "EAT_OC",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 774,
+		"conduiteatenir_code" : "EAT_OR",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 775,
+		"conduiteatenir_code" : "EAT_1B",
+		"datedeb" : "2021-08-11T08:59:14.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 775,
+		"conduiteatenir_code" : "EAT_OR",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 776,
+		"conduiteatenir_code" : "EAT_1B",
+		"datedeb" : "2021-08-11T08:59:14.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 776,
+		"conduiteatenir_code" : "EAT_OR",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 777,
+		"conduiteatenir_code" : "EAT_OR",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : "2021-08-11T08:59:14.000Z"
+	},
+	{
+		"zone_id" : 778,
+		"conduiteatenir_code" : "P_T3_A_SR",
+		"datedeb" : "2019-05-21T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 780,
+		"conduiteatenir_code" : "P_T3_A",
+		"datedeb" : "2019-05-21T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 781,
+		"conduiteatenir_code" : "FJ_1",
+		"datedeb" : "2019-01-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 782,
+		"conduiteatenir_code" : "ZIK_CAT_C",
+		"datedeb" : "2019-06-12T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 783,
+		"conduiteatenir_code" : "FJ_3",
+		"datedeb" : "2019-07-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 784,
+		"conduiteatenir_code" : "FJ_4",
+		"datedeb" : "2019-07-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 785,
+		"conduiteatenir_code" : "ZIK_CAT_E",
+		"datedeb" : "2019-08-01T00:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 801,
+		"conduiteatenir_code" : "EAT_2",
+		"datedeb" : "2021-08-09T12:41:17.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 802,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "2021-08-10T15:03:19.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 803,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "2021-08-10T15:25:15.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 804,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "2021-08-11T08:22:38.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 805,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 806,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "2021-08-11T11:32:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 807,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "2021-08-11T09:45:49.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 808,
+		"conduiteatenir_code" : "EAT_2",
+		"datedeb" : "2021-08-11T11:51:50.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 809,
+		"conduiteatenir_code" : "EAT_2",
+		"datedeb" : "2021-08-09T12:41:17.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 810,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "2021-08-09T12:41:17.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 811,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 812,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	},
+	{
+		"zone_id" : 813,
+		"conduiteatenir_code" : "EAT_1A",
+		"datedeb" : "1995-05-02T01:00:00.000Z",
+		"datefin" : null
+	}
+]}

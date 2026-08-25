@@ -30,28 +30,30 @@
    accès après une période d'inactivité : 30-60 secondes (palier gratuit,
    sans incidence pour un usage ponctuel par le médecin).
 
-5. **Initialiser la base**, depuis l'onglet *Shell* du service sur Render
-   (ou en local si `DATABASE_URL` est aussi dans ton `.env`) :
-   ```
-   python manage.py migrate
-   python manage.py createsuperuser
-   python manage.py migrate_legacy_data /chemin/vers/le/dossier/json
-   ```
-   Le dossier JSON doit contenir les 6 fichiers : `_zone__202608221002.json`,
-   `risque_202608222244.json`, `conduiteatenir_202608222244.json`,
-   `endemie_202608222243.json`, `pays_202608241323.json`,
-   `zonesaine_202608241320.json`.
+5. **Créer le compte admin** — ajouter 3 variables d'environnement sur Render
+   (onglet *Environment* du service) : `DJANGO_SUPERUSER_USERNAME`,
+   `DJANGO_SUPERUSER_EMAIL`, `DJANGO_SUPERUSER_PASSWORD`. Elles sont lues
+   automatiquement au démarrage du conteneur (`entrypoint.sh`) — pas besoin
+   du Shell Render, indisponible sur le palier gratuit.
 
-   Sur le palier gratuit, le shell Render n'a pas accès à des fichiers
-   locaux — le plus simple est de committer temporairement le dossier JSON
-   dans le repo (dans un sous-dossier, ex. `legacy_exports/`) pour que la
-   commande puisse le lire depuis le service déployé, puis de le retirer
-   une fois l'import fait.
+6. **Importer les données historiques**, toujours sans Shell :
+   - Créer un sous-dossier `legacy_exports/` à la racine du repo, y copier
+     les 6 fichiers JSON (`_zone__202608221002.json`,
+     `risque_202608222244.json`, `conduiteatenir_202608222244.json`,
+     `endemie_202608222243.json`, `pays_202608241323.json`,
+     `zonesaine_202608241320.json`).
+   - Sur Render, ajouter la variable d'environnement `RUN_LEGACY_IMPORT=true`.
+   - `git add . && git commit -m "Import données historiques" && git push`
+     — Render redéploie, et l'import se lance automatiquement au démarrage.
+   - Une fois l'import confirmé (cf. étape 7), repasser `RUN_LEGACY_IMPORT`
+     à `false` sur Render, pour que l'import ne se relance pas à chaque
+     redémarrage du conteneur (le palier gratuit s'endort après 15 min
+     d'inactivité et redémarre au prochain accès).
 
-6. **Accéder à l'admin** : `https://<nom-du-service>.onrender.com/admin/`
+7. **Accéder à l'admin** : `https://<nom-du-service>.onrender.com/admin/`
    — se connecter avec le compte créé à l'étape 5. Le médecin peut consulter
-   et modifier `Zone`, `Risque`, `ConduiteATenir`, `Endemie` et `ZoneSaine`,
-   avec widget carte pour les champs géométriques.
+   et modifier `Zone`, `Risque`, `ConduiteATenir`, `Endemie`, `Pays` et
+   `ZoneSaine`, avec widget carte pour les champs géométriques.
 
 ## En attente / non bloquant
 

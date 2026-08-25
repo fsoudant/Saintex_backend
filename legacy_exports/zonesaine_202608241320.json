@@ -1,0 +1,723 @@
+{
+"zonesaine": [
+	{
+		"id" : 2,
+		"libelle_fr" : "Ville de Calcutta",
+		"libelle_en" : "City of Calcutta",
+		"lat" : 22.6039,
+		"long" : 88.3521,
+		"endemie_cat_code" : "P_T3_A_SR",
+		"endemie_zone_id" : 278,
+		"pays_uid" : 93
+	},
+	{
+		"id" : 3,
+		"libelle_fr" : "Ville de Bangalore",
+		"libelle_en" : "City of Bangalore",
+		"lat" : 13.026,
+		"long" : 77.6074,
+		"endemie_cat_code" : "P_T3_A_SR",
+		"endemie_zone_id" : 262,
+		"pays_uid" : 93
+	},
+	{
+		"id" : 4,
+		"libelle_fr" : "Ville de Bombay",
+		"libelle_en" : "City of Mumbay",
+		"lat" : 19.1036,
+		"long" : 72.8613,
+		"endemie_cat_code" : "P_T3_A_SR",
+		"endemie_zone_id" : 261,
+		"pays_uid" : 93
+	},
+	{
+		"id" : 5,
+		"libelle_fr" : "Ville de Nagpur",
+		"libelle_en" : "City of Nagpur",
+		"lat" : 21.1665,
+		"long" : 79.0137,
+		"endemie_cat_code" : "P_T3_A_SR",
+		"endemie_zone_id" : 261,
+		"pays_uid" : 93
+	},
+	{
+		"id" : 6,
+		"libelle_fr" : "Ville de Nasik",
+		"libelle_en" : "City of Nasik",
+		"lat" : 20.0559,
+		"long" : 73.7402,
+		"endemie_cat_code" : "P_T3_A_SR",
+		"endemie_zone_id" : 261,
+		"pays_uid" : 93
+	},
+	{
+		"id" : 7,
+		"libelle_fr" : "Ville de Pune",
+		"libelle_en" : "City of Pune",
+		"lat" : 18.6046,
+		"long" : 73.8721,
+		"endemie_cat_code" : "P_T3_A_SR",
+		"endemie_zone_id" : 261,
+		"pays_uid" : 93
+	},
+	{
+		"id" : 8,
+		"libelle_fr" : "Ville de La Mecque",
+		"libelle_en" : "City of Medina",
+		"lat" : 21.4531,
+		"long" : 39.8145,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 9,
+		"libelle_fr" : "Ville de Médine",
+		"libelle_en" : null,
+		"lat" : 24.4471,
+		"long" : 39.5947,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 10,
+		"libelle_fr" : "Chutes d'Iguazu",
+		"libelle_en" : "Iguazu Falls",
+		"lat" : -25.6883,
+		"long" : -54.4452,
+		"endemie_cat_code" : "P_T1_A",
+		"endemie_zone_id" : 356,
+		"pays_uid" : 31
+	},
+	{
+		"id" : 11,
+		"libelle_fr" : "Ville de Bakou",
+		"libelle_en" : null,
+		"lat" : 40.4135,
+		"long" : 49.8669,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 12,
+		"libelle_fr" : "Ville de Dhaka",
+		"libelle_en" : null,
+		"lat" : 23.8155,
+		"long" : 90.4065,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 13,
+		"libelle_fr" : "Ville de Belize city",
+		"libelle_en" : null,
+		"lat" : 17.5079,
+		"long" : -88.2037,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 14,
+		"libelle_fr" : "Ville de Francistown",
+		"libelle_en" : null,
+		"lat" : -21.146,
+		"long" : 27.5098,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 15,
+		"libelle_fr" : "Ville de Garborone",
+		"libelle_en" : null,
+		"lat" : -24.647,
+		"long" : 25.9497,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 16,
+		"libelle_fr" : "Ville de Phnom Penh",
+		"libelle_en" : "City of Phnom Penh",
+		"lat" : 11.5661,
+		"long" : 104.897,
+		"endemie_cat_code" : "P_T1_AM",
+		"endemie_zone_id" : 292,
+		"pays_uid" : 37
+	},
+	{
+		"id" : 17,
+		"libelle_fr" : "Ville de Belem",
+		"libelle_en" : "City of Belem",
+		"lat" : -1.42807,
+		"long" : -48.5046,
+		"endemie_cat_code" : "P_T3_A",
+		"endemie_zone_id" : 341,
+		"pays_uid" : 31
+	},
+	{
+		"id" : 18,
+		"libelle_fr" : "Ville de Bogota",
+		"libelle_en" : null,
+		"lat" : 4.59833,
+		"long" : -74.0753,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 19,
+		"libelle_fr" : "Ville de Cartagena",
+		"libelle_en" : "City of Cartagena",
+		"lat" : 10.423,
+		"long" : -75.531,
+		"endemie_cat_code" : "P_T3_A",
+		"endemie_zone_id" : 341,
+		"pays_uid" : 46
+	},
+	{
+		"id" : 20,
+		"libelle_fr" : "Ville de Puerto Limon",
+		"libelle_en" : "City of Puerto Limon",
+		"lat" : 9.9932,
+		"long" : -83.0457,
+		"endemie_cat_code" : "P_T1_A",
+		"endemie_zone_id" : 367,
+		"pays_uid" : 53
+	},
+	{
+		"id" : 21,
+		"libelle_fr" : "Ville de Guayaquil",
+		"libelle_en" : "City of Guyaquil",
+		"lat" : -2.16379,
+		"long" : -79.9255,
+		"endemie_cat_code" : "",
+		"endemie_zone_id" : null,
+		"pays_uid" : 63
+	},
+	{
+		"id" : 22,
+		"libelle_fr" : "Ville de Quito",
+		"libelle_en" : null,
+		"lat" : -0.164795,
+		"long" : -78.4644,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 23,
+		"libelle_fr" : "Ville de Asmara",
+		"libelle_en" : "City of Asmara",
+		"lat" : 15.3345,
+		"long" : 38.9383,
+		"endemie_cat_code" : "P_T3_A",
+		"endemie_zone_id" : 396,
+		"pays_uid" : 64
+	},
+	{
+		"id" : 24,
+		"libelle_fr" : "Ville de Addis Abeba",
+		"libelle_en" : null,
+		"lat" : 8.98275,
+		"long" : 38.7653,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 25,
+		"libelle_fr" : "Ville de Guatemala city",
+		"libelle_en" : null,
+		"lat" : 14.6208,
+		"long" : -90.5328,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 26,
+		"libelle_fr" : "Ville de Antigua",
+		"libelle_en" : null,
+		"lat" : 14.5517,
+		"long" : -90.7498,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 27,
+		"libelle_fr" : "Lac Atitlan",
+		"libelle_en" : null,
+		"lat" : 14.7005,
+		"long" : -91.2085,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 28,
+		"libelle_fr" : "Ville de Jakarta",
+		"libelle_en" : "City of Jakarta",
+		"lat" : -6.19517,
+		"long" : 106.853,
+		"endemie_cat_code" : "P_T3_A_SR",
+		"endemie_zone_id" : 2,
+		"pays_uid" : 94
+	},
+	{
+		"id" : 29,
+		"libelle_fr" : "Ville de San Pedro Sula",
+		"libelle_en" : null,
+		"lat" : 14.094,
+		"long" : -87.215,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 30,
+		"libelle_fr" : "Ville de Tegucigalpa",
+		"libelle_en" : null,
+		"lat" : 15.496,
+		"long" : -88.028,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 31,
+		"libelle_fr" : "Ville de Vientiane",
+		"libelle_en" : "City of Vientiane",
+		"lat" : 17.9683,
+		"long" : 102.601,
+		"endemie_cat_code" : "P_T3_A_NR",
+		"endemie_zone_id" : 532,
+		"pays_uid" : 109
+	},
+	{
+		"id" : 32,
+		"libelle_fr" : "Ville de Acapulco",
+		"libelle_en" : null,
+		"lat" : 16.8676,
+		"long" : -99.8822,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 33,
+		"libelle_fr" : "Ville de Cancun",
+		"libelle_en" : "Cancun",
+		"lat" : 21.1665,
+		"long" : -86.8579,
+		"endemie_cat_code" : "P_T1_A",
+		"endemie_zone_id" : 359,
+		"pays_uid" : 133
+	},
+	{
+		"id" : 34,
+		"libelle_fr" : "Ile de Cozumel",
+		"libelle_en" : "Cozumel",
+		"lat" : 20.4373,
+		"long" : -86.9073,
+		"endemie_cat_code" : "P_T1_A",
+		"endemie_zone_id" : 359,
+		"pays_uid" : 133
+	},
+	{
+		"id" : 35,
+		"libelle_fr" : "Ville de Playa del carmen",
+		"libelle_en" : "City of Playa del Carme",
+		"lat" : 20.6379,
+		"long" : -87.0776,
+		"endemie_cat_code" : "P_T1_A",
+		"endemie_zone_id" : 359,
+		"pays_uid" : 133
+	},
+	{
+		"id" : 36,
+		"libelle_fr" : "Ville de Windhoek",
+		"libelle_en" : null,
+		"lat" : -22.5633,
+		"long" : 17.0892,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 37,
+		"libelle_fr" : "Ville de Kathmandu",
+		"libelle_en" : null,
+		"lat" : 27.7054,
+		"long" : 85.3198,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 38,
+		"libelle_fr" : "Ville de Phokhara",
+		"libelle_en" : null,
+		"lat" : 28.21,
+		"long" : 83.974,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 39,
+		"libelle_fr" : "Ville et canal de Panama",
+		"libelle_en" : "City and canal of Panam",
+		"lat" : 8.96918,
+		"long" : -79.552,
+		"endemie_cat_code" : "P_T2_A_SR",
+		"endemie_zone_id" : 368,
+		"pays_uid" : 158
+	},
+	{
+		"id" : 40,
+		"libelle_fr" : "Site de Machu Picchu",
+		"libelle_en" : null,
+		"lat" : -13.1604,
+		"long" : -72.5468,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 41,
+		"libelle_fr" : "Lac Titicaca",
+		"libelle_en" : null,
+		"lat" : -15.6442,
+		"long" : -69.5874,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 42,
+		"libelle_fr" : "Ville de Arequipa",
+		"libelle_en" : null,
+		"lat" : -16.3939,
+		"long" : -71.5375,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 43,
+		"libelle_fr" : "Ville de Cuzco",
+		"libelle_en" : null,
+		"lat" : -13.5285,
+		"long" : -71.9714,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 44,
+		"libelle_fr" : "Ville de Puno",
+		"libelle_en" : null,
+		"lat" : -15.8345,
+		"long" : -70.0214,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 45,
+		"libelle_fr" : "Ville de Lima",
+		"libelle_en" : null,
+		"lat" : -12.0393,
+		"long" : -77.0416,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 46,
+		"libelle_fr" : "Ville de Moquega",
+		"libelle_en" : null,
+		"lat" : -17.1933,
+		"long" : -70.9332,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 47,
+		"libelle_fr" : "Ville de Ica",
+		"libelle_en" : null,
+		"lat" : -14.078,
+		"long" : -75.7343,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 48,
+		"libelle_fr" : "Ville de Nazca",
+		"libelle_en" : null,
+		"lat" : -14.8333,
+		"long" : -74.9377,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 49,
+		"libelle_fr" : "Ville de Tacna",
+		"libelle_en" : null,
+		"lat" : -18.0101,
+		"long" : -70.2411,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 50,
+		"libelle_fr" : "Ville de Manille",
+		"libelle_en" : "City of Manila",
+		"lat" : 14.5995,
+		"long" : 120.987,
+		"endemie_cat_code" : "P_T3_A_NR",
+		"endemie_zone_id" : 30,
+		"pays_uid" : 163
+	},
+	{
+		"id" : 51,
+		"libelle_fr" : "Ville de Saint Dominique",
+		"libelle_en" : "City of Santo Domingo",
+		"lat" : 18.4588,
+		"long" : -69.95,
+		"endemie_cat_code" : "P_T1_A",
+		"endemie_zone_id" : 372,
+		"pays_uid" : 60
+	},
+	{
+		"id" : 52,
+		"libelle_fr" : "Ville de Santiago",
+		"libelle_en" : "City of Santiago",
+		"lat" : 19.4666,
+		"long" : -70.708,
+		"endemie_cat_code" : "P_T1_A",
+		"endemie_zone_id" : 372,
+		"pays_uid" : 60
+	},
+	{
+		"id" : 53,
+		"libelle_fr" : "Ville de Punta cana",
+		"libelle_en" : "City of Punta Cana",
+		"lat" : 18.5942,
+		"long" : -68.4119,
+		"endemie_cat_code" : "P_T1_A",
+		"endemie_zone_id" : 372,
+		"pays_uid" : 60
+	},
+	{
+		"id" : 54,
+		"libelle_fr" : "Ville de Paramaribo",
+		"libelle_en" : "City of Paramaribo",
+		"lat" : 5.83188,
+		"long" : -55.2173,
+		"endemie_cat_code" : "P_T3_A",
+		"endemie_zone_id" : 341,
+		"pays_uid" : 203
+	},
+	{
+		"id" : 55,
+		"libelle_fr" : "Ville de Bangkok",
+		"libelle_en" : null,
+		"lat" : 13.7634,
+		"long" : 100.503,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 56,
+		"libelle_fr" : "Ville de Chiangmai",
+		"libelle_en" : null,
+		"lat" : 18.7763,
+		"long" : 98.9786,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 57,
+		"libelle_fr" : "Ville de Pattaya",
+		"libelle_en" : null,
+		"lat" : 12.9296,
+		"long" : 100.854,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 58,
+		"libelle_fr" : "Ville de Phuket",
+		"libelle_en" : null,
+		"lat" : 7.99396,
+		"long" : 98.3276,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 59,
+		"libelle_fr" : "Ville de Ko Samui ",
+		"libelle_en" : null,
+		"lat" : 9.53575,
+		"long" : 100.042,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 60,
+		"libelle_fr" : "Ville de Caracas",
+		"libelle_en" : null,
+		"lat" : 10.531,
+		"long" : -66.8188,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 61,
+		"libelle_fr" : "Ville de Ho chi minh",
+		"libelle_en" : null,
+		"lat" : 10.8765,
+		"long" : 106.633,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 62,
+		"libelle_fr" : "Ville de Hanoi",
+		"libelle_en" : null,
+		"lat" : 21.064,
+		"long" : 105.842,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 63,
+		"libelle_fr" : "Ville de Sanaa",
+		"libelle_en" : null,
+		"lat" : 15.4537,
+		"long" : 44.1211,
+		"endemie_cat_code" : null,
+		"endemie_zone_id" : null,
+		"pays_uid" : null
+	},
+	{
+		"id" : 64,
+		"libelle_fr" : "Ville de La Paz",
+		"libelle_en" : "City of La Paz",
+		"lat" : -16.5,
+		"long" : -68.1333,
+		"endemie_cat_code" : "FJ_3",
+		"endemie_zone_id" : 783,
+		"pays_uid" : 28
+	},
+	{
+		"id" : 65,
+		"libelle_fr" : "Ville de Sucre",
+		"libelle_en" : "City of Sucre",
+		"lat" : -19.0196,
+		"long" : -65.262,
+		"endemie_cat_code" : "FJ_3",
+		"endemie_zone_id" : 783,
+		"pays_uid" : 28
+	},
+	{
+		"id" : 66,
+		"libelle_fr" : "Ville de Fortaleza",
+		"libelle_en" : "City of Fortaleza",
+		"lat" : -3.73186,
+		"long" : -38.5267,
+		"endemie_cat_code" : "FJ_4",
+		"endemie_zone_id" : 784,
+		"pays_uid" : 31
+	},
+	{
+		"id" : 67,
+		"libelle_fr" : "Ville de Recife",
+		"libelle_en" : "City of Recife",
+		"lat" : -8.05389,
+		"long" : -34.8811,
+		"endemie_cat_code" : "FJ_4",
+		"endemie_zone_id" : 784,
+		"pays_uid" : 31
+	},
+	{
+		"id" : 68,
+		"libelle_fr" : "Archipel de San Andrès",
+		"libelle_en" : "Archipelago of San Andrés",
+		"lat" : 12.5847,
+		"long" : -81.7006,
+		"endemie_cat_code" : "FJ_3",
+		"endemie_zone_id" : 469,
+		"pays_uid" : 46
+	},
+	{
+		"id" : 69,
+		"libelle_fr" : "Ile de Providencia",
+		"libelle_en" : "Isla de Providencia",
+		"lat" : 13.3427,
+		"long" : -81.3715,
+		"endemie_cat_code" : "FJ_3",
+		"endemie_zone_id" : 469,
+		"pays_uid" : 46
+	},
+	{
+		"id" : 70,
+		"libelle_fr" : "Ville de Bogota",
+		"libelle_en" : "City of Bogota",
+		"lat" : 4.62433,
+		"long" : -74.0636,
+		"endemie_cat_code" : "FJ_3",
+		"endemie_zone_id" : 469,
+		"pays_uid" : 46
+	},
+	{
+		"id" : 71,
+		"libelle_fr" : "Ville de Guayaquil",
+		"libelle_en" : "City of Guayaquil",
+		"lat" : -2.20382,
+		"long" : -79.8975,
+		"endemie_cat_code" : "FJ_2",
+		"endemie_zone_id" : 77,
+		"pays_uid" : 63
+	},
+	{
+		"id" : 72,
+		"libelle_fr" : "Ville de Quito",
+		"libelle_en" : "City of Quito",
+		"lat" : -0.180653,
+		"long" : -78.4678,
+		"endemie_cat_code" : "FJ_2",
+		"endemie_zone_id" : 77,
+		"pays_uid" : 63
+	},
+	{
+		"id" : 73,
+		"libelle_fr" : "Archipel des Galapagos",
+		"libelle_en" : "Galapagos Islands",
+		"lat" : -0.777259,
+		"long" : -91.1426,
+		"endemie_cat_code" : "FJ_2",
+		"endemie_zone_id" : 77,
+		"pays_uid" : 63
+	}
+]}

@@ -19,9 +19,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN chmod +x entrypoint.sh
 
-# collectstatic est exécuté au démarrage du conteneur, pas pendant le build :
-# DATABASE_URL et DJANGO_SECRET_KEY (exigées dès le chargement de Django,
-# cf. settings.py) ne sont garanties disponibles qu'au runtime sur Render.
-CMD python manage.py collectstatic --noinput && \
-    gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+# collectstatic, migrate, création du compte admin et import des données
+# se font au démarrage du conteneur (entrypoint.sh), pas pendant le build :
+# les variables d'environnement Render ne sont garanties disponibles qu'au
+# runtime, et le Shell Render (indisponible sur le palier gratuit) n'est
+# plus nécessaire pour lancer ces commandes.
+CMD ["./entrypoint.sh"]
