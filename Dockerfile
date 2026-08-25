@@ -20,7 +20,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python manage.py collectstatic --noinput
-
-# Render fournit le port via la variable d'environnement $PORT
-CMD gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+# collectstatic est exécuté au démarrage du conteneur, pas pendant le build :
+# DATABASE_URL et DJANGO_SECRET_KEY (exigées dès le chargement de Django,
+# cf. settings.py) ne sont garanties disponibles qu'au runtime sur Render.
+CMD python manage.py collectstatic --noinput && \
+    gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
