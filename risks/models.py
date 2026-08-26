@@ -93,8 +93,8 @@ class ConduiteATenir(models.Model):
         blank=True, help_text="Conduite à tenir affichée à l'utilisateur (texte validé médical)"
     )
     recommandation_en = models.TextField(blank=True)
-    legende_fr = models.CharField(max_length=256, blank=True)
-    legende_en = models.CharField(max_length=256, blank=True)
+    legende_fr = models.TextField(blank=True)
+    legende_en = models.TextField(blank=True)
     couleur = models.CharField(max_length=30, null=True, blank=True)
 
     def __str__(self):
@@ -145,7 +145,7 @@ class Pays(models.Model):
     """
 
     source_id = models.IntegerField(unique=True, help_text="uid d'origine MariaDB")
-    code = models.CharField(max_length=10, unique=True, help_text="Code pays (souvent ISO 3166-1 alpha-2)")
+    code = models.CharField(max_length=30, unique=True, help_text="Code pays (souvent ISO 3166-1 alpha-2 ; quelques entrées historiques utilisent un libellé complet, ex. Galápagos)")
     libelle_fr = models.CharField(max_length=256)
     libelle_en = models.CharField(max_length=256)
 
