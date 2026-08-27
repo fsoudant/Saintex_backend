@@ -37,6 +37,18 @@ class Zone(models.Model):
         blank=True,
         help_text="Anomalie constatée à l'import (géométrie manquante ou tronquée)",
     )
+    pays = models.ForeignKey(
+        "Pays",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="zones_frontiere",
+        help_text=(
+            "Renseigné uniquement pour les Zone qui portent la frontière "
+            "administrative d'un pays (issues des anciens placeholders "
+            "'zone_XX') — nul pour les zones de risque écologiques."
+        ),
+    )
 
     class Meta:
         indexes = [models.Index(fields=["source_id"])]
@@ -122,6 +134,19 @@ class Endemie(models.Model):
     date_fin = models.DateTimeField(
         null=True, blank=True, help_text="Nul = période en cours (pas de fin connue)"
     )
+    zone_exclue = gis_models.MultiPolygonField(
+        geography=True,
+        srid=4326,
+        null=True,
+        blank=True,
+        help_text=(
+            "Zone géographique où ce risque précis est absent malgré la Zone "
+            "englobante (ex. une ville épargnée par le paludisme). Remplace "
+            "l'ancien mécanisme ZoneSaine : porté ici plutôt que sur Zone "
+            "elle-même, car une même Zone peut porter plusieurs risques et "
+            "l'exclusion ne concerne généralement qu'un seul d'entre eux."
+        ),
+    )
 
     class Meta:
         indexes = [
@@ -135,7 +160,9 @@ class Endemie(models.Model):
 
 class Pays(models.Model):
     """Référentiel pays — utilisé pour le tunnel de paiement (sélection des
-    pays visités, cf. §6 de la spec) et pour situer les ZoneSaine.
+    pays visités, cf. §6 de la spec) et relié à la Zone qui porte sa
+    frontière administrative (cf. Zone.pays), pour détecter l'entrée dans
+    le pays et déclencher le contrat.
 
     Les champs de synthèse par maladie (CHIK, CHOLE, PALU...) proviennent
     tels quels de la base historique ; leur nomenclature ne correspond pas
@@ -164,48 +191,6 @@ class Pays(models.Model):
         default=dict,
         blank=True,
         help_text="Champs hérités tels quels de la base historique (CHIK, PALU, FJ_*, ZIKA...)",
-    )
-
-    def __str__(self):
-        return self.libelle_fr
-
-
-class ZoneSaine(models.Model):
-    """Exception ponctuelle ("trou") dans une Zone endémique : un point précis
-    (le plus souvent une ville) où un risque donné est absent, alors même que
-    la Zone qui l'englobe est marquée à risque pour ce même risque.
-
-    Exemple réel : Bombay est exempte de paludisme bien que la zone
-    géographique qui l'entoure soit à risque.
-    """
-
-    source_id = models.IntegerField(unique=True)
-    libelle_fr = models.CharField(max_length=256)
-    libelle_en = models.CharField(max_length=256, blank=True, null=True)
-    point = gis_models.PointField(geography=True, srid=4326)
-
-    conduite_a_tenir = models.ForeignKey(
-        ConduiteATenir,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="zones_saines",
-        help_text="Risque neutralisé en ce point ; nul si l'exception n'est pas encore renseignée",
-    )
-    zone = models.ForeignKey(
-        Zone,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="zones_saines",
-        help_text="Zone endémique dans laquelle ce point fait exception",
-    )
-    pays = models.ForeignKey(
-        Pays,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="zones_saines",
     )
 
     def __str__(self):

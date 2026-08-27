@@ -1,22 +1,30 @@
 """
-Importe les données historiques (zone, risque, conduiteatenir, endemie)
-depuis les 4 exports JSON de la base MariaDB existante.
+Importe les données historiques (pays, zone, risque, conduiteatenir,
+endemie, zonesaine) depuis les 6 exports JSON de la base MariaDB existante.
 
 Usage :
     python manage.py migrate_legacy_data /chemin/vers/dossier/exports/
 
 Le dossier doit contenir :
+    pays_202608241323.json
     _zone__202608221002.json
     risque_202608222244.json
     conduiteatenir_202608222244.json
     endemie_202608222243.json
+    zonesaine_202608241320.json
 
-Idempotent sur Zone/Risque/ConduiteATenir (update_or_create sur la clé
+Idempotent sur Pays/Zone/Risque/ConduiteATenir (update_or_create sur la clé
 naturelle). Endemie n'a pas de clé naturelle fiable dans l'export : la table
 est vidée puis entièrement recréée à chaque exécution.
+
+zonesaine.json ne peuple plus une table à part (ZoneSaine, supprimée) : ses
+points sont transformés en polygones (buffer ~20 km) et appliqués comme
+`Endemie.zone_exclue`, sur le couple (zone, conduite à tenir) précis qu'ils
+concernent — pas sur toute la Zone, qui peut porter plusieurs risques.
 """
 
 import json
+import math
 import re
 from pathlib import Path
 
@@ -24,11 +32,17 @@ from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from risks.models import ConduiteATenir, Endemie, Pays, Risque, Zone, ZoneSaine
+from risks.models import ConduiteATenir, Endemie, Pays, Risque, Zone
 
 # Corrige le défaut de format observé dans l'export ("11." sans décimale
 # après le point, ex. Amerique_2_FJ) avant le parsing JSON strict.
 BARE_DECIMAL_RE = re.compile(r"(\d)\.(?=[,\]])")
+
+# Rayon par défaut du polygone d'exclusion généré autour d'un point
+# zonesaine (approximation "échelle ville") — à affiner à la main dans
+# l'admin (widget carte sur Endemie.zone_exclue) une fois le prototype
+# entre les mains de l'équipe médicale.
+DEFAULT_EXCLUSION_RADIUS_KM = 20
 
 
 def parse_coords(raw):
@@ -56,42 +70,54 @@ def parse_coords(raw):
     return points, None
 
 
+def buffer_point_km(lon, lat, radius_km):
+    """Cercle approximatif de rayon radius_km autour de (lon, lat), en degrés.
+
+    Approximation suffisante pour un point de départ éditable à la main —
+    pas une précision géodésique de référence (cf. DEFAULT_EXCLUSION_RADIUS_KM).
+    """
+    lat_deg = radius_km / 111.0
+    point = Point(lon, lat, srid=4326)
+    return point.buffer(lat_deg)
+
+
 class Command(BaseCommand):
-    help = "Importe zone/risque/conduiteatenir/endemie depuis les exports JSON MariaDB."
+    help = "Importe pays/zone/risque/conduiteatenir/endemie/zonesaine depuis les exports JSON MariaDB."
 
     def add_arguments(self, parser):
         parser.add_argument(
             "export_dir",
             type=str,
-            help="Répertoire contenant les 4 fichiers d'export JSON",
+            help="Répertoire contenant les 6 fichiers d'export JSON",
         )
 
     def handle(self, *args, **options):
         export_dir = Path(options["export_dir"])
 
+        pays_file = export_dir / "pays_202608241323.json"
         zone_file = export_dir / "_zone__202608221002.json"
         risque_file = export_dir / "risque_202608222244.json"
         ca_file = export_dir / "conduiteatenir_202608222244.json"
         endemie_file = export_dir / "endemie_202608222243.json"
         zonesaine_file = export_dir / "zonesaine_202608241320.json"
-        pays_file = export_dir / "pays_202608241323.json"
 
-        for f in (zone_file, risque_file, ca_file, endemie_file, zonesaine_file, pays_file):
+        for f in (pays_file, zone_file, risque_file, ca_file, endemie_file, zonesaine_file):
             if not f.exists():
                 raise CommandError(f"Fichier introuvable : {f}")
 
         with transaction.atomic():
-            n_zones, zone_issues = self.import_zones(zone_file)
+            n_pays = self.import_pays(pays_file)
+            n_zones, zone_issues, n_pays_linked = self.import_zones(zone_file)
             n_risques = self.import_risques(risque_file)
             n_ca, ca_skipped = self.import_conduites(ca_file)
             n_endemies, endemie_skipped = self.import_endemies(endemie_file)
-            n_pays = self.import_pays(pays_file)
-            n_zs, zs_skipped = self.import_zones_saines(zonesaine_file)
+            n_excl, excl_skipped = self.apply_zone_exclusions(zonesaine_file)
 
         self.stdout.write(self.style.SUCCESS(
-            f"\nImport terminé : {n_zones} zones, {n_risques} risques, "
-            f"{n_ca} conduites à tenir, {n_endemies} endémies, {n_pays} pays, "
-            f"{n_zs} zones saines."
+            f"\nImport terminé : {n_pays} pays, {n_zones} zones "
+            f"({n_pays_linked} reliées à leur pays), {n_risques} risques, "
+            f"{n_ca} conduites à tenir, {n_endemies} endémies, "
+            f"{n_excl} zones exclues appliquées."
         ))
 
         if zone_issues:
@@ -111,15 +137,50 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING(
                 f"{endemie_skipped} lignes endemie ignorées (zone ou conduite introuvable)."
             ))
-        if zs_skipped:
+        if excl_skipped:
             self.stdout.write(self.style.WARNING(
-                f"{zs_skipped} zones saines ignorées (coordonnées manquantes)."
+                f"{excl_skipped} zonesaine ignorées (coordonnées, zone, conduite ou endémie introuvable)."
             ))
+
+    def import_pays(self, path):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        known_fields = {
+            "uid", "code", "libelle_fr", "libelle_en",
+            "box_so_lat", "box_so_long", "box_ne_lat", "box_ne_long",
+            "center_lat", "center_long", "flash_fr", "flash_en",
+        }
+        count = 0
+        for p in data["pays"]:
+            center = None
+            if p["center_lat"] is not None and p["center_long"] is not None:
+                center = Point(p["center_long"], p["center_lat"], srid=4326)
+
+            synthese = {k: v for k, v in p.items() if k not in known_fields}
+
+            Pays.objects.update_or_create(
+                source_id=p["uid"],
+                defaults=dict(
+                    code=p["code"],
+                    libelle_fr=p["libelle_fr"] or "",
+                    libelle_en=p["libelle_en"] or "",
+                    box_so_lat=p["box_so_lat"],
+                    box_so_long=p["box_so_long"],
+                    box_ne_lat=p["box_ne_lat"],
+                    box_ne_long=p["box_ne_long"],
+                    center=center,
+                    flash_fr=p["flash_fr"],
+                    flash_en=p["flash_en"],
+                    risques_synthese=synthese,
+                ),
+            )
+            count += 1
+        return count
 
     def import_zones(self, path):
         data = json.loads(path.read_text(encoding="utf-8"))
         issues = []
         count = 0
+        linked = 0
         for z in data["zone"]:
             points, note = parse_coords(z["coords"])
             geom = None
@@ -128,14 +189,24 @@ class Command(BaseCommand):
                     geom = MultiPolygon(Polygon(points))
                 except Exception as exc:
                     note = f"géométrie invalide après parsing : {exc}"
+
+            # Les anciens placeholders "zone_XX" portent la frontière d'un
+            # pays (code ISO le plus souvent) -> reliés à Pays si possible.
+            pays = None
+            if z["nom"].startswith("zone_"):
+                code = z["nom"].split("_", 1)[1]
+                pays = Pays.objects.filter(code=code).first()
+                if pays:
+                    linked += 1
+
             Zone.objects.update_or_create(
                 source_id=z["id"],
-                defaults={"nom": z["nom"], "geom": geom, "note": note or ""},
+                defaults={"nom": z["nom"], "geom": geom, "note": note or "", "pays": pays},
             )
             count += 1
             if note:
                 issues.append((z["id"], z["nom"], note))
-        return count, issues
+        return count, issues, linked
 
     def import_risques(self, path):
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -210,73 +281,29 @@ class Command(BaseCommand):
         Endemie.objects.bulk_create(to_create, batch_size=500)
         return len(to_create), skipped
 
-    def import_pays(self, path):
+    def apply_zone_exclusions(self, path):
+        """Convertit chaque point zonesaine en polygone d'exclusion, appliqué
+        aux Endemie correspondant exactement à (zone, conduite à tenir) —
+        jamais à la Zone entière (cf. Endemie.zone_exclue).
+        """
         data = json.loads(path.read_text(encoding="utf-8"))
-        # Champs déjà modélisés explicitement -> exclus du blob JSON restant
-        known_fields = {
-            "uid", "code", "libelle_fr", "libelle_en",
-            "box_so_lat", "box_so_long", "box_ne_lat", "box_ne_long",
-            "center_lat", "center_long", "flash_fr", "flash_en",
-        }
-        count = 0
-        for p in data["pays"]:
-            center = None
-            if p["center_lat"] is not None and p["center_long"] is not None:
-                center = Point(p["center_long"], p["center_lat"], srid=4326)
-
-            synthese = {k: v for k, v in p.items() if k not in known_fields}
-
-            Pays.objects.update_or_create(
-                source_id=p["uid"],
-                defaults=dict(
-                    code=p["code"],
-                    libelle_fr=p["libelle_fr"] or "",
-                    libelle_en=p["libelle_en"] or "",
-                    box_so_lat=p["box_so_lat"],
-                    box_so_long=p["box_so_long"],
-                    box_ne_lat=p["box_ne_lat"],
-                    box_ne_long=p["box_ne_long"],
-                    center=center,
-                    flash_fr=p["flash_fr"],
-                    flash_en=p["flash_en"],
-                    risques_synthese=synthese,
-                ),
-            )
-            count += 1
-        return count
-
-    def import_zones_saines(self, path):
-        data = json.loads(path.read_text(encoding="utf-8"))
-        count = 0
+        applied = 0
         skipped = 0
         for z in data["zonesaine"]:
-            if z["lat"] is None or z["long"] is None:
+            code = z["endemie_cat_code"]
+            if not code or z["endemie_zone_id"] is None or z["lat"] is None or z["long"] is None:
                 skipped += 1
                 continue
 
-            conduite = None
-            code = z["endemie_cat_code"]
-            if code:  # exclut None et ""
-                conduite = ConduiteATenir.objects.filter(code=code).first()
-
-            zone = None
-            if z["endemie_zone_id"] is not None:
-                zone = Zone.objects.filter(source_id=z["endemie_zone_id"]).first()
-
-            pays = None
-            if z["pays_uid"] is not None:
-                pays = Pays.objects.filter(source_id=z["pays_uid"]).first()
-
-            ZoneSaine.objects.update_or_create(
-                source_id=z["id"],
-                defaults=dict(
-                    libelle_fr=z["libelle_fr"] or "",
-                    libelle_en=z["libelle_en"],
-                    point=Point(z["long"], z["lat"], srid=4326),
-                    conduite_a_tenir=conduite,
-                    zone=zone,
-                    pays=pays,
-                ),
+            matching = Endemie.objects.filter(
+                zone__source_id=z["endemie_zone_id"],
+                conduite_a_tenir__code=code,
             )
-            count += 1
-        return count, skipped
+            if not matching.exists():
+                skipped += 1
+                continue
+
+            exclusion = MultiPolygon(buffer_point_km(z["long"], z["lat"], DEFAULT_EXCLUSION_RADIUS_KM))
+            updated = matching.update(zone_exclue=exclusion)
+            applied += updated
+        return applied, skipped
