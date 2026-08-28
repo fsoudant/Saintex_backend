@@ -28,7 +28,9 @@ import math
 import re
 from pathlib import Path
 
-from django.contrib.gis.geos import MultiPolygon, Point, Polygon
+import antimeridian
+import shapely.geometry
+from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Point, Polygon
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
@@ -68,6 +70,54 @@ def parse_coords(raw):
         points = points + [points[0]]
 
     return points, None
+
+
+def build_zone_geom(points):
+    """Construit la géométrie GEOS d'une Zone à partir de son anneau brut
+    [lon, lat] (export MariaDB).
+
+    Gère le passage au méridien de changement de date (180°) : sans ce
+    traitement, un Polygon construit directement relie les points dans
+    l'ordre littéral de leurs longitudes, donc par le plus court chemin
+    *numérique* — qui passe par le méridien de Greenwich au lieu du 180e
+    quand la zone est à cheval sur l'antiméridien (ex. Kiribati, Tuvalu,
+    Fidji, Afrique_Asie_centrale). Le polygone obtenu est alors valide au
+    sens géométrique mais représente presque tout le globe à l'envers.
+
+    antimeridian.fix_polygon() détecte la traversée et découpe correctement
+    en MultiPolygon de part et d'autre de ±180°. S'il reste une géométrie
+    invalide après coup (auto-intersection déjà présente dans les
+    coordonnées sources, indépendante de l'antiméridien — cf. note ci-
+    dessous), on répare avec un buffer(0) et on le signale via `note` pour
+    vérification manuelle dans l'admin (widget carte).
+
+    Retourne (geom, note). note est une chaîne vide si aucune réparation
+    n'a été nécessaire.
+    """
+    naive = shapely.geometry.Polygon(points)
+    note = ""
+
+    try:
+        fixed = antimeridian.fix_polygon(naive)
+    except Exception as exc:
+        # Se produit quand l'auto-intersection est trop sévère pour que
+        # l'algorithme puisse même déterminer où couper (ex. zone_id 730,
+        # coree_du_sud, dans l'export historique) — on retombe sur le
+        # polygone brut, réparé juste après par le buffer(0).
+        fixed = naive
+        note = f"découpage antiméridien impossible ({exc}) — réparation par buffer(0)"
+
+    if not fixed.is_valid:
+        fixed = fixed.buffer(0)
+        note = note or (
+            "géométrie source auto-intersectée, réparée automatiquement "
+            "(buffer 0) — à vérifier/redessiner dans l'admin"
+        )
+
+    geos_geom = GEOSGeometry(fixed.wkt, srid=4326)
+    if isinstance(geos_geom, Polygon):
+        geos_geom = MultiPolygon(geos_geom)
+    return geos_geom, note
 
 
 def buffer_point_km(lon, lat, radius_km):
@@ -122,7 +172,8 @@ class Command(BaseCommand):
 
         if zone_issues:
             self.stdout.write(self.style.WARNING(
-                f"\n{len(zone_issues)} zones importées avec geom=NULL :"
+                f"\n{len(zone_issues)} zones importées avec une anomalie "
+                "(géométrie manquante ou corrigée automatiquement — cf. Zone.note) :"
             ))
             for source_id, nom, note in zone_issues[:20]:
                 self.stdout.write(f"  - id={source_id} nom={nom}: {note}")
@@ -186,7 +237,9 @@ class Command(BaseCommand):
             geom = None
             if points is not None:
                 try:
-                    geom = MultiPolygon(Polygon(points))
+                    geom, fix_note = build_zone_geom(points)
+                    if fix_note:
+                        note = fix_note
                 except Exception as exc:
                     note = f"géométrie invalide après parsing : {exc}"
 

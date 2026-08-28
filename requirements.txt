@@ -5,3 +5,5 @@ dj-database-url>=2.3
 python-dotenv>=1.0
 gunicorn>=23.0
 whitenoise>=6.7
+shapely>=2.0
+antimeridian>=0.4
