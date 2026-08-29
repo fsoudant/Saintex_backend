@@ -26,6 +26,7 @@ concernent — pas sur toute la Zone, qui peut porter plusieurs risques.
 import json
 import math
 import re
+import warnings
 from pathlib import Path
 
 import antimeridian
@@ -98,7 +99,16 @@ def build_zone_geom(points):
     note = ""
 
     try:
-        fixed = antimeridian.fix_polygon(naive)
+        with warnings.catch_warnings():
+            # Le sens de rotation (horaire/antihoraire) des polygones de
+            # l'export historique est incohérent — très courant sur de
+            # vieux exports GIS, sans rapport avec la précision de la
+            # zone. antimeridian le corrige de lui-même (fix_winding=True,
+            # comportement par défaut) ; on masque juste l'avertissement
+            # correspondant pour ne pas polluer les logs Render (~80
+            # occurrences par import).
+            warnings.simplefilter("ignore", antimeridian.FixWindingWarning)
+            fixed = antimeridian.fix_polygon(naive)
     except Exception as exc:
         # Se produit quand l'auto-intersection est trop sévère pour que
         # l'algorithme puisse même déterminer où couper (ex. zone_id 730,
