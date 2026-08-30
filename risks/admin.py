@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.gis.admin import GISModelAdmin
 from django.utils.html import format_html
@@ -8,6 +9,7 @@ import shapely.affinity
 import shapely.wkt
 
 from .models import MOIS_CHOICES, ConduiteATenir, Endemie, Pays, Risque, Zone
+from .widgets import RGBColorField
 
 _MOIS_LABELS = dict(MOIS_CHOICES)
 
@@ -169,6 +171,11 @@ class RisqueAdmin(admin.ModelAdmin):
     search_fields = ("code", "libelle_fr", "libelle_en")
     ordering = ("ordre", "code")
 
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == "couleur_legende":
+            return RGBColorField(help_text=db_field.help_text)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
 
 @admin.register(ConduiteATenir)
 class ConduiteATenirAdmin(admin.ModelAdmin):
@@ -183,6 +190,11 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
     list_filter = ("risque",)
     search_fields = ("code", "legende_fr", "recommandation_fr", "facteurs_de_risque_fr")
     autocomplete_fields = ("risque",)
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == "couleur":
+            return RGBColorField(help_text=db_field.help_text)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     @admin.display(description="Légende (fr)", ordering="legende_fr")
     def legende_fr_courte(self, obj):

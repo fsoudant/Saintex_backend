@@ -1,0 +1,1 @@
+{% for widget in widget.subwidgets %}{% include widget.template_name %}{% if not forloop.first %} <label style="font-weight:normal">Aucune couleur</label>{% endif %} {% endfor %}
