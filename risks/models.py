@@ -9,7 +9,14 @@ elles-mêmes activées sur des Zone géographiques via des lignes Endemie
 """
 
 from django.contrib.gis.db import models as gis_models
+from django.core.exceptions import ValidationError
 from django.db import models
+
+MOIS_CHOICES = [
+    (1, "Janvier"), (2, "Février"), (3, "Mars"), (4, "Avril"),
+    (5, "Mai"), (6, "Juin"), (7, "Juillet"), (8, "Août"),
+    (9, "Septembre"), (10, "Octobre"), (11, "Novembre"), (12, "Décembre"),
+]
 
 
 class Zone(models.Model):
@@ -108,6 +115,64 @@ class ConduiteATenir(models.Model):
     legende_fr = models.TextField(blank=True)
     legende_en = models.TextField(blank=True)
     couleur = models.CharField(max_length=30, null=True, blank=True)
+
+    saison_mois_debut = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        choices=MOIS_CHOICES,
+        help_text=(
+            "Mois de début de la période à risque (ex. rec_fr mentionnant "
+            "'d'août à novembre'). Vide = risque non saisonnier, actif toute "
+            "l'année. À renseigner avec saison_mois_fin, jamais seul."
+        ),
+    )
+    saison_mois_fin = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        choices=MOIS_CHOICES,
+        help_text=(
+            "Mois de fin de la période à risque (inclus). Peut être inférieur à "
+            "saison_mois_debut pour une période à cheval sur le nouvel an "
+            "(ex. 'd'octobre à février' → début=10, fin=2)."
+        ),
+    )
+
+    def clean(self):
+        super().clean()
+        debut_vide = self.saison_mois_debut is None
+        fin_vide = self.saison_mois_fin is None
+        if debut_vide != fin_vide:
+            raise ValidationError(
+                "saison_mois_debut et saison_mois_fin doivent être renseignés "
+                "ensemble, ou tous les deux laissés vides (risque non saisonnier)."
+            )
+
+    def is_in_season(self, when):
+        """True si la date/datetime `when` tombe dans la période à risque
+        saisonnière de cette conduite à tenir.
+
+        Toujours True si aucune saisonnalité n'est définie (risque actif
+        toute l'année). Gère les périodes à cheval sur le nouvel an (ex.
+        octobre → février) : le test se fait uniquement sur le mois, sans
+        tenir compte de l'année ni du jour.
+        """
+        if self.saison_mois_debut is None or self.saison_mois_fin is None:
+            return True
+        mois = when.month
+        if self.saison_mois_debut <= self.saison_mois_fin:
+            return self.saison_mois_debut <= mois <= self.saison_mois_fin
+        return mois >= self.saison_mois_debut or mois <= self.saison_mois_fin
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(saison_mois_debut__isnull=True, saison_mois_fin__isnull=True)
+                    | models.Q(saison_mois_debut__isnull=False, saison_mois_fin__isnull=False)
+                ),
+                name="conduiteatenir_saison_mois_ensemble",
+            ),
+        ]
 
     def __str__(self):
         return self.code

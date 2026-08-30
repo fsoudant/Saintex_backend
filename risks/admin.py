@@ -7,7 +7,9 @@ from django.utils.text import Truncator
 import shapely.affinity
 import shapely.wkt
 
-from .models import ConduiteATenir, Endemie, Pays, Risque, Zone
+from .models import MOIS_CHOICES, ConduiteATenir, Endemie, Pays, Risque, Zone
+
+_MOIS_LABELS = dict(MOIS_CHOICES)
 
 
 def _shift_west_parts(shapely_geom):
@@ -170,7 +172,7 @@ class RisqueAdmin(admin.ModelAdmin):
 
 @admin.register(ConduiteATenir)
 class ConduiteATenirAdmin(admin.ModelAdmin):
-    list_display = ("code", "risque", "legende_fr", "recommandation_fr_courte")
+    list_display = ("code", "risque", "legende_fr", "recommandation_fr_courte", "saison_display")
     list_filter = ("risque",)
     search_fields = ("code", "legende_fr", "recommandation_fr")
     autocomplete_fields = ("risque",)
@@ -182,6 +184,12 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
             obj.recommandation_fr,
             Truncator(obj.recommandation_fr).chars(80),
         )
+
+    @admin.display(description="Saison", ordering="saison_mois_debut")
+    def saison_display(self, obj):
+        if obj.saison_mois_debut is None:
+            return "Toute l'année"
+        return f"{_MOIS_LABELS[obj.saison_mois_debut]} → {_MOIS_LABELS[obj.saison_mois_fin]}"
 
 
 @admin.register(Endemie)
