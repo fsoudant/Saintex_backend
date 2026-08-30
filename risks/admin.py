@@ -172,10 +172,33 @@ class RisqueAdmin(admin.ModelAdmin):
 
 @admin.register(ConduiteATenir)
 class ConduiteATenirAdmin(admin.ModelAdmin):
-    list_display = ("code", "risque", "legende_fr", "recommandation_fr_courte", "saison_display")
+    list_display = (
+        "code",
+        "risque",
+        "legende_fr_courte",
+        "facteurs_de_risque_fr_courte",
+        "recommandation_fr_courte",
+        "saison_display",
+    )
     list_filter = ("risque",)
-    search_fields = ("code", "legende_fr", "recommandation_fr")
+    search_fields = ("code", "legende_fr", "recommandation_fr", "facteurs_de_risque_fr")
     autocomplete_fields = ("risque",)
+
+    @admin.display(description="Légende (fr)", ordering="legende_fr")
+    def legende_fr_courte(self, obj):
+        return format_html(
+            '<span title="{}">{}</span>',
+            obj.legende_fr,
+            Truncator(obj.legende_fr).chars(50),
+        )
+
+    @admin.display(description="Facteurs de risque (fr)", ordering="facteurs_de_risque_fr")
+    def facteurs_de_risque_fr_courte(self, obj):
+        return format_html(
+            '<span title="{}">{}</span>',
+            obj.facteurs_de_risque_fr,
+            Truncator(obj.facteurs_de_risque_fr).chars(80),
+        )
 
     @admin.display(description="Recommandation (fr)", ordering="recommandation_fr")
     def recommandation_fr_courte(self, obj):

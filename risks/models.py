@@ -112,6 +112,15 @@ class ConduiteATenir(models.Model):
         blank=True, help_text="Conduite à tenir affichée à l'utilisateur (texte validé médical)"
     )
     recommandation_en = models.TextField(blank=True)
+    facteurs_de_risque_fr = models.TextField(
+        blank=True,
+        help_text=(
+            "Circonstances qui augmentent l'exposition pour cette variante "
+            "(ex. 'Soirées ou nuitées en milieu rural', 'Séjour en zone rurale "
+            "ou boisée, en dessous de 1500 m d'altitude')"
+        ),
+    )
+    facteurs_de_risque_en = models.TextField(blank=True)
     legende_fr = models.TextField(blank=True)
     legende_en = models.TextField(blank=True)
     couleur = models.CharField(max_length=30, null=True, blank=True)
