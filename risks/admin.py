@@ -14,6 +14,20 @@ from .widgets import RGBColorField
 _MOIS_LABELS = dict(MOIS_CHOICES)
 
 
+class _RisqueAlphaFilter(admin.RelatedFieldListFilter):
+    """Variante de RelatedFieldListFilter qui force le tri alphabetique
+    (libelle_fr) des Risque dans le filtre lateral, au lieu de l'ordre
+    manuel (Risque.ordre / RisqueAdmin.ordering) que Django utilise par
+    defaut ici car Risque est enregistre avec ordering=('ordre', 'code').
+
+    Cet ordre manuel reste volontairement intact pour la liste "Risque"
+    elle-meme (RisqueAdmin.ordering) ; seul ce filtre est concerne.
+    """
+
+    def field_choices(self, field, request, model_admin):
+        return field.get_choices(include_blank=False, ordering=("libelle_fr",))
+
+
 def _shift_west_parts(shapely_geom):
     """Renvoie la liste des polygones d'une geometrie Shapely, en decalant de
     +360 tout polygone dont le bord gauche touche -180 (partie "ouest" issue
@@ -181,13 +195,13 @@ class RisqueAdmin(admin.ModelAdmin):
 class ConduiteATenirAdmin(admin.ModelAdmin):
     list_display = (
         "code",
-        "risque",
+        "risque_display",
         "legende_fr_courte",
         "facteurs_de_risque_fr_courte",
         "recommandation_fr_courte",
         "saison_display",
     )
-    list_filter = ("risque",)
+    list_filter = (("risque", _RisqueAlphaFilter),)
     search_fields = ("code", "legende_fr", "recommandation_fr", "facteurs_de_risque_fr")
     autocomplete_fields = ("risque",)
 
@@ -195,6 +209,10 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
         if db_field.name == "couleur":
             return RGBColorField(help_text=db_field.help_text)
         return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+    @admin.display(description="Risque", ordering="risque__libelle_fr")
+    def risque_display(self, obj):
+        return obj.risque
 
     @admin.display(description="Légende (fr)", ordering="legende_fr")
     def legende_fr_courte(self, obj):
@@ -230,7 +248,7 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
 @admin.register(Endemie)
 class EndemieAdmin(GISModelAdmin):
     list_display = ("zone_display", "conduite_a_tenir", "date_debut", "date_fin", "has_exclusion")
-    list_filter = ("conduite_a_tenir__risque",)
+    list_filter = (("conduite_a_tenir__risque", _RisqueAlphaFilter),)
     search_fields = ("zone__nom", "conduite_a_tenir__code")
     autocomplete_fields = ("zone", "conduite_a_tenir")
     gis_widget_kwargs = {"attrs": {"default_zoom": 5}}
