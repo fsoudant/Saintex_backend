@@ -1,8 +1,10 @@
 {% extends "admin/change_form.html" %}
 
 {% block object-tools-items %}
+  {% if original %}
   <li>
-    <a href="{% url 'risk_map' %}" class="button">🗺️ Voir la carte des risques</a>
+    <a href="{% url 'risk_map' %}?conduite_a_tenir={{ original.pk }}" class="button">🗺️ Voir la carte des risques</a>
   </li>
+  {% endif %}
   {{ block.super }}
 {% endblock %}

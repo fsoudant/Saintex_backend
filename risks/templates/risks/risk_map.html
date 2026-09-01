@@ -13,8 +13,13 @@
 </head>
 <body>
   <div class="bar">
-    🗺️ Carte des risques — couleur = moyenne des risques actifs par zone, transparent = zone saine
-    <a href="/admin/risks/endemie/">← retour à l'admin</a>
+    {% if conduite_a_tenir %}
+      🗺️ Carte des risques — {{ conduite_a_tenir.code }} ({{ conduite_a_tenir.risque.libelle_fr }}) — couleur = zones où cette conduite s'applique, transparent = zone saine
+      <a href="{% url 'admin:risks_conduiteatenir_change' conduite_a_tenir.pk %}">← retour à la fiche</a>
+    {% else %}
+      🗺️ Carte des risques — couleur = moyenne des risques actifs par zone, transparent = zone saine
+      <a href="/admin/risks/endemie/">← retour à l'admin</a>
+    {% endif %}
   </div>
   <div id="map"></div>
 
@@ -25,10 +30,12 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    fetch("{% url 'risk_map_geojson' %}")
+    const geojsonUrl = "{% url 'risk_map_geojson' %}{% if conduite_a_tenir %}?conduite_a_tenir={{ conduite_a_tenir.pk }}{% endif %}";
+
+    fetch(geojsonUrl)
       .then(r => r.json())
       .then(data => {
-        L.geoJSON(data, {
+        const layer = L.geoJSON(data, {
           style: (f) => ({
             fillColor: f.properties.fill || '#ffffff',
             fillOpacity: f.properties.fill ? 0.55 : 0,
@@ -48,6 +55,14 @@
             }
           }
         }).addTo(map);
+
+        {% if conduite_a_tenir %}
+        // Vue filtrée : recadrer automatiquement sur les zones concernées
+        // plutôt que de garder le cadrage "monde entier" par défaut.
+        if (layer.getBounds().isValid()) {
+          map.fitBounds(layer.getBounds(), { padding: [20, 20] });
+        }
+        {% endif %}
       });
   </script>
 </body>
