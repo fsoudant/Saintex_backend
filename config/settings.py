@@ -12,13 +12,35 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
-load_dotenv()
-
+# ----------------------------------------------------------------------
+# Charger le .env (au même niveau que manage.py)
+# ----------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
+# ----------------------------------------------------------------------
+# Paramètres de base — lecture depuis les variables d'environnement
+# (préfixe DJANGO_, cf. entrypoint.sh / config Render)
+# ----------------------------------------------------------------------
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+
+# -------------------  paramètres de sécurité HTTP/HTTPS  -------------------
+# Render termine le TLS au niveau de son proxy et transmet la requête en HTTP
+# simple au conteneur ; sans cet en-tête, Django ne voit jamais "https" et
+# SECURE_SSL_REDIRECT=True provoque une boucle de redirection infinie.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+SECURE_SSL_REDIRECT = os.getenv("DJANGO_SECURE_SSL_REDIRECT", "False").lower() == "true"
+SECURE_HSTS_SECONDS = int(os.getenv("DJANGO_SECURE_HSTS_SECONDS", "0"))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", "False").lower() == "true"
+SECURE_HSTS_PRELOAD = os.getenv("DJANGO_SECURE_HSTS_PRELOAD", "False").lower() == "true"
+SECURE_CONTENT_TYPE_NOSNIFF = os.getenv("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", "False").lower() == "true"
+SECURE_BROWSER_XSS_FILTER = os.getenv("DJANGO_SECURE_BROWSER_XSS_FILTER", "False").lower() == "true"
+
+SESSION_COOKIE_SECURE = os.getenv("DJANGO_SESSION_COOKIE_SECURE", "False").lower() == "true"
+CSRF_COOKIE_SECURE = os.getenv("DJANGO_CSRF_COOKIE_SECURE", "False").lower() == "true"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -30,6 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",  # GeoDjango — nécessaire pour PostGIS
     "rest_framework",
     "risks",  # Zone, Risque, ConduiteATenir, Endemie
+    "clients",  # Utilisateur, Position, PushToken, PreferenceChangeLog (cf. Saintex.rtf §5)
 ]
 
 MIDDLEWARE = [
@@ -81,10 +104,12 @@ DATABASES = {
 #   macOS   : brew install gdal geos proj
 #   Ubuntu  : apt install gdal-bin libgdal-dev libgeos-dev libproj-dev
 # En général auto-détectées ; si Django ne les trouve pas au démarrage,
-# décommenter et ajuster les chemins ci-dessous (utile notamment sur macOS
-# selon la version de Homebrew) :
-# GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
-# GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
+# pointer explicitement vers les librairies via GDAL_LIBRARY_PATH /
+# GEOS_LIBRARY_PATH (variables d'environnement) — utile notamment sur macOS
+# selon la version de Homebrew, ou pour utiliser celles embarquées dans un
+# wheel Python (ex. pyogrio pour libgdal).
+GDAL_LIBRARY_PATH = os.environ.get("GDAL_LIBRARY_PATH") or None
+GEOS_LIBRARY_PATH = os.environ.get("GEOS_LIBRARY_PATH") or None
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -109,4 +134,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    # Jeton opaque propre aux voyageurs (Utilisateur.api_token), distinct des
+    # comptes staff Django (cf. clients.authentication) ; ceux-ci continuent
+    # de passer par la session admin classique, hors DRF.
+    "DEFAULT_AUTHENTICATION_CLASSES": ["clients.authentication.UtilisateurTokenAuthentication"],
 }

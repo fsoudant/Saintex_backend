@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 from risks.views import risk_map_geojson, risk_map_view
 
@@ -9,5 +9,6 @@ urlpatterns = [
     path("admin/risks/map/", risk_map_view, name="risk_map"),
     path("admin/risks/map/data/", risk_map_geojson, name="risk_map_geojson"),
     path("admin/", admin.site.urls),
-    # API des check-ins et endpoints back-office à ajouter ici (risks.urls)
+    # API client mobile (positions, préférences) — cf. Saintex.rtf §4-5.
+    path("api/", include("clients.urls")),
 ]
