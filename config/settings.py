@@ -7,6 +7,7 @@ jamais en dur ici.
 """
 
 import os
+import sys
 from pathlib import Path
 
 import dj_database_url
@@ -91,9 +92,18 @@ WSGI_APPLICATION = "config.wsgi.application"
 #   postgresql://user:password@ep-xxx.region.aws.neon.tech/dbname?sslmode=require
 # Le moteur "postgis" (et non le "postgresql" standard) est requis pour que
 # GeoDjango sache gérer les champs géométriques (Zone.geom).
+_database_url = os.environ["DATABASE_URL"]
+if "test" in sys.argv:
+    # `manage.py test` a besoin de CREATE/DROP DATABASE pour la base de test
+    # éphémère — opérations qui se comportent mal derrière le pooler PgBouncer
+    # de Neon (sessions qui trainent, DROP DATABASE bloqué par "other users").
+    # On bascule donc automatiquement sur la connexion directe (sans
+    # "-pooler") pour les tests uniquement, sans toucher à .env.
+    _database_url = _database_url.replace("-pooler.", ".")
+
 DATABASES = {
     "default": dj_database_url.parse(
-        os.environ["DATABASE_URL"],
+        _database_url,
         engine="django.contrib.gis.db.backends.postgis",
         conn_max_age=600,
     )

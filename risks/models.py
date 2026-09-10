@@ -83,6 +83,15 @@ class Risque(models.Model):
     lien_fr = models.URLField(null=True, blank=True)
     lien_en = models.URLField(null=True, blank=True)
 
+    vaccin_disponible = models.BooleanField(
+        default=False,
+        help_text=(
+            "Un vaccin existe-t-il pour ce risque ? Détermine si la couverture "
+            "vaccinale peut être déclarée pour ce risque (cf. clients.VaccinationRisque). "
+            "Faux notamment pour le paludisme (PAL), qui n'a pas de vaccin."
+        ),
+    )
+
     # Texte affiché pour les zones sans risque actif (ex. recommandations
     # vaccinales de base même hors zone à risque)
     cat_zones_saines_fr = models.TextField(blank=True)

@@ -12,6 +12,7 @@ opaque), sans mot de passe ni notion de session web.
 import secrets
 
 from django.contrib.gis.db import models as gis_models
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
@@ -181,3 +182,58 @@ class PreferenceChangeLog(models.Model):
             ancienne_valeur=ancienne_valeur,
             nouvelle_valeur=nouvelle_valeur,
         )
+
+
+class VaccinationRisque(models.Model):
+    """Couverture vaccinale déclarée d'un voyageur pour un Risque donné.
+
+    Simple booléen : vacciné / non vacciné. N'a de sens que pour les risques
+    disposant d'un vaccin (Risque.vaccin_disponible=True) — le paludisme
+    (PAL), qui n'a pas de vaccin, ne peut donc jamais avoir d'entrée ici : la
+    règle est imposée structurellement par clean() ci-dessous, pas seulement
+    par convention dans l'admin.
+
+    Objectif : ne pas notifier un voyageur déjà protégé lorsqu'il entre dans
+    une zone à risque pour laquelle il est vacciné — à exploiter côté moteur
+    de notification, pas encore implémenté (cf. Saintex.rtf §6).
+    """
+
+    utilisateur = models.ForeignKey(
+        Utilisateur, on_delete=models.CASCADE, related_name="vaccinations"
+    )
+    risque = models.ForeignKey(
+        "risks.Risque", on_delete=models.CASCADE, related_name="vaccinations_utilisateurs"
+    )
+    vaccine = models.BooleanField(
+        default=False, help_text="True = voyageur vacciné/protégé pour ce risque"
+    )
+    declared_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["utilisateur", "risque"], name="une_entree_vaccination_par_risque"
+            ),
+        ]
+        verbose_name = "Couverture vaccinale"
+        verbose_name_plural = "Couvertures vaccinales"
+
+    def clean(self):
+        super().clean()
+        if self.risque_id and not self.risque.vaccin_disponible:
+            raise ValidationError(
+                f"« {self.risque} » n'a pas de vaccin disponible "
+                "(Risque.vaccin_disponible=False) — la couverture vaccinale n'a pas "
+                "de sens pour ce risque."
+            )
+
+    def save(self, *args, **kwargs):
+        # full_clean() (et pas juste clean()) pour que la règle tienne aussi
+        # depuis une future création via l'API mobile, pas seulement via les
+        # formulaires admin qui appellent full_clean() automatiquement.
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        statut = "vacciné" if self.vaccine else "non vacciné"
+        return f"{self.utilisateur.email} / {self.risque.code} : {statut}"

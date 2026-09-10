@@ -1,15 +1,27 @@
-import json
+import shapely.geometry
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 
 from .colors import average_rgb, parse_rgb, to_css
+from .geo_utils import recompose_antimeridian
 from .models import ConduiteATenir, Zone
 
 
 def _risk_colors(endemies):
     return [parse_rgb(e.conduite_a_tenir.risque.couleur_legende) for e in endemies]
+
+
+def _geom_to_geojson(geom):
+    """GeoJSON d'une géométrie GEOS, recomposée si elle franchit
+    l'antiméridien (cf. geo_utils.recompose_antimeridian) : sans ça, une
+    zone comme Tuvalu/Kiribati/Fidji/Afrique_Asie_centrale s'affiche sur le
+    Leaflet de la carte des risques comme deux esquilles tronquées aux deux
+    bords opposés de la carte plate, au lieu d'un seul bloc continu autour
+    de 180°/-180°.
+    """
+    return shapely.geometry.mapping(recompose_antimeridian(geom))
 
 
 def build_risk_map_geojson(conduite_a_tenir=None):
@@ -54,7 +66,7 @@ def build_risk_map_geojson(conduite_a_tenir=None):
 
         features.append({
             "type": "Feature",
-            "geometry": json.loads(zone.geom.geojson),
+            "geometry": _geom_to_geojson(zone.geom),
             "properties": {
                 "fill": to_css(base_color),
                 "layer": "zone",
@@ -74,7 +86,7 @@ def build_risk_map_geojson(conduite_a_tenir=None):
                 patch_color = average_rgb(autres_couleurs)
             features.append({
                 "type": "Feature",
-                "geometry": json.loads(excluded.zone_exclue.geojson),
+                "geometry": _geom_to_geojson(excluded.zone_exclue),
                 "properties": {
                     "fill": to_css(patch_color),
                     "layer": "exclusion",

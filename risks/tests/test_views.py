@@ -33,6 +33,14 @@ def _geom():
     return MultiPolygon(poly, srid=4326)
 
 
+def _geom_a_cheval_antimeridien():
+    """Comme une Zone Tuvalu/Kiribati/Fidji/Afrique_Asie_centrale apres
+    build_zone_geom : deux carres, l'un colle a -180, l'autre a +180."""
+    ouest = Polygon(((-180, 0), (-179, 0), (-179, 1), (-180, 1), (-180, 0)))
+    est = Polygon(((179, 1), (180, 1), (180, 2), (179, 2), (179, 1)))
+    return MultiPolygon(ouest, est, srid=4326)
+
+
 def _risque(couleur, libelle):
     r = mock.MagicMock()
     r.couleur_legende = couleur
@@ -144,6 +152,24 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
         self.assertEqual(len(exclusions), 1)
         # La patch est coloriée de la dengue (seul autre risque de la zone).
         self.assertEqual(exclusions[0]["properties"]["fill"], "rgb(0,0,255)")
+
+    def test_zone_a_cheval_antimeridien_recomposee_en_bloc_continu(self):
+        # Reproduit Tuvalu/Kiribati/Fidji/Afrique_Asie_centrale : sans la
+        # recomposition (cf. geo_utils.recompose_antimeridian), le GeoJSON
+        # sortirait tel quel, avec les deux carres separes aux bords
+        # opposes (-180/-179 et 179/180) plutot qu'un bloc continu 179/181.
+        paludisme = _risque("rgb(255,0,0)", "Paludisme")
+        c_pal = _conduite(1, "P_T3_A", paludisme)
+        zon = _zone("Fidji", _geom_a_cheval_antimeridien(), [_endemie(10, c_pal)])
+        self._patch_zones([zon])
+
+        data = build_risk_map_geojson()
+
+        geometry = data["features"][0]["geometry"]
+        self.assertEqual(geometry["type"], "MultiPolygon")
+        xs = [pt[0] for poly in geometry["coordinates"] for ring in poly for pt in ring]
+        self.assertAlmostEqual(min(xs), 179.0)
+        self.assertAlmostEqual(max(xs), 181.0)
 
     def test_vue_filtree_par_conduite(self):
         paludisme = _risque("rgb(255,0,0)", "Paludisme")

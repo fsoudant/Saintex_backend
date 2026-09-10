@@ -1,13 +1,28 @@
 from django.contrib import admin
 from django.contrib.gis.admin import GISModelAdmin
 
-from .models import PreferenceChangeLog, Position, PushToken, Utilisateur
+from risks.models import Risque
+
+from .models import PreferenceChangeLog, Position, PushToken, Utilisateur, VaccinationRisque
 
 
 class PushTokenInline(admin.TabularInline):
     model = PushToken
     extra = 0
     readonly_fields = ("created_at",)
+
+
+class VaccinationRisqueInline(admin.TabularInline):
+    model = VaccinationRisque
+    extra = 0
+    readonly_fields = ("declared_at",)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        # Ne propose que les risques ayant un vaccin (cf. Risque.vaccin_disponible) —
+        # cohérent avec la contrainte imposée par VaccinationRisque.clean().
+        if db_field.name == "risque":
+            kwargs["queryset"] = Risque.objects.filter(vaccin_disponible=True)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Utilisateur)
@@ -19,7 +34,7 @@ class UtilisateurAdmin(admin.ModelAdmin):
     list_filter = ("subscription_status", "email_active", "push_active", "consent_status")
     search_fields = ("email", "phone")
     readonly_fields = ("api_token", "created_at", "last_seen_at")
-    inlines = [PushTokenInline]
+    inlines = [PushTokenInline, VaccinationRisqueInline]
 
 
 @admin.register(Position)
@@ -49,3 +64,20 @@ class PreferenceChangeLogAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+
+@admin.register(VaccinationRisque)
+class VaccinationRisqueAdmin(admin.ModelAdmin):
+    # Vue transversale pour l'équipe médicale (ex. "qui est couvert pour la
+    # fièvre jaune ?"), en complément de l'inline sur UtilisateurAdmin qui
+    # ne montre qu'un voyageur à la fois.
+    list_display = ("utilisateur", "risque", "vaccine", "declared_at")
+    list_filter = ("risque", "vaccine")
+    search_fields = ("utilisateur__email",)
+    autocomplete_fields = ("utilisateur", "risque")
+    readonly_fields = ("declared_at",)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "risque":
+            kwargs["queryset"] = Risque.objects.filter(vaccin_disponible=True)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
