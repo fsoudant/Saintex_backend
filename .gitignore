@@ -9,3 +9,5 @@ restore_list.txt
 saintex_neon_export.dump
 restore_list_filtered.txt
 logs/gunicorn.log
+saintex-spec-technique.md
+

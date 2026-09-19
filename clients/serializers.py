@@ -5,8 +5,8 @@ from .models import Utilisateur
 
 
 class PositionInSerializer(serializers.Serializer):
-    """Entrée du polling client (cf. Saintex.rtf §4) : juste lat/lon, la
-    position est envoyée telle quelle, sans intelligence côté client.
+    """Entrée du polling client (cf. saintex-spec-technique.md §4) : juste
+    lat/lon, la position est envoyée telle quelle, sans intelligence côté client.
     """
 
     lat = serializers.FloatField(min_value=-90, max_value=90)
@@ -17,9 +17,9 @@ class PositionInSerializer(serializers.Serializer):
 
 
 class UtilisateurPreferencesSerializer(serializers.ModelSerializer):
-    """Écran "préférences de notification" (cf. Saintex.rtf §4) : lecture et
-    mise à jour des seuls champs que l'utilisateur peut modifier lui-même.
-    Le SMS n'apparaît pas ici — il n'est pas désactivable (cf. §6).
+    """Écran "préférences de notification" (cf. saintex-spec-technique.md §4) :
+    lecture et mise à jour des seuls champs que l'utilisateur peut modifier
+    lui-même. Le SMS n'apparaît pas ici — il n'est pas désactivable (cf. §8).
     """
 
     class Meta:

@@ -1,6 +1,9 @@
+from django.contrib.gis.geos import Point
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 
-from clients.models import PreferenceChangeLog, Utilisateur
+from clients.models import NotificationLog, PreferenceChangeLog, Utilisateur, UserRiskZoneStatus
+from risks.models import ConduiteATenir, Endemie, Risque, Zone
 
 
 class UtilisateurTests(TestCase):
@@ -35,3 +38,70 @@ class PreferenceChangeLogTests(TestCase):
     def test_enregistrer_rejects_untracked_field(self):
         with self.assertRaises(ValueError):
             PreferenceChangeLog.enregistrer(self.utilisateur, "email", "a@example.com", "b@example.com")
+
+
+class _EndemieFixtureMixin:
+    """Fabrique une Endemie minimale (Zone + Risque + ConduiteATenir) pour
+    les tests de UserRiskZoneStatus/NotificationLog, qui n'ont besoin que
+    d'une référence valide, pas d'un scénario médical réaliste.
+    """
+
+    def _endemie(self):
+        zone = Zone.objects.create(source_id=1, nom="Zone test")
+        risque = Risque.objects.create(
+            code="PAL",
+            libelle_fr="Paludisme",
+            libelle_en="Malaria",
+            nature_du_risque_fr="...",
+            nature_du_risque_en="...",
+        )
+        conduite = ConduiteATenir.objects.create(
+            code="PAL_T1", risque=risque, nature_du_risque_fr="...", nature_du_risque_en="..."
+        )
+        return Endemie.objects.create(zone=zone, conduite_a_tenir=conduite)
+
+
+class UserRiskZoneStatusTests(_EndemieFixtureMixin, TestCase):
+    def setUp(self):
+        self.utilisateur = Utilisateur.objects.create(email="a@example.com", phone="+33600000000")
+        self.endemie = self._endemie()
+
+    def test_entered_at_set_automatically(self):
+        statut = UserRiskZoneStatus.objects.create(utilisateur=self.utilisateur, endemie=self.endemie)
+        self.assertIsNotNone(statut.entered_at)
+        self.assertIsNone(statut.last_reminded_at)
+
+    def test_un_seul_statut_par_utilisateur_et_endemie(self):
+        UserRiskZoneStatus.objects.create(utilisateur=self.utilisateur, endemie=self.endemie)
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            UserRiskZoneStatus.objects.create(utilisateur=self.utilisateur, endemie=self.endemie)
+
+
+class NotificationLogTests(_EndemieFixtureMixin, TestCase):
+    def setUp(self):
+        self.utilisateur = Utilisateur.objects.create(email="a@example.com", phone="+33600000000")
+
+    def test_creation_alerte_zone_avec_position(self):
+        log = NotificationLog.objects.create(
+            utilisateur=self.utilisateur,
+            type_notification=NotificationLog.TypeNotification.ALERTE_ZONE,
+            endemie=self._endemie(),
+            position=Point(2.35, 48.85, srid=4326),
+            message="Vous entrez dans une zone à risque de paludisme.",
+            destinataire="a@example.com",
+            canal=NotificationLog.Canal.EMAIL,
+        )
+        self.assertEqual(log.statut, NotificationLog.Statut.EN_ATTENTE)
+
+    def test_creation_relance_silence_sans_position_ni_endemie(self):
+        # Cf. docstring du modèle : une relance "appli silencieuse" ne porte
+        # par définition aucune position ni endemie associée.
+        log = NotificationLog.objects.create(
+            utilisateur=self.utilisateur,
+            type_notification=NotificationLog.TypeNotification.RELANCE_SILENCE,
+            message="Nous n'avons plus de nouvelles de votre position depuis 7h.",
+            destinataire="+33600000000",
+            canal=NotificationLog.Canal.SMS,
+        )
+        self.assertIsNone(log.endemie)
+        self.assertIsNone(log.position)

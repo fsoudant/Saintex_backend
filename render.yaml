@@ -12,3 +12,20 @@ services:
         value: ".onrender.com"
       - key: DATABASE_URL
         sync: false # renseigné manuellement dans le dashboard Render (chaîne Neon)
+
+  # Watchdog "appli silencieuse" (cf. saintex-spec-technique.md §8, clients/watchdog.py).
+  # Payant contrairement au service web ci-dessus (free tier) — cron jobs Render
+  # facturés à la minute, ~1$/mois minimum selon le temps d'exécution. À décommenter
+  # quand ce coût est validé ; en attendant, la commande peut être lancée manuellement
+  # (`python manage.py watchdog_relance_silence`) pour tester en local/staging.
+  # - type: cron
+  #   name: saintex-watchdog-relance-silence
+  #   runtime: docker
+  #   plan: starter
+  #   schedule: "*/15 * * * *" # toutes les 15 min — largement suffisant vu la granularité horaire des seuils (§8)
+  #   dockerCommand: python manage.py watchdog_relance_silence
+  #   envVars:
+  #     - key: DJANGO_SECRET_KEY
+  #       sync: false # même valeur que le service web, à renseigner manuellement
+  #     - key: DATABASE_URL
+  #       sync: false

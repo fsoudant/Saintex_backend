@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Saintex</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- Écran 1 : onboarding + consentement RGPD (spec §6 tunnel, étape implicite avant sélection) -->
+    <section id="screen-onboarding" class="screen">
+      <h1>Saintex</h1>
+      <p>
+        Saintex vous alerte automatiquement, sans action de votre part, lorsque vous entrez
+        dans une zone présentant un risque infectieux (paludisme, encéphalite à tiques, etc.).
+      </p>
+      <p>
+        Pour cela, l'application a besoin d'accéder à votre position en arrière-plan,
+        y compris lorsqu'elle est fermée. Cette donnée de localisation est traitée
+        uniquement côté serveur, de façon minimale : aucune position brute n'est
+        conservée, sauf au moment précis d'une alerte envoyée (voir notre politique
+        de confidentialité).
+      </p>
+      <label class="consent-row">
+        <input type="checkbox" id="consent-checkbox" />
+        <span>J'ai lu et j'accepte le traitement de ma position pour la détection de risques sanitaires (RGPD).</span>
+      </label>
+      <button id="btn-onboarding-continue" disabled>Continuer</button>
+    </section>
+
+    <!-- Écran 2 : tunnel premier lancement (spec §6, étapes 1 à 4) -->
+    <section id="screen-tunnel" class="screen hidden">
+      <h2>Votre voyage</h2>
+
+      <div class="field">
+        <label for="contract-duration">Durée du contrat</label>
+        <select id="contract-duration">
+          <option value="1">1 mois</option>
+          <option value="2">2 mois</option>
+          <option value="3">3 mois</option>
+          <option value="6">6 mois</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Pays visités</label>
+        <div id="country-list" class="checkbox-list">
+          <!-- rempli dynamiquement par tunnel.ts depuis l'API des pays -->
+        </div>
+      </div>
+
+      <fieldset class="field">
+        <legend>Canaux de notification</legend>
+        <label class="consent-row">
+          <input type="checkbox" checked disabled />
+          <span>SMS (toujours actif, non désactivable)</span>
+        </label>
+        <label class="consent-row">
+          <input type="checkbox" id="pref-email" checked />
+          <span>Email</span>
+        </label>
+        <label class="consent-row">
+          <input type="checkbox" id="pref-push" checked />
+          <span>Notifications push</span>
+        </label>
+      </fieldset>
+
+      <div class="field">
+        <label for="reminder-delay">Fréquence de rappel en zone à risque</label>
+        <select id="reminder-delay">
+          <option value="once">Une seule fois</option>
+          <option value="daily">Quotidien</option>
+          <option value="every_2_days">Tous les 2 jours</option>
+          <option value="weekly">Hebdomadaire</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="user-email">Email</label>
+        <input type="email" id="user-email" placeholder="vous@exemple.com" autocomplete="email" />
+      </div>
+
+      <div class="field">
+        <label for="user-phone">Téléphone (SMS)</label>
+        <input type="tel" id="user-phone" placeholder="+33 6 12 34 56 78" autocomplete="tel" />
+      </div>
+
+      <button id="btn-tunnel-continue" disabled>Continuer vers le paiement</button>
+      <p class="note">
+        Le paiement se fait via un lien externe sécurisé (Stripe), hors de l'application,
+        pour limiter les commissions de plateforme (cf. spec §6).
+      </p>
+    </section>
+
+    <!-- Écran 3 : accueil / solde (spec §7 subscription_status, contract_started_at) -->
+    <section id="screen-home" class="screen hidden">
+      <h2>Mon voyage</h2>
+      <div id="balance-card" class="card">
+        <p class="loading">Chargement…</p>
+      </div>
+      <nav class="tabbar">
+        <button id="nav-home" class="active">Accueil</button>
+        <button id="nav-preferences">Préférences</button>
+      </nav>
+    </section>
+
+    <!-- Écran 4 : préférences (spec §7 email_active, push_active, reminder_delay) -->
+    <section id="screen-preferences" class="screen hidden">
+      <h2>Préférences de notification</h2>
+
+      <label class="consent-row">
+        <input type="checkbox" checked disabled />
+        <span>SMS (toujours actif, non désactivable)</span>
+      </label>
+      <label class="consent-row">
+        <input type="checkbox" id="settings-pref-email" />
+        <span>Email</span>
+      </label>
+      <label class="consent-row">
+        <input type="checkbox" id="settings-pref-push" />
+        <span>Notifications push</span>
+      </label>
+
+      <div class="field">
+        <label for="settings-reminder-delay">Fréquence de rappel en zone à risque</label>
+        <select id="settings-reminder-delay">
+          <option value="once">Une seule fois</option>
+          <option value="daily">Quotidien</option>
+          <option value="every_2_days">Tous les 2 jours</option>
+          <option value="weekly">Hebdomadaire</option>
+        </select>
+      </div>
+
+      <button id="btn-preferences-save">Enregistrer</button>
+      <p id="preferences-status" class="note"></p>
+
+      <nav class="tabbar">
+        <button id="nav-home-2">Accueil</button>
+        <button id="nav-preferences-2" class="active">Préférences</button>
+      </nav>
+    </section>
+
+  </div>
+
+  <script type="module" src="dist/main.js"></script>
+</body>
+</html>

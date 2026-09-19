@@ -1,5 +1,5 @@
 """
-Vues API voyageurs (cf. Saintex.rtf §4).
+Vues API voyageurs (cf. saintex-spec-technique.md §4).
 
 Ne couvre pour l'instant que le polling de position et la lecture/mise à
 jour des préférences de notification. L'inscription (création du compte
@@ -13,14 +13,22 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import PreferenceChangeLog, Position
+from risks.detection import zones_actives_pour_point
+
+from .models import PreferenceChangeLog, UserRiskZoneStatus
+from .notifications import envoyer_alerte_entree, envoyer_rappel_si_echeance
 from .serializers import PositionInSerializer, UtilisateurPreferencesSerializer
 
 
 class PositionPollView(APIView):
     """POST /api/positions/ — reçoit la position envoyée par le client toutes
-    les 6h (cf. §4). Met aussi à jour Utilisateur.last_seen_at, utilisé par
-    le futur watchdog de relance (§6) pour détecter le silence > 7h.
+    les 6h (cf. §4). Met à jour Utilisateur.last_contact_at (utilisé par le
+    watchdog de relance, §8, pour détecter le silence > 7h) et détecte les
+    zones à risque actives à cette position (§7/§8) pour maintenir
+    UserRiskZoneStatus à jour.
+
+    La position reçue n'est jamais persistée (cf. §7, minimisation
+    maximale) : elle ne sert qu'au calcul ci-dessous, puis est écartée.
     """
 
     permission_classes = [permissions.IsAuthenticated]
@@ -30,14 +38,28 @@ class PositionPollView(APIView):
         serializer.is_valid(raise_exception=True)
 
         utilisateur = request.user
-        Position.objects.create(utilisateur=utilisateur, point=serializer.to_point())
-        utilisateur.last_seen_at = timezone.now()
-        utilisateur.save(update_fields=["last_seen_at"])
+        point = serializer.to_point()
 
-        # Pas de corps de réponse : la détection de zone à risque et la
-        # décision de notification (§6) ne sont pas encore implémentées ;
-        # le client n'a de toute façon rien à faire de la réponse (§4 :
-        # "aucune notification générée localement").
+        utilisateur.last_contact_at = timezone.now()
+        utilisateur.save(update_fields=["last_contact_at"])
+
+        for endemie in zones_actives_pour_point(point):
+            statut_zone, cree = UserRiskZoneStatus.objects.get_or_create(
+                utilisateur=utilisateur, endemie=endemie
+            )
+            if cree:
+                # Nouvelle zone détectée pour cet utilisateur : alerte
+                # d'entrée (§8), envoyée une seule fois grâce à
+                # get_or_create ci-dessus.
+                envoyer_alerte_entree(utilisateur, statut_zone, point)
+            else:
+                # Zone déjà active : notifier seulement si l'échéance de
+                # reminder_delay est atteinte depuis le dernier rappel (§8).
+                envoyer_rappel_si_echeance(utilisateur, statut_zone, point)
+
+        # Pas de corps de réponse : le client n'a de toute façon rien à
+        # faire de la réponse (§4 : "aucune notification générée
+        # localement", toutes les alertes proviennent du serveur).
         return Response(status=status.HTTP_201_CREATED)
 
 
@@ -45,7 +67,7 @@ class MePreferencesView(APIView):
     """GET/PATCH /api/me/ — écran "préférences de notification" (§4).
 
     Chaque changement effectif sur un champ tracé est journalisé dans
-    PreferenceChangeLog (§5), un par champ modifié.
+    PreferenceChangeLog (§7), un par champ modifié.
     """
 
     permission_classes = [permissions.IsAuthenticated]

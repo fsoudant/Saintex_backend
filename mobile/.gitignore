@@ -1,0 +1,4 @@
+node_modules/
+www/dist/
+ios/App/Pods/
+.DS_Store
