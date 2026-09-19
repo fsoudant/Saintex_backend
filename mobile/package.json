@@ -1,0 +1,22 @@
+{
+  "name": "saintex-mobile",
+  "version": "0.1.0",
+  "description": "Coque UI Capacitor pour Saintex (iOS) — le cœur fonctionnel (GPS/boot) est natif Swift, hors de ce dossier.",
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/main.ts --bundle --format=esm --target=es2020 --outfile=www/dist/main.js",
+    "typecheck": "tsc --noEmit",
+    "sync": "npm run build && npx cap sync ios",
+    "open:ios": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@capacitor/preferences": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0",
+    "typescript": "^5.5.0",
+    "esbuild": "^0.23.0"
+  }
+}

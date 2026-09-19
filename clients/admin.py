@@ -1,9 +1,15 @@
 from django.contrib import admin
-from django.contrib.gis.admin import GISModelAdmin
 
 from risks.models import Risque
 
-from .models import PreferenceChangeLog, Position, PushToken, Utilisateur, VaccinationRisque
+from .models import (
+    NotificationLog,
+    PreferenceChangeLog,
+    PushToken,
+    Utilisateur,
+    UserRiskZoneStatus,
+    VaccinationRisque,
+)
 
 
 class PushTokenInline(admin.TabularInline):
@@ -29,27 +35,12 @@ class VaccinationRisqueInline(admin.TabularInline):
 class UtilisateurAdmin(admin.ModelAdmin):
     list_display = (
         "email", "phone", "subscription_status", "email_active", "push_active",
-        "last_seen_at", "consent_status",
+        "last_contact_at", "consent_status",
     )
     list_filter = ("subscription_status", "email_active", "push_active", "consent_status")
     search_fields = ("email", "phone")
-    readonly_fields = ("api_token", "created_at", "last_seen_at")
+    readonly_fields = ("api_token", "created_at", "last_contact_at")
     inlines = [PushTokenInline, VaccinationRisqueInline]
-
-
-@admin.register(Position)
-class PositionAdmin(GISModelAdmin):
-    # Lecture seule : ce sont des données reçues automatiquement du client,
-    # pas des enregistrements à créer/modifier depuis l'admin.
-    list_display = ("utilisateur", "received_at")
-    list_filter = ("utilisateur",)
-    date_hierarchy = "received_at"
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
 
 
 @admin.register(PreferenceChangeLog)
@@ -58,6 +49,42 @@ class PreferenceChangeLogAdmin(admin.ModelAdmin):
     list_filter = ("champ",)
     search_fields = ("utilisateur__email",)
     date_hierarchy = "changed_at"
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(UserRiskZoneStatus)
+class UserRiskZoneStatusAdmin(admin.ModelAdmin):
+    # Lecture seule : état calculé/maintenu par le moteur de détection de
+    # zone à risque, pas un enregistrement à créer/modifier depuis l'admin.
+    list_display = ("utilisateur", "endemie", "entered_at", "last_reminded_at")
+    list_filter = ("endemie",)
+    search_fields = ("utilisateur__email",)
+    autocomplete_fields = ("utilisateur",)
+    date_hierarchy = "entered_at"
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(NotificationLog)
+class NotificationLogAdmin(admin.ModelAdmin):
+    # Lecture seule : journal probatoire produit par le moteur d'envoi
+    # (cf. §9), jamais saisi/modifié à la main.
+    list_display = (
+        "utilisateur", "type_notification", "canal", "statut", "destinataire", "sent_at",
+    )
+    list_filter = ("type_notification", "canal", "statut")
+    search_fields = ("utilisateur__email", "destinataire")
+    autocomplete_fields = ("utilisateur",)
+    date_hierarchy = "sent_at"
 
     def has_add_permission(self, request):
         return False
