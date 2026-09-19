@@ -3,7 +3,6 @@
 .env
 __pycache__/
 Saintex.rtf
-check_env.py
 logs/gunicorn-error.log
 restore_list.txt
 saintex_neon_export.dump
@@ -11,3 +10,5 @@ restore_list_filtered.txt
 logs/gunicorn.log
 saintex-spec-technique.md
 
+restore_list_business.txt
+restore_list_clients.txt
