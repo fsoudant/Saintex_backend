@@ -26,6 +26,7 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+CSRF_TRUSTED_ORIGINS = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
 
 # -------------------  paramètres de sécurité HTTP/HTTPS  -------------------
 # Render termine le TLS au niveau de son proxy et transmet la requête en HTTP
