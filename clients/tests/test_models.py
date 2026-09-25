@@ -1,8 +1,19 @@
+import datetime
+
 from django.contrib.gis.geos import Point
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TestCase
+from django.utils import timezone
 
-from clients.models import NotificationLog, PreferenceChangeLog, Utilisateur, UserRiskZoneStatus
+from clients.models import (
+    CONTRACT_START_DATE_MAX_MONTHS_AHEAD,
+    NotificationLog,
+    PreferenceChangeLog,
+    Utilisateur,
+    UserRiskZoneStatus,
+    valider_date_debut_contrat,
+)
 from risks.models import ConduiteATenir, Endemie, Risque, Zone
 
 
@@ -19,6 +30,84 @@ class UtilisateurTests(TestCase):
     def test_is_authenticated_always_true(self):
         u = Utilisateur.objects.create(email="a@example.com", phone="+33600000000")
         self.assertTrue(u.is_authenticated)
+
+
+class ContractStartDateTests(TestCase):
+    """Cf. saintex-spec-technique.md §6 : date de début de contrat fixée par
+    l'utilisateur, modifiable jusqu'à la veille de son arrivée, bornée à
+    CONTRACT_START_DATE_MAX_MONTHS_AHEAD (décision réunion médicale)."""
+
+    def setUp(self):
+        self.aujourdhui = timezone.localdate()
+
+    def test_date_future_dans_la_borne_est_acceptee(self):
+        # Ne lève pas d'exception.
+        valider_date_debut_contrat(None, self.aujourdhui + datetime.timedelta(days=30))
+
+    def test_date_dans_le_passe_est_rejetee(self):
+        with self.assertRaises(ValidationError):
+            valider_date_debut_contrat(None, self.aujourdhui - datetime.timedelta(days=1))
+
+    def test_date_au_dela_de_la_borne_max_est_rejetee(self):
+        trop_loin = self.aujourdhui.replace(
+            year=self.aujourdhui.year + (CONTRACT_START_DATE_MAX_MONTHS_AHEAD // 12) + 1
+        )
+        with self.assertRaises(ValidationError):
+            valider_date_debut_contrat(None, trop_loin)
+
+    def test_modification_avant_demarrage_est_acceptee(self):
+        ancienne = self.aujourdhui + datetime.timedelta(days=10)
+        nouvelle = self.aujourdhui + datetime.timedelta(days=20)
+        # Ne lève pas d'exception : le contrat n'a pas encore démarré.
+        valider_date_debut_contrat(ancienne, nouvelle)
+
+    def test_modification_apres_demarrage_est_rejetee(self):
+        deja_demarree = self.aujourdhui - datetime.timedelta(days=1)
+        with self.assertRaises(ValidationError):
+            valider_date_debut_contrat(deja_demarree, self.aujourdhui + datetime.timedelta(days=5))
+
+    def test_reaffecter_la_meme_date_le_jour_meme_ne_leve_rien(self):
+        # Cf. valider_date_debut_contrat : le garde-fou "déjà démarré" ne se
+        # déclenche que si la valeur change réellement.
+        valider_date_debut_contrat(self.aujourdhui, self.aujourdhui)
+
+    def test_utilisateur_clean_valide_le_changement_de_date(self):
+        u = Utilisateur.objects.create(
+            email="a@example.com",
+            phone="+33600000000",
+            contract_start_date=self.aujourdhui - datetime.timedelta(days=1),
+        )
+        u.contract_start_date = self.aujourdhui + datetime.timedelta(days=5)
+        with self.assertRaises(ValidationError):
+            u.clean()
+
+    def test_contrat_demarre_property(self):
+        u = Utilisateur.objects.create(
+            email="a@example.com", phone="+33600000000",
+            contract_start_date=self.aujourdhui - datetime.timedelta(days=1),
+        )
+        self.assertTrue(u.contrat_demarre)
+
+    def test_contrat_pas_encore_demarre_property(self):
+        u = Utilisateur.objects.create(
+            email="a@example.com", phone="+33600000000",
+            contract_start_date=self.aujourdhui + datetime.timedelta(days=1),
+        )
+        self.assertFalse(u.contrat_demarre)
+
+    def test_contract_expiry_date_calculee(self):
+        u = Utilisateur.objects.create(
+            email="a@example.com", phone="+33600000000",
+            contract_start_date=datetime.date(2026, 1, 15), contract_duration=2,
+        )
+        self.assertEqual(u.contract_expiry_date, datetime.date(2026, 3, 15))
+
+    def test_contract_expiry_date_none_si_duree_manquante(self):
+        u = Utilisateur.objects.create(
+            email="a@example.com", phone="+33600000000",
+            contract_start_date=self.aujourdhui,
+        )
+        self.assertIsNone(u.contract_expiry_date)
 
 
 class PreferenceChangeLogTests(TestCase):

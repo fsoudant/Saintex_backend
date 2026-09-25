@@ -35,12 +35,19 @@ class VaccinationRisqueInline(admin.TabularInline):
 class UtilisateurAdmin(admin.ModelAdmin):
     list_display = (
         "email", "phone", "subscription_status", "email_active", "push_active",
-        "last_contact_at", "consent_status",
+        "contract_start_date", "last_contact_at", "consent_status",
     )
     list_filter = ("subscription_status", "email_active", "push_active", "consent_status")
     search_fields = ("email", "phone")
-    readonly_fields = ("api_token", "created_at", "last_contact_at")
+    readonly_fields = ("api_token", "created_at", "last_contact_at", "contract_expiry_date_display")
     inlines = [PushTokenInline, VaccinationRisqueInline]
+
+    def contract_expiry_date_display(self, obj):
+        # contract_expiry_date est une propriété calculée (début + durée),
+        # pas un champ de modèle — exposée en lecture seule via cette méthode.
+        return obj.contract_expiry_date
+
+    contract_expiry_date_display.short_description = "Date d'expiration du contrat"
 
 
 @admin.register(PreferenceChangeLog)

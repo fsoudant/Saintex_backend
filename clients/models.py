@@ -9,11 +9,65 @@ voyageurs, et permet une authentification API dédiée et minimale (jeton
 opaque), sans mot de passe ni notion de session web.
 """
 
+import calendar
 import secrets
 
 from django.contrib.gis.db import models as gis_models
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
+
+# Borne haute retenue pour l'horizon de saisie de contract_start_date (cf.
+# saintex-spec-technique.md §6, "Démarrage du contrat") : décidée en réunion
+# avec le co-fondateur médical comme "6 à 12 mois" sans qu'un chiffre exact
+# soit arrêté au procès-verbal — 12 retenu ici (borne la plus permissive) en
+# attendant confirmation ; à ajuster en un seul endroit si le chiffre exact
+# est précisé.
+CONTRACT_START_DATE_MAX_MONTHS_AHEAD = 12
+
+
+def _ajouter_mois(date_ref, mois):
+    """Ajoute `mois` mois calendaires à `date_ref`, sans dépendance externe
+    (dateutil n'est pas dans les paquets du projet, cf. tools-and-environment).
+    Cale le jour sur le dernier jour du mois cible si nécessaire (ex. 31
+    janvier + 1 mois -> 28/29 février)."""
+    mois_total = date_ref.month - 1 + mois
+    annee = date_ref.year + mois_total // 12
+    mois_resultat = mois_total % 12 + 1
+    jour = min(date_ref.day, calendar.monthrange(annee, mois_resultat)[1])
+    return date_ref.replace(year=annee, month=mois_resultat, day=jour)
+
+
+def valider_date_debut_contrat(ancienne_valeur, nouvelle_valeur, aujourdhui=None):
+    """Valide un changement de Utilisateur.contract_start_date (cf.
+    saintex-spec-technique.md §6, décision réunion médicale) :
+
+    - la date ne doit pas être dans le passé ;
+    - elle ne doit pas dépasser CONTRACT_START_DATE_MAX_MONTHS_AHEAD à
+      l'avance ;
+    - si une date était déjà fixée et que "aujourd'hui" l'a atteinte ou
+      dépassée, le contrat a démarré effectivement et la date n'est plus
+      modifiable (validation rule actée : "editable while date_actuelle <
+      contract_start_date").
+
+    Fonction libre (pas une méthode d'instance) pour rester appelable aussi
+    bien depuis Utilisateur.clean() que depuis le serializer DRF, sans
+    dupliquer la règle. Ne renvoie rien ; lève ValidationError si invalide.
+    """
+    aujourdhui = aujourdhui or timezone.localdate()
+
+    if ancienne_valeur is not None and nouvelle_valeur != ancienne_valeur and aujourdhui >= ancienne_valeur:
+        raise ValidationError(
+            "Le contrat a déjà démarré : la date de début n'est plus modifiable."
+        )
+    if nouvelle_valeur < aujourdhui:
+        raise ValidationError("La date de début de contrat ne peut pas être dans le passé.")
+    borne_max = _ajouter_mois(aujourdhui, CONTRACT_START_DATE_MAX_MONTHS_AHEAD)
+    if nouvelle_valeur > borne_max:
+        raise ValidationError(
+            "La date de début de contrat ne peut pas être fixée à plus de "
+            f"{CONTRACT_START_DATE_MAX_MONTHS_AHEAD} mois à l'avance."
+        )
 
 
 def generate_api_token():
@@ -71,6 +125,29 @@ class Utilisateur(models.Model):
         max_length=20, choices=StatutAbonnement.choices, default=StatutAbonnement.ESSAI
     )
 
+    contract_duration = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text="Durée du contrat en mois, choisie à l'achat (1, 2, 3...)",
+    )
+
+    purchased_at = models.DateTimeField(
+        null=True, blank=True, help_text="Horodatage de l'achat"
+    )
+
+    contract_start_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text=(
+            "Date de début du contrat, fixée par l'utilisateur lui-même à "
+            "l'achat (cf. saintex-spec-technique.md §6 — la sélection de pays "
+            "comme déclencheur d'activation a été abandonnée au profit d'une "
+            "date déclarée). Modifiable tant que cette date n'est pas encore "
+            "arrivée ; figée dès que le contrat démarre effectivement (cf. "
+            "contrat_demarre / valider_date_debut_contrat)."
+        ),
+    )
+
     last_contact_at = models.DateTimeField(
         null=True,
         blank=True,
@@ -101,6 +178,37 @@ class Utilisateur(models.Model):
     @property
     def is_authenticated(self):
         return True
+
+    @property
+    def contract_expiry_date(self):
+        """Date d'expiration du contrat (début + durée, cf. §6 : "Expiration =
+        date de déclenchement + durée choisie"), ou None tant que l'une des
+        deux informations n'est pas encore renseignée."""
+        if self.contract_start_date is None or self.contract_duration is None:
+            return None
+        return _ajouter_mois(self.contract_start_date, self.contract_duration)
+
+    @property
+    def contrat_demarre(self):
+        """True si le contrat a effectivement démarré (date de début atteinte
+        ou dépassée — cf. §6 : le compteur démarre le jour même, pas
+        seulement après)."""
+        if self.contract_start_date is None:
+            return False
+        return timezone.localdate() >= self.contract_start_date
+
+    def clean(self):
+        super().clean()
+        if self.contract_start_date is not None:
+            ancienne_valeur = None
+            if self.pk:
+                ancienne_valeur = (
+                    Utilisateur.objects.filter(pk=self.pk)
+                    .values_list("contract_start_date", flat=True)
+                    .first()
+                )
+            if ancienne_valeur != self.contract_start_date:
+                valider_date_debut_contrat(ancienne_valeur, self.contract_start_date)
 
     def __str__(self):
         return self.email

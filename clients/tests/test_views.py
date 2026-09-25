@@ -1,5 +1,8 @@
+import datetime
+
 from django.contrib.gis.geos import MultiPolygon, Polygon
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework.test import APITestCase
 
 from clients.models import NotificationLog, PreferenceChangeLog, Utilisateur, UserRiskZoneStatus
@@ -174,3 +177,48 @@ class MePreferencesViewTests(APITestCase):
         self.client.patch(self.url, {"email": "hacked@example.com"}, format="json")
         self.utilisateur.refresh_from_db()
         self.assertEqual(self.utilisateur.email, "a@example.com")
+
+
+class MeContratViewTests(APITestCase):
+    """Cf. saintex-spec-technique.md §6 : écran de gestion du contrat,
+    contract_start_date modifiable tant que le contrat n'a pas démarré."""
+
+    def setUp(self):
+        self.aujourdhui = timezone.localdate()
+        self.utilisateur = Utilisateur.objects.create(email="a@example.com", phone="+33600000000")
+        self.url = reverse("me_contrat")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.utilisateur.api_token}")
+
+    def test_get_returns_contract_info(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("contract_start_date", response.data)
+
+    def test_patch_sets_start_date_within_bounds(self):
+        nouvelle_date = self.aujourdhui + datetime.timedelta(days=30)
+        response = self.client.patch(
+            self.url, {"contract_start_date": nouvelle_date.isoformat()}, format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.utilisateur.refresh_from_db()
+        self.assertEqual(self.utilisateur.contract_start_date, nouvelle_date)
+
+    def test_patch_rejects_past_date(self):
+        hier = self.aujourdhui - datetime.timedelta(days=1)
+        response = self.client.patch(self.url, {"contract_start_date": hier.isoformat()}, format="json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_patch_rejects_change_once_contract_started(self):
+        self.utilisateur.contract_start_date = self.aujourdhui - datetime.timedelta(days=1)
+        self.utilisateur.save(update_fields=["contract_start_date"])
+
+        nouvelle_date = self.aujourdhui + datetime.timedelta(days=10)
+        response = self.client.patch(
+            self.url, {"contract_start_date": nouvelle_date.isoformat()}, format="json"
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_patch_ignores_read_only_contract_duration(self):
+        self.client.patch(self.url, {"contract_duration": 6}, format="json")
+        self.utilisateur.refresh_from_db()
+        self.assertIsNone(self.utilisateur.contract_duration)

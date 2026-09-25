@@ -17,7 +17,11 @@ from risks.detection import zones_actives_pour_point
 
 from .models import PreferenceChangeLog, UserRiskZoneStatus
 from .notifications import envoyer_alerte_entree, envoyer_rappel_si_echeance
-from .serializers import PositionInSerializer, UtilisateurPreferencesSerializer
+from .serializers import (
+    PositionInSerializer,
+    UtilisateurContratSerializer,
+    UtilisateurPreferencesSerializer,
+)
 
 
 class PositionPollView(APIView):
@@ -93,4 +97,26 @@ class MePreferencesView(APIView):
                 nouvelle_valeur=str(getattr(utilisateur, champ)),
             )
 
+        return Response(serializer.data)
+
+
+class MeContratView(APIView):
+    """GET/PATCH /api/me/contrat/ — écran de gestion du contrat (cf.
+    saintex-spec-technique.md §6). Seule `contract_start_date` est
+    modifiable, et seulement tant que le contrat n'a pas démarré (cf.
+    UtilisateurContratSerializer.validate_contract_start_date). Contrairement
+    à MePreferencesView, les changements ne sont pas journalisés dans
+    PreferenceChangeLog : ce journal est réservé aux préférences de
+    notification (§7), pas au contrat.
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        return Response(UtilisateurContratSerializer(request.user).data)
+
+    def patch(self, request):
+        serializer = UtilisateurContratSerializer(request.user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
