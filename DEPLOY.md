@@ -11,6 +11,13 @@ cd ~/Documents/GitHub/Saintex_backend
 git pull
 ```
 
+Active le venv du projet — nécessaire pour toute commande `python`/`pip`/
+`manage.py` plus bas dans ce guide (migrations, gunicorn, etc.) :
+
+```bash
+source .venv/bin/activate
+```
+
 Regarde ce qui a changé avant de continuer :
 
 ```bash
@@ -22,10 +29,10 @@ Deux questions à se poser à la lecture du diff :
 - `requirements.txt` a-t-il changé ?
 - Y a-t-il de nouveaux fichiers dans un dossier `migrations/` (`clients/migrations/`, `risks/migrations/`) ?
 
-Si `requirements.txt` a changé :
+Si `requirements.txt` a changé (le venv est déjà actif depuis l'étape
+ci-dessus) :
 
 ```bash
-source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -40,6 +47,36 @@ pip install numpy --no-binary numpy \
   --config-settings=setup-args="-Dcpu-baseline=native" \
   --config-settings=setup-args="-Dcpu-dispatch=none"
 ```
+## Vérifier les migrations avant de migrer
+
+Les migrations de ce projet sont parfois écrites à la main plutôt que générées par
+`makemigrations` (pas de shell disponible sur toutes les machines de travail) : il faut
+donc vérifier qu'aucune migration ne manque avant chaque déploiement.
+
+1. **Vérification (ne modifie rien) :**
+```bash
+   python manage.py makemigrations --check --dry-run
+```
+   - Sort silencieusement avec le code 0 → rien ne manque, tu peux passer directement à `migrate`.
+   - Affiche des changements détectés → une migration manque : passe à l'étape 2 avant de continuer.
+
+2. **Génération (si l'étape 1 a détecté quelque chose) :**
+```bash
+   python manage.py makemigrations
+```
+   Crée le(s) fichier(s) de migration manquant(s) avec les noms exacts calculés par Django
+   (ex. noms d'index basés sur un hash). Relance ensuite l'étape 1 pour confirmer que tout
+   est désormais couvert (code 0).
+
+3. **Commit du fichier généré, si l'étape 2 a eu lieu sur le Mac Web :**
+```bash
+   git add <chemin_du_fichier_de_migration_généré>
+   git commit -m "Migration : <description>"
+   git push
+```
+   Sans ce commit/push, la machine de dev restera désynchronisée sur ce fichier au prochain
+   `git pull`.
+
 
 ## Cas A — Lot sans impact sur la base de données
 
