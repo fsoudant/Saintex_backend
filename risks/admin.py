@@ -157,11 +157,12 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
         "risque_display",
         "legende_fr_courte",
         "facteurs_de_risque_fr_courte",
-        "recommandation_fr_courte",
+        "recommandation_non_protege_fr_courte",
+        "recommandation_protege_fr_courte",
         "saison_display",
     )
     list_filter = (("risque", _RisqueAlphaFilter),)
-    search_fields = ("code", "legende_fr", "recommandation_fr", "facteurs_de_risque_fr")
+    search_fields = ("code", "legende_fr", "recommandation_non_protege_fr", "recommandation_protege_fr", "facteurs_de_risque_fr")
     autocomplete_fields = ("risque",)
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
@@ -189,12 +190,25 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
             Truncator(obj.facteurs_de_risque_fr).chars(80),
         )
 
-    @admin.display(description="Recommandation (fr)", ordering="recommandation_fr")
-    def recommandation_fr_courte(self, obj):
+    @admin.display(description="Recommandation non protégé (fr)", ordering="recommandation_non_protege_fr")
+    def recommandation_non_protege_fr_courte(self, obj):
         return format_html(
             '<span title="{}">{}</span>',
-            obj.recommandation_fr,
-            Truncator(obj.recommandation_fr).chars(80),
+            obj.recommandation_non_protege_fr,
+            Truncator(obj.recommandation_non_protege_fr).chars(80),
+        )
+
+    @admin.display(description="Recommandation protégé (fr)", ordering="recommandation_protege_fr")
+    def recommandation_protege_fr_courte(self, obj):
+        if not obj.recommandation_protege_fr:
+            # Cf. help_text du champ : tant qu'il n'est pas rédigé, le moteur
+            # de notification retombe sur la version non protégé — l'admin
+            # le signale ici pour que l'équipe médicale voie ce qui reste à écrire.
+            return format_html('<em style="color:#999">(non rédigé — repli sur non protégé)</em>')
+        return format_html(
+            '<span title="{}">{}</span>',
+            obj.recommandation_protege_fr,
+            Truncator(obj.recommandation_protege_fr).chars(80),
         )
 
     @admin.display(description="Saison", ordering="saison_mois_debut")

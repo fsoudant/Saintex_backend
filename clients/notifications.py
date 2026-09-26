@@ -62,40 +62,66 @@ SENDERS = {
 
 
 def _est_vaccine(utilisateur, risque):
+    """Cf. Utilisateur.voyage_en_famille : même requête, sémantique différente
+    selon le profil — "cet utilisateur est vacciné" pour un individuel, "tous
+    les membres de la famille sont protégés" pour un voyageur en famille.
+    C'est _composer_recommandation qui applique la bonne lecture ; cette
+    fonction se contente de lire la déclaration brute."""
     return VaccinationRisque.objects.filter(
         utilisateur=utilisateur, risque=risque, vaccine=True
     ).exists()
 
 
+def _composer_recommandation(conduite, utilisateur):
+    """Texte de conduite à tenir pour cette conduite/cet utilisateur (cf.
+    saintex-spec-technique.md §8, décision réunion médicale) :
+
+    - individuel protégé (vacciné) -> recommandation_protege_fr
+    - individuel non protégé -> recommandation_non_protege_fr
+    - famille, "tous protégés" déclaré -> recommandation_protege_fr (comme un
+      individuel protégé : toute la famille est couverte)
+    - famille, "tous protégés" non déclaré -> message composite couvrant les
+      deux cas, faute de savoir qui précisément dans la famille est protégé
+      ("Pour les membres non protégés contre X, ... Pour les membres
+      protégés, ...")
+
+    Tant que recommandation_protege_fr n'est pas rédigé par l'équipe médicale
+    pour une conduite donnée, on retombe sur recommandation_non_protege_fr :
+    jamais de texte vide envoyé, et la modulation vaccinale ne fait jamais
+    disparaître l'alerte (cf. decisions-and-principles).
+    """
+    risque = conduite.risque
+    non_protege = conduite.recommandation_non_protege_fr or risque.nature_du_risque_fr
+    protege = conduite.recommandation_protege_fr or non_protege
+
+    tous_proteges = _est_vaccine(utilisateur, risque)
+
+    if utilisateur.voyage_en_famille and not tous_proteges:
+        return (
+            f"Pour les membres non protégés contre {risque.libelle_fr}, {non_protege} "
+            f"Pour les membres protégés, {protege}"
+        ).strip()
+
+    return protege if tous_proteges else non_protege
+
+
 def _composer_message(endemie, utilisateur, type_notification):
     """Compose le texte transmis, figé au moment de l'envoi (cf.
-    NotificationLog.message). Utilise la conduite à tenir validée par
-    l'équipe médicale ; la mention de modulation vaccinale reste un
-    placeholder explicite (cf. spec §8 "à valider avec l'équipe médicale").
+    NotificationLog.message). La conduite à tenir varie selon la couverture
+    vaccinale déclarée et le profil individuel/famille de l'utilisateur (cf.
+    _composer_recommandation) — texte validé par l'équipe médicale dans les
+    deux cas, jamais de placeholder non validé (cf. spec §8).
     """
     conduite = endemie.conduite_a_tenir
     risque = conduite.risque
-    recommandation = conduite.recommandation_fr or risque.nature_du_risque_fr
+    recommandation = _composer_recommandation(conduite, utilisateur)
 
     if type_notification == NotificationLog.TypeNotification.RAPPEL_ZONE:
         entete = f"[Rappel] Vous êtes toujours en zone à risque : {risque.libelle_fr}."
     else:
         entete = f"Vous entrez dans une zone à risque : {risque.libelle_fr}."
 
-    message = f"{entete} {recommandation}".strip()
-
-    if _est_vaccine(utilisateur, risque):
-        # TODO(validation médicale, cf. spec §8) : formulation à faire
-        # rédiger et valider par l'équipe médicale avant toute mise en
-        # production — cette mention n'est qu'un placeholder fonctionnel
-        # pour que le circuit "modulation, pas suppression" soit testable.
-        message += (
-            " [TODO validation médicale] Vous avez déclaré être vacciné·e "
-            "contre ce risque — cette alerte reste valable pour les autres "
-            "mesures de prévention."
-        )
-
-    return message
+    return f"{entete} {recommandation}".strip()
 
 
 def _canaux_actifs(utilisateur):

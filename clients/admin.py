@@ -4,6 +4,7 @@ from risks.models import Risque
 
 from .models import (
     NotificationLog,
+    ParametreContrat,
     PreferenceChangeLog,
     PushToken,
     Utilisateur,
@@ -35,9 +36,9 @@ class VaccinationRisqueInline(admin.TabularInline):
 class UtilisateurAdmin(admin.ModelAdmin):
     list_display = (
         "email", "phone", "subscription_status", "email_active", "push_active",
-        "contract_start_date", "last_contact_at", "consent_status",
+        "voyage_en_famille", "contract_start_date", "last_contact_at", "consent_status",
     )
-    list_filter = ("subscription_status", "email_active", "push_active", "consent_status")
+    list_filter = ("subscription_status", "email_active", "push_active", "voyage_en_famille", "consent_status")
     search_fields = ("email", "phone")
     readonly_fields = ("api_token", "created_at", "last_contact_at", "contract_expiry_date_display")
     inlines = [PushTokenInline, VaccinationRisqueInline]
@@ -115,3 +116,19 @@ class VaccinationRisqueAdmin(admin.ModelAdmin):
         if db_field.name == "risque":
             kwargs["queryset"] = Risque.objects.filter(vaccin_disponible=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(ParametreContrat)
+class ParametreContratAdmin(admin.ModelAdmin):
+    # Singleton (cf. ParametreContrat.get_solo) : un seul ajout possible,
+    # jamais de suppression — sinon valider_date_debut_contrat n'aurait
+    # plus de ligne à lire (elle en recrée une via get_or_create, mais
+    # autant éviter le clignotement à paramètres remis à la valeur par
+    # défaut entre-temps).
+    list_display = ("horizon_max_mois",)
+
+    def has_add_permission(self, request):
+        return not ParametreContrat.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False

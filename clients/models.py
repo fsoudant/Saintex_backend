@@ -17,13 +17,52 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-# Borne haute retenue pour l'horizon de saisie de contract_start_date (cf.
-# saintex-spec-technique.md §6, "Démarrage du contrat") : décidée en réunion
-# avec le co-fondateur médical comme "6 à 12 mois" sans qu'un chiffre exact
-# soit arrêté au procès-verbal — 12 retenu ici (borne la plus permissive) en
-# attendant confirmation ; à ajuster en un seul endroit si le chiffre exact
-# est précisé.
+# Valeur d'amorçage pour ParametreContrat.horizon_max_mois (cf. classe
+# ci-dessous) : sert de default au champ modèle et de secours si la ligne de
+# config n'existe pas encore (première migration). La valeur qui compte en
+# fonctionnement normal est celle stockée en base, éditable depuis l'admin
+# sans déploiement — cf. §6, "6 à 12 mois" non arrêté précisément au PV de
+# réunion.
 CONTRACT_START_DATE_MAX_MONTHS_AHEAD = 12
+
+
+class ParametreContrat(models.Model):
+    """Singleton de paramétrage métier pour le contrat (cf. §6) — permet à
+    l'équipe (médicale/business) d'ajuster l'horizon max de
+    `contract_start_date` depuis l'admin, sans nouveau déploiement, tant que
+    le chiffre exact ("6 à 12 mois") n'est pas figé avec le co-fondateur
+    médical. Une seule ligne existe en pratique (pk=1, cf. get_solo()).
+    """
+
+    horizon_max_mois = models.PositiveSmallIntegerField(
+        default=CONTRACT_START_DATE_MAX_MONTHS_AHEAD,
+        help_text=(
+            "Horizon maximal (en mois) auquel un utilisateur peut fixer sa "
+            "date de début de contrat (cf. §6 — \"6 à 12 mois\", chiffre exact "
+            "non arrêté au PV de réunion)."
+        ),
+    )
+
+    class Meta:
+        verbose_name = "Paramétrage du contrat"
+        verbose_name_plural = "Paramétrage du contrat"
+
+    def __str__(self):
+        return f"Horizon max de début de contrat : {self.horizon_max_mois} mois"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1  # force le singleton, quelle que soit la façon dont l'objet a été instancié
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Le singleton ne doit jamais disparaître : valider_date_debut_contrat
+        # en dépend à chaque appel (cf. get_solo()).
+        pass
+
+    @classmethod
+    def get_solo(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
 
 
 def _ajouter_mois(date_ref, mois):
@@ -38,13 +77,13 @@ def _ajouter_mois(date_ref, mois):
     return date_ref.replace(year=annee, month=mois_resultat, day=jour)
 
 
-def valider_date_debut_contrat(ancienne_valeur, nouvelle_valeur, aujourdhui=None):
+def valider_date_debut_contrat(ancienne_valeur, nouvelle_valeur, aujourdhui=None, horizon_max_mois=None):
     """Valide un changement de Utilisateur.contract_start_date (cf.
     saintex-spec-technique.md §6, décision réunion médicale) :
 
     - la date ne doit pas être dans le passé ;
-    - elle ne doit pas dépasser CONTRACT_START_DATE_MAX_MONTHS_AHEAD à
-      l'avance ;
+    - elle ne doit pas dépasser l'horizon défini par ParametreContrat (éditable
+      en admin, cf. classe ci-dessus) à l'avance ;
     - si une date était déjà fixée et que "aujourd'hui" l'a atteinte ou
       dépassée, le contrat a démarré effectivement et la date n'est plus
       modifiable (validation rule actée : "editable while date_actuelle <
@@ -52,9 +91,13 @@ def valider_date_debut_contrat(ancienne_valeur, nouvelle_valeur, aujourdhui=None
 
     Fonction libre (pas une méthode d'instance) pour rester appelable aussi
     bien depuis Utilisateur.clean() que depuis le serializer DRF, sans
-    dupliquer la règle. Ne renvoie rien ; lève ValidationError si invalide.
+    dupliquer la règle. `horizon_max_mois` est surchargeable explicitement
+    (tests, appels spécifiques) ; par défaut lu depuis ParametreContrat.get_solo().
+    Ne renvoie rien ; lève ValidationError si invalide.
     """
     aujourdhui = aujourdhui or timezone.localdate()
+    if horizon_max_mois is None:
+        horizon_max_mois = ParametreContrat.get_solo().horizon_max_mois
 
     if ancienne_valeur is not None and nouvelle_valeur != ancienne_valeur and aujourdhui >= ancienne_valeur:
         raise ValidationError(
@@ -62,11 +105,11 @@ def valider_date_debut_contrat(ancienne_valeur, nouvelle_valeur, aujourdhui=None
         )
     if nouvelle_valeur < aujourdhui:
         raise ValidationError("La date de début de contrat ne peut pas être dans le passé.")
-    borne_max = _ajouter_mois(aujourdhui, CONTRACT_START_DATE_MAX_MONTHS_AHEAD)
+    borne_max = _ajouter_mois(aujourdhui, horizon_max_mois)
     if nouvelle_valeur > borne_max:
         raise ValidationError(
             "La date de début de contrat ne peut pas être fixée à plus de "
-            f"{CONTRACT_START_DATE_MAX_MONTHS_AHEAD} mois à l'avance."
+            f"{horizon_max_mois} mois à l'avance."
         )
 
 
@@ -118,6 +161,18 @@ class Utilisateur(models.Model):
             "implémentée (dépend du moteur de notification, cf. §8) : la "
             "valeur ci-dessus n'est pour l'instant qu'un défaut global à "
             "l'inscription, modifiable ensuite par l'utilisateur."
+        ),
+    )
+
+    voyage_en_famille = models.BooleanField(
+        default=False,
+        help_text=(
+            "Question \"voyagez-vous en famille ?\" posée à l'inscription "
+            "(cf. §8, décision réunion médicale). Si True, la couverture "
+            "vaccinale déclarée par risque (VaccinationRisque.vaccine) se lit "
+            "comme \"tous les membres de la famille sont protégés contre ce "
+            "risque\" plutôt que \"cet utilisateur est vacciné\" — cf. "
+            "clients/notifications.py, _composer_recommandation."
         ),
     )
 
@@ -239,7 +294,7 @@ class PreferenceChangeLog(models.Model):
 
     # Liste fermée des champs traçables, pour éviter d'y glisser n'importe
     # quel nom de champ par erreur depuis le code appelant.
-    CHAMPS_TRACES = ("email_active", "push_active", "reminder_delay")
+    CHAMPS_TRACES = ("email_active", "push_active", "reminder_delay", "voyage_en_famille")
 
     utilisateur = models.ForeignKey(
         Utilisateur, on_delete=models.CASCADE, related_name="preference_changes"
@@ -281,7 +336,14 @@ class VaccinationRisque(models.Model):
 
     Objectif : ne pas notifier un voyageur déjà protégé lorsqu'il entre dans
     une zone à risque pour laquelle il est vacciné — à exploiter côté moteur
-    de notification (cf. saintex-spec-technique.md §8).
+    de notification (cf. saintex-spec-technique.md §8). Ne suppose jamais
+    l'alerte : elle en module uniquement le contenu (texte protégé vs non
+    protégé, cf. ConduiteATenir.recommandation_protege_fr/recommandation_non_protege_fr).
+
+    Cf. Utilisateur.voyage_en_famille : pour un voyageur en famille, `vaccine`
+    se lit comme "tous les membres de la famille sont protégés contre ce
+    risque" plutôt que "cet utilisateur est vacciné" (cf. décision réunion
+    médicale, §8) — même champ, sémantique contextuelle selon le profil.
     """
 
     utilisateur = models.ForeignKey(

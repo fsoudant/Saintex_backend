@@ -9,6 +9,7 @@ from django.utils import timezone
 from clients.models import (
     CONTRACT_START_DATE_MAX_MONTHS_AHEAD,
     NotificationLog,
+    ParametreContrat,
     PreferenceChangeLog,
     Utilisateur,
     UserRiskZoneStatus,
@@ -108,6 +109,41 @@ class ContractStartDateTests(TestCase):
             contract_start_date=self.aujourdhui,
         )
         self.assertIsNone(u.contract_expiry_date)
+
+
+class ParametreContratTests(TestCase):
+    """Cf. saintex-spec-technique.md §6 : l'horizon max de contract_start_date
+    est un singleton admin-éditable (ParametreContrat), pas une constante
+    figée — le chiffre exact ("6 à 12 mois") n'étant pas arrêté au PV de
+    réunion médicale."""
+
+    def setUp(self):
+        self.aujourdhui = timezone.localdate()
+
+    def test_get_solo_cree_une_ligne_par_defaut(self):
+        self.assertEqual(ParametreContrat.objects.count(), 0)
+        parametre = ParametreContrat.get_solo()
+        self.assertEqual(parametre.horizon_max_mois, CONTRACT_START_DATE_MAX_MONTHS_AHEAD)
+        self.assertEqual(ParametreContrat.objects.count(), 1)
+
+    def test_get_solo_reste_un_singleton(self):
+        ParametreContrat.get_solo()
+        ParametreContrat.objects.create(horizon_max_mois=6)
+        self.assertEqual(ParametreContrat.objects.count(), 1)
+
+    def test_valider_date_debut_contrat_utilise_le_parametre_en_base(self):
+        ParametreContrat.objects.create(horizon_max_mois=6)
+        trop_loin = self.aujourdhui.replace(year=self.aujourdhui.year + 1)
+        with self.assertRaises(ValidationError):
+            valider_date_debut_contrat(None, trop_loin)
+
+    def test_valider_date_debut_contrat_horizon_explicite_ignore_la_base(self):
+        ParametreContrat.objects.create(horizon_max_mois=6)
+        # Ne lève pas d'exception : l'horizon passé explicitement prime sur
+        # la valeur en base (utile pour les tests/appels spécifiques).
+        valider_date_debut_contrat(
+            None, self.aujourdhui + datetime.timedelta(days=300), horizon_max_mois=12
+        )
 
 
 class PreferenceChangeLogTests(TestCase):

@@ -2,7 +2,7 @@ from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
-from .models import Utilisateur, valider_date_debut_contrat
+from .models import ParametreContrat, Utilisateur, valider_date_debut_contrat
 
 
 class PositionInSerializer(serializers.Serializer):
@@ -25,7 +25,10 @@ class UtilisateurPreferencesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Utilisateur
-        fields = ["email", "phone", "email_active", "push_active", "reminder_delay", "subscription_status"]
+        fields = [
+            "email", "phone", "email_active", "push_active", "reminder_delay",
+            "voyage_en_famille", "subscription_status",
+        ]
         read_only_fields = ["email", "phone", "subscription_status"]
 
 
@@ -38,6 +41,7 @@ class UtilisateurContratSerializer(serializers.ModelSerializer):
     """
 
     contract_expiry_date = serializers.DateField(read_only=True)
+    horizon_max_mois = serializers.SerializerMethodField()
 
     class Meta:
         model = Utilisateur
@@ -46,9 +50,16 @@ class UtilisateurContratSerializer(serializers.ModelSerializer):
             "purchased_at",
             "contract_start_date",
             "contract_expiry_date",
+            "horizon_max_mois",
             "subscription_status",
         ]
         read_only_fields = ["contract_duration", "purchased_at", "subscription_status"]
+
+    def get_horizon_max_mois(self, obj):
+        # Exposé pour que le tunnel mobile connaisse la borne courante sans
+        # la dupliquer en dur côté client (cf. ParametreContrat, éditable
+        # sans déploiement tant que le chiffre exact n'est pas arrêté).
+        return ParametreContrat.get_solo().horizon_max_mois
 
     def validate_contract_start_date(self, value):
         ancienne_valeur = self.instance.contract_start_date if self.instance else None
