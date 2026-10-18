@@ -52,6 +52,9 @@ class ParametreContrat(models.Model):
 
     def save(self, *args, **kwargs):
         self.pk = 1  # force le singleton, quelle que soit la façon dont l'objet a été instancié
+        # objects.create() force un INSERT : sur un singleton déjà présent, on veut
+    	# une mise à jour de la ligne 1, pas une violation d'unicité.
+   		 kwargs["force_insert"] = False
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
