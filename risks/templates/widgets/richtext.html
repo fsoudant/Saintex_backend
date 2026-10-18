@@ -1,0 +1,93 @@
+<div class="saintex-rte" id="{{ widget.attrs.id }}_rte">
+  <div class="saintex-rte-bar">
+    <button type="button" data-cmd="bold" title="Gras"><b>G</b></button>
+    <button type="button" data-cmd="italic" title="Italique"><i>I</i></button>
+    <button type="button" data-cmd="small" title="Texte plus petit"><small>A</small>&minus;</button>
+    <button type="button" data-cmd="big" title="Texte plus grand"><big>A</big>+</button>
+    <button type="button" data-cmd="title" title="Titre">Titre</button>
+    <button type="button" data-cmd="list" title="Liste à puces">&bull; Liste</button>
+    <button type="button" data-cmd="link" title="Insérer un lien (sélectionner d'abord le texte)">🔗 Lien</button>
+    <button type="button" data-cmd="unlink" title="Retirer le lien">Retirer le lien</button>
+    <button type="button" data-cmd="clear" title="Effacer la mise en forme de la sélection">Effacer le format</button>
+  </div>
+  <div class="saintex-rte-area" contenteditable="true">{{ widget.value_html|safe }}</div>
+  <textarea name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %} hidden>{{ widget.value_html }}</textarea>
+</div>
+<style>
+  .saintex-rte { display: inline-block; width: 100%; max-width: 680px; vertical-align: top; }
+  .saintex-rte-bar { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: var(--darkened-bg, #f8f8f8); border: 1px solid var(--border-color, #ccc); border-bottom: 0; }
+  .saintex-rte-bar button { cursor: pointer; padding: 2px 8px; }
+  .saintex-rte-area { min-height: 8em; padding: 8px; background: var(--body-bg, #fff); color: var(--body-fg, #000); border: 1px solid var(--border-color, #ccc); overflow: auto; }
+  .saintex-rte-area p { margin: 0 0 .7em; }
+  .saintex-rte-area a { color: #2563eb; text-decoration: underline; }
+</style>
+<script>
+(function () {
+  if (!window.saintexRichText) {
+    window.saintexRichText = function (id) {
+      var root = document.getElementById(id + "_rte");
+      var area = root.querySelector(".saintex-rte-area");
+      var field = root.querySelector("textarea");
+      try { document.execCommand("defaultParagraphSeparator", false, "p"); } catch (e) {}
+
+      function sync() { field.value = area.innerHTML; }
+
+      function selectedHtml() {
+        var sel = window.getSelection();
+        if (!sel.rangeCount || sel.isCollapsed || !area.contains(sel.anchorNode)) return null;
+        var box = document.createElement("div");
+        box.appendChild(sel.getRangeAt(0).cloneContents());
+        return box.innerHTML;
+      }
+
+      function wrapSelection(tag) {
+        var inner = selectedHtml();
+        if (inner === null) { alert("Sélectionnez d'abord le texte à modifier."); return; }
+        document.execCommand("insertHTML", false, "<" + tag + ">" + inner + "</" + tag + ">");
+      }
+
+      function addLink() {
+        if (selectedHtml() === null) { alert("Sélectionnez d'abord le texte qui servira de lien."); return; }
+        var url = window.prompt("Adresse du lien (ex. https://www.who.int/…) :", "https://");
+        if (!url) return;
+        url = url.trim();
+        if (!/^(https?:\/\/|mailto:)/i.test(url)) url = "https://" + url;
+        document.execCommand("createLink", false, url);
+      }
+
+      var actions = {
+        bold: function () { document.execCommand("bold"); },
+        italic: function () { document.execCommand("italic"); },
+        small: function () { wrapSelection("small"); },
+        big: function () { wrapSelection("big"); },
+        title: function () { document.execCommand("formatBlock", false, "h3"); },
+        list: function () { document.execCommand("insertUnorderedList"); },
+        link: addLink,
+        unlink: function () { document.execCommand("unlink"); },
+        clear: function () { document.execCommand("removeFormat"); document.execCommand("formatBlock", false, "p"); }
+      };
+
+      root.querySelectorAll(".saintex-rte-bar button").forEach(function (btn) {
+        // mousedown + preventDefault : le clic ne doit pas retirer la sélection du texte.
+        btn.addEventListener("mousedown", function (e) { e.preventDefault(); });
+        btn.addEventListener("click", function () {
+          area.focus();
+          actions[btn.dataset.cmd]();
+          sync();
+        });
+      });
+
+      area.addEventListener("input", sync);
+      // Collage : texte brut uniquement (évite d'importer la mise en forme de Word/web).
+      area.addEventListener("paste", function (e) {
+        e.preventDefault();
+        var text = (e.clipboardData || window.clipboardData).getData("text/plain");
+        document.execCommand("insertText", false, text);
+      });
+      var form = field.form;
+      if (form) form.addEventListener("submit", sync);
+    };
+  }
+  window.saintexRichText("{{ widget.attrs.id|escapejs }}");
+})();
+</script>

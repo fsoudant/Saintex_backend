@@ -164,18 +164,6 @@ class Utilisateur(models.Model):
         ),
     )
 
-    voyage_en_famille = models.BooleanField(
-        default=False,
-        help_text=(
-            "Question \"voyagez-vous en famille ?\" posée à l'inscription "
-            "(cf. §8, décision réunion médicale). Si True, la couverture "
-            "vaccinale déclarée par risque (VaccinationRisque.vaccine) se lit "
-            "comme \"tous les membres de la famille sont protégés contre ce "
-            "risque\" plutôt que \"cet utilisateur est vacciné\" — cf. "
-            "clients/notifications.py, _composer_recommandation."
-        ),
-    )
-
     subscription_status = models.CharField(
         max_length=20, choices=StatutAbonnement.choices, default=StatutAbonnement.ESSAI
     )
@@ -294,7 +282,7 @@ class PreferenceChangeLog(models.Model):
 
     # Liste fermée des champs traçables, pour éviter d'y glisser n'importe
     # quel nom de champ par erreur depuis le code appelant.
-    CHAMPS_TRACES = ("email_active", "push_active", "reminder_delay", "voyage_en_famille")
+    CHAMPS_TRACES = ("email_active", "push_active", "reminder_delay")
 
     utilisateur = models.ForeignKey(
         Utilisateur, on_delete=models.CASCADE, related_name="preference_changes"
@@ -323,68 +311,6 @@ class PreferenceChangeLog(models.Model):
             ancienne_valeur=ancienne_valeur,
             nouvelle_valeur=nouvelle_valeur,
         )
-
-
-class VaccinationRisque(models.Model):
-    """Couverture vaccinale déclarée d'un voyageur pour un Risque donné.
-
-    Simple booléen : vacciné / non vacciné. N'a de sens que pour les risques
-    disposant d'un vaccin (Risque.vaccin_disponible=True) — le paludisme
-    (PAL), qui n'a pas de vaccin, ne peut donc jamais avoir d'entrée ici : la
-    règle est imposée structurellement par clean() ci-dessous, pas seulement
-    par convention dans l'admin.
-
-    Objectif : ne pas notifier un voyageur déjà protégé lorsqu'il entre dans
-    une zone à risque pour laquelle il est vacciné — à exploiter côté moteur
-    de notification (cf. saintex-spec-technique.md §8). Ne suppose jamais
-    l'alerte : elle en module uniquement le contenu (texte protégé vs non
-    protégé, cf. ConduiteATenir.recommandation_protege_fr/recommandation_non_protege_fr).
-
-    Cf. Utilisateur.voyage_en_famille : pour un voyageur en famille, `vaccine`
-    se lit comme "tous les membres de la famille sont protégés contre ce
-    risque" plutôt que "cet utilisateur est vacciné" (cf. décision réunion
-    médicale, §8) — même champ, sémantique contextuelle selon le profil.
-    """
-
-    utilisateur = models.ForeignKey(
-        Utilisateur, on_delete=models.CASCADE, related_name="vaccinations"
-    )
-    risque = models.ForeignKey(
-        "risks.Risque", on_delete=models.CASCADE, related_name="vaccinations_utilisateurs"
-    )
-    vaccine = models.BooleanField(
-        default=False, help_text="True = voyageur vacciné/protégé pour ce risque"
-    )
-    declared_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["utilisateur", "risque"], name="une_entree_vaccination_par_risque"
-            ),
-        ]
-        verbose_name = "Couverture vaccinale"
-        verbose_name_plural = "Couvertures vaccinales"
-
-    def clean(self):
-        super().clean()
-        if self.risque_id and not self.risque.vaccin_disponible:
-            raise ValidationError(
-                f"« {self.risque} » n'a pas de vaccin disponible "
-                "(Risque.vaccin_disponible=False) — la couverture vaccinale n'a pas "
-                "de sens pour ce risque."
-            )
-
-    def save(self, *args, **kwargs):
-        # full_clean() (et pas juste clean()) pour que la règle tienne aussi
-        # depuis une future création via l'API mobile, pas seulement via les
-        # formulaires admin qui appellent full_clean() automatiquement.
-        self.full_clean()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        statut = "vacciné" if self.vaccine else "non vacciné"
-        return f"{self.utilisateur.email} / {self.risque.code} : {statut}"
 
 
 class UserRiskZoneStatus(models.Model):
@@ -489,6 +415,14 @@ class NotificationLog(models.Model):
         ),
     )
     message = models.TextField(help_text="Texte effectivement transmis, figé au moment de l'envoi")
+    message_html = models.TextField(
+        blank=True,
+        help_text=(
+            "Version HTML (texte enrichi : liens, gras...) du message, figée à "
+            "l'envoi — renseignée pour le canal email uniquement ; `message` reste "
+            "la version texte brut (SMS, push)."
+        ),
+    )
     destinataire = models.CharField(
         max_length=255, help_text="Email ou numéro de téléphone, figé au moment de l'envoi"
     )

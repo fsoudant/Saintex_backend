@@ -12,6 +12,8 @@ from django.contrib.gis.db import models as gis_models
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from .richtext import sanitize_html
+
 MOIS_CHOICES = [
     (1, "Janvier"), (2, "Février"), (3, "Mars"), (4, "Avril"),
     (5, "Mai"), (6, "Juin"), (7, "Juillet"), (8, "Août"),
@@ -86,9 +88,10 @@ class Risque(models.Model):
     vaccin_disponible = models.BooleanField(
         default=False,
         help_text=(
-            "Un vaccin existe-t-il pour ce risque ? Détermine si la couverture "
-            "vaccinale peut être déclarée pour ce risque (cf. clients.VaccinationRisque). "
-            "Faux notamment pour le paludisme (PAL), qui n'a pas de vaccin."
+            "Information indicative : un vaccin existe-t-il pour ce risque ? "
+            "Faux notamment pour le paludisme (PAL), qui n'a pas de vaccin. "
+            "N'intervient plus dans les notifications depuis l'abandon du "
+            "questionnaire vaccinal (octobre 2026)."
         ),
     )
 
@@ -117,28 +120,16 @@ class ConduiteATenir(models.Model):
         help_text="Description du niveau/contexte de risque pour cette variante"
     )
     nature_du_risque_en = models.TextField()
-    recommandation_non_protege_fr = models.TextField(
+    recommandation_fr = models.TextField(
         blank=True,
         help_text=(
-            "Conduite à tenir affichée à un voyageur non protégé contre ce risque "
-            "(texte validé médical) — anciennement recommandation_fr, scindé en "
-            "deux textes distincts (§8, décision réunion médicale). Sert aussi "
-            "de repli si recommandation_protege_fr n'est pas encore rédigée."
+            "Conduite à tenir transmise au voyageur à l'entrée dans la zone "
+            "(texte validé par l'équipe médicale). Texte unique pour tous les "
+            "voyageurs : la distinction protégé / non protégé a été abandonnée "
+            "en octobre 2026 (cf. spec §8)."
         ),
     )
-    recommandation_non_protege_en = models.TextField(blank=True)
-    recommandation_protege_fr = models.TextField(
-        blank=True,
-        help_text=(
-            "Conduite à tenir affichée à un voyageur déjà protégé contre ce "
-            "risque (vacciné, cf. clients.VaccinationRisque) — texte distinct "
-            "décidé en réunion avec le co-fondateur médical (§8). Tant que ce "
-            "champ n'est pas rempli pour une conduite donnée, le moteur de "
-            "notification retombe sur recommandation_non_protege_fr (jamais de "
-            "texte vide envoyé, cf. clients/notifications.py)."
-        ),
-    )
-    recommandation_protege_en = models.TextField(blank=True)
+    recommandation_en = models.TextField(blank=True)
     facteurs_de_risque_fr = models.TextField(
         blank=True,
         help_text=(
@@ -182,6 +173,16 @@ class ConduiteATenir(models.Model):
                 "saison_mois_debut et saison_mois_fin doivent être renseignés "
                 "ensemble, ou tous les deux laissés vides (risque non saisonnier)."
             )
+
+    def save(self, *args, **kwargs):
+        # Les recommandations sont du texte enrichi (HTML limité, cf.
+        # risks.richtext) : assaini à chaque écriture, quelle qu'en soit la
+        # source (admin, import legacy, shell), pour que ce qui est en base
+        # soit toujours sûr à afficher et à envoyer. Un texte brut encore
+        # reçu (import legacy) est converti en HTML au passage.
+        self.recommandation_fr = sanitize_html(self.recommandation_fr)
+        self.recommandation_en = sanitize_html(self.recommandation_en)
+        super().save(*args, **kwargs)
 
     def is_in_season(self, when):
         """True si la date/datetime `when` tombe dans la période à risque

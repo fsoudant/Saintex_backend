@@ -11,6 +11,7 @@ saisir dans l'admin change.
 from django import forms
 
 from .colors import parse_rgb
+from .richtext import sanitize_html
 
 
 def _rgb_to_hex(value):
@@ -75,3 +76,23 @@ class RGBColorField(forms.MultiValueField):
         if aucune_couleur:
             return None
         return _hex_to_rgb_css(hex_value)
+
+
+class RichTextWidget(forms.Textarea):
+    """Petit éditeur de texte enrichi (gras, italique, taille, titre, liste,
+    lien hypertexte) pour les recommandations des conduites à tenir (cf.
+    risks.richtext et saintex-spec-technique.md §8).
+
+    Volontairement sans dépendance externe : un champ `contenteditable` et
+    quelques boutons (JS inline dans le template, donc rien à collecter côté
+    fichiers statiques). Le HTML produit n'est jamais cru : ConduiteATenir.save()
+    l'assainit systématiquement, et la valeur réinjectée dans l'éditeur est
+    elle aussi assainie ici (cas d'un formulaire réaffiché après erreur).
+    """
+
+    template_name = "widgets/richtext.html"
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context["widget"]["value_html"] = sanitize_html(value if isinstance(value, str) else "")
+        return context

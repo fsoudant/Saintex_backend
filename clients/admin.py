@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from risks.models import Risque
-
 from .models import (
     NotificationLog,
     ParametreContrat,
@@ -9,7 +7,6 @@ from .models import (
     PushToken,
     Utilisateur,
     UserRiskZoneStatus,
-    VaccinationRisque,
 )
 
 
@@ -19,29 +16,16 @@ class PushTokenInline(admin.TabularInline):
     readonly_fields = ("created_at",)
 
 
-class VaccinationRisqueInline(admin.TabularInline):
-    model = VaccinationRisque
-    extra = 0
-    readonly_fields = ("declared_at",)
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        # Ne propose que les risques ayant un vaccin (cf. Risque.vaccin_disponible) —
-        # cohérent avec la contrainte imposée par VaccinationRisque.clean().
-        if db_field.name == "risque":
-            kwargs["queryset"] = Risque.objects.filter(vaccin_disponible=True)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
 @admin.register(Utilisateur)
 class UtilisateurAdmin(admin.ModelAdmin):
     list_display = (
         "email", "phone", "subscription_status", "email_active", "push_active",
-        "voyage_en_famille", "contract_start_date", "last_contact_at", "consent_status",
+        "contract_start_date", "last_contact_at", "consent_status",
     )
-    list_filter = ("subscription_status", "email_active", "push_active", "voyage_en_famille", "consent_status")
+    list_filter = ("subscription_status", "email_active", "push_active", "consent_status")
     search_fields = ("email", "phone")
     readonly_fields = ("api_token", "created_at", "last_contact_at", "contract_expiry_date_display")
-    inlines = [PushTokenInline, VaccinationRisqueInline]
+    inlines = [PushTokenInline]
 
     def contract_expiry_date_display(self, obj):
         # contract_expiry_date est une propriété calculée (début + durée),
@@ -99,23 +83,6 @@ class NotificationLogAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
-
-
-@admin.register(VaccinationRisque)
-class VaccinationRisqueAdmin(admin.ModelAdmin):
-    # Vue transversale pour l'équipe médicale (ex. "qui est couvert pour la
-    # fièvre jaune ?"), en complément de l'inline sur UtilisateurAdmin qui
-    # ne montre qu'un voyageur à la fois.
-    list_display = ("utilisateur", "risque", "vaccine", "declared_at")
-    list_filter = ("risque", "vaccine")
-    search_fields = ("utilisateur__email",)
-    autocomplete_fields = ("utilisateur", "risque")
-    readonly_fields = ("declared_at",)
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "risque":
-            kwargs["queryset"] = Risque.objects.filter(vaccin_disponible=True)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(ParametreContrat)

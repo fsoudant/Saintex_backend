@@ -11,18 +11,13 @@ from clients.models import (
     PushToken,
     Utilisateur,
     UserRiskZoneStatus,
-    VaccinationRisque,
 )
 from clients.notifications import envoyer_alerte_entree, envoyer_rappel_si_echeance
 from risks.models import ConduiteATenir, Endemie, Risque, Zone
 
 
 class _EndemieFixtureMixin:
-    def _endemie(
-        self,
-        recommandation_non_protege_fr="Prenez un traitement préventif.",
-        recommandation_protege_fr="",
-    ):
+    def _endemie(self, recommandation_fr="Prenez un traitement préventif."):
         zone = Zone.objects.create(source_id=1, nom="Zone test")
         risque = Risque.objects.create(
             code="PAL",
@@ -36,8 +31,7 @@ class _EndemieFixtureMixin:
             risque=risque,
             nature_du_risque_fr="...",
             nature_du_risque_en="...",
-            recommandation_non_protege_fr=recommandation_non_protege_fr,
-            recommandation_protege_fr=recommandation_protege_fr,
+            recommandation_fr=recommandation_fr,
         )
         return Endemie.objects.create(zone=zone, conduite_a_tenir=conduite)
 
@@ -100,82 +94,64 @@ class EnvoyerAlerteEntreeTests(_EndemieFixtureMixin, TestCase):
             self.assertEqual(log.position, self.point)
             self.assertEqual(log.statut, NotificationLog.Statut.ENVOYE)
 
-    def test_message_contient_la_recommandation_non_protege_par_defaut(self):
+    def test_message_contient_la_recommandation(self):
         logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
         self.assertIn("Prenez un traitement préventif.", logs[0].message)
 
-    def test_message_utilise_la_recommandation_protege_si_vaccine(self):
-        # Cf. §8, décision réunion médicale : deux messages distincts par
-        # conduite à tenir selon la couverture vaccinale déclarée.
-        endemie = self._endemie(
-            recommandation_non_protege_fr="Prenez un traitement préventif.",
-            recommandation_protege_fr="Restez vigilant malgré la vaccination.",
+    def test_message_identique_pour_tous_les_voyageurs(self):
+        # Cf. §8, décision d'octobre 2026 : plus de modulation selon une
+        # couverture vaccinale déclarée, un seul texte pour tout le monde.
+        autre = Utilisateur.objects.create(email="b@example.com", phone="+33600000001")
+        statut_autre = UserRiskZoneStatus.objects.create(
+            utilisateur=autre, endemie=self.endemie
         )
-        statut = UserRiskZoneStatus.objects.create(utilisateur=self.utilisateur, endemie=endemie)
-        risque = endemie.conduite_a_tenir.risque
-        risque.vaccin_disponible = True
-        risque.save(update_fields=["vaccin_disponible"])
-        VaccinationRisque.objects.create(utilisateur=self.utilisateur, risque=risque, vaccine=True)
+        logs_a = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
+        logs_b = envoyer_alerte_entree(autre, statut_autre, self.point)
+        self.assertEqual(logs_a[0].message, logs_b[0].message)
 
-        logs = envoyer_alerte_entree(self.utilisateur, statut, self.point)
-        self.assertIn("Restez vigilant malgré la vaccination.", logs[0].message)
-        self.assertNotIn("Prenez un traitement préventif.", logs[0].message)
-
-    def test_message_retombe_sur_non_protege_si_texte_protege_absent(self):
-        # recommandation_protege_fr pas encore rédigée par l'équipe médicale
-        # (défaut de self._endemie()) : jamais de texte vide envoyé.
-        risque = self.endemie.conduite_a_tenir.risque
-        risque.vaccin_disponible = True
-        risque.save(update_fields=["vaccin_disponible"])
-        VaccinationRisque.objects.create(
-            utilisateur=self.utilisateur, risque=risque, vaccine=True
-        )
+    def test_message_retombe_sur_la_nature_du_risque_si_recommandation_vide(self):
+        # Jamais de texte vide envoyé tant que l'équipe médicale n'a pas
+        # rédigé la recommandation.
+        conduite = self.endemie.conduite_a_tenir
+        conduite.recommandation_fr = ""
+        conduite.save(update_fields=["recommandation_fr"])
 
         logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        self.assertIn("Prenez un traitement préventif.", logs[0].message)
+        self.assertIn("Transmission par moustique.", logs[0].message)
 
-    def test_message_non_module_si_non_vaccine(self):
+    def test_email_porte_le_html_et_le_sms_le_texte_brut(self):
+        # Cf. §8, texte enrichi : seul l'email affiche la mise en forme, SMS et
+        # push reçoivent une version texte brut (lien -> "texte (url)").
+        conduite = self.endemie.conduite_a_tenir
+        conduite.recommandation_fr = (
+            '<p><strong>Protégez-vous.</strong> Voir <a href="https://www.who.int/fr">l\'OMS</a>.</p>'
+        )
+        conduite.save()
+
         logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        self.assertIn("Prenez un traitement préventif.", logs[0].message)
+        par_canal = {log.canal: log for log in logs}
 
+        email = par_canal[NotificationLog.Canal.EMAIL]
+        self.assertIn("<strong>Protégez-vous.</strong>", email.message_html)
+        self.assertIn('href="https://www.who.int/fr"', email.message_html)
 
-class EnvoyerAlerteEntreeFamilleTests(_EndemieFixtureMixin, TestCase):
-    """Cf. §8, décision réunion médicale : voyageur en famille — message
-    composite tant que "tous protégés" n'est pas déclaré, message protégé
-    simple sinon (cf. clients.notifications._composer_recommandation)."""
+        sms = par_canal[NotificationLog.Canal.SMS]
+        self.assertEqual(sms.message_html, "")
+        self.assertNotIn("<", sms.message)
+        self.assertIn("Protégez-vous. Voir l'OMS (https://www.who.int/fr).", sms.message)
 
-    def setUp(self):
-        self.utilisateur = Utilisateur.objects.create(
-            email="a@example.com", phone="+33600000000", voyage_en_famille=True
-        )
-        self.endemie = self._endemie(
-            recommandation_non_protege_fr="Prenez un traitement préventif.",
-            recommandation_protege_fr="Restez vigilant malgré la vaccination.",
-        )
-        self.statut = UserRiskZoneStatus.objects.create(
-            utilisateur=self.utilisateur, endemie=self.endemie
-        )
-        self.point = Point(2.35, 48.85, srid=4326)
-        self.risque = self.endemie.conduite_a_tenir.risque
-        self.risque.vaccin_disponible = True
-        self.risque.save(update_fields=["vaccin_disponible"])
+    def test_recommandation_non_rediges_donne_aussi_un_email_html(self):
+        conduite = self.endemie.conduite_a_tenir
+        conduite.recommandation_fr = ""
+        conduite.save()
 
-    def test_message_composite_si_pas_tous_proteges(self):
         logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        message = logs[0].message
-        self.assertIn("Pour les membres non protégés contre Paludisme,", message)
-        self.assertIn("Prenez un traitement préventif.", message)
-        self.assertIn("Pour les membres protégés,", message)
-        self.assertIn("Restez vigilant malgré la vaccination.", message)
+        email = next(log for log in logs if log.canal == NotificationLog.Canal.EMAIL)
+        self.assertIn("<p>Transmission par moustique.</p>", email.message_html)
 
-    def test_message_protege_simple_si_tous_proteges_declare(self):
-        VaccinationRisque.objects.create(
-            utilisateur=self.utilisateur, risque=self.risque, vaccine=True
-        )
+    def test_message_ne_contient_plus_de_mention_non_protege(self):
         logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        message = logs[0].message
-        self.assertIn("Restez vigilant malgré la vaccination.", message)
-        self.assertNotIn("Pour les membres non protégés", message)
+        self.assertNotIn("NON PROTÉGÉ", logs[0].message.upper())
 
 
 class EnvoyerRappelSiEcheanceTests(_EndemieFixtureMixin, TestCase):

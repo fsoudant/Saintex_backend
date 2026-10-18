@@ -24,7 +24,7 @@ def _geom_to_geojson(geom):
     return shapely.geometry.mapping(recompose_antimeridian(geom))
 
 
-def build_risk_map_geojson(conduite_a_tenir=None):
+def build_risk_map_geojson(conduite_a_tenir=None, zone=None):
     """Construit une FeatureCollection GeoJSON :
     - une feature par Zone (géométrie complète), coloriée avec la moyenne
       des couleurs `Risque` de toutes les endémies qui s'y appliquent ;
@@ -41,6 +41,14 @@ def build_risk_map_geojson(conduite_a_tenir=None):
     zones saines transparentes plutôt qu'une moyenne d'"autres risques"
     puisqu'aucun autre risque n'est affiché dans cette vue.
 
+    Si `zone` est fourni (vue depuis le bouton "Voir la carte de la zone" de
+    sa fiche détail), la carte se limite à cette seule zone, colorée avec la
+    moyenne des couleurs de tous les risques de ses endémies ; la couleur
+    propre à chaque risque est fournie dans `risques_couleurs` pour que la
+    page puisse en afficher la légende. Une zone sans aucune endémie reste
+    affichée (transparente) dans cette vue, contrairement à la carte globale
+    qui ne montre que les zones à risque.
+
     Simplification actuelle, sans incidence sur les données réelles : ne
     gère pas le chevauchement de plusieurs exclusions sur une même zone
     (aucun cas de ce type aujourd'hui — à généraliser le jour où ça arrive).
@@ -53,25 +61,38 @@ def build_risk_map_geojson(conduite_a_tenir=None):
     )
     if conduite_a_tenir is not None:
         zones = zones.filter(endemies__conduite_a_tenir=conduite_a_tenir).distinct()
+    if zone is not None:
+        zones = zones.filter(pk=zone.pk)
 
-    for zone in zones:
-        endemies = list(zone.endemies.all())
+    for zone_obj in zones:
+        endemies = list(zone_obj.endemies.all())
         if conduite_a_tenir is not None:
             endemies = [e for e in endemies if e.conduite_a_tenir_id == conduite_a_tenir.pk]
-        if not endemies:
+        if not endemies and zone is None:
             continue
 
         base_color = average_rgb(_risk_colors(endemies))
         risques_labels = sorted({e.conduite_a_tenir.risque.libelle_fr for e in endemies})
+        couleurs_par_risque = {}
+        for e in endemies:
+            risque = e.conduite_a_tenir.risque
+            couleurs_par_risque.setdefault(
+                risque.libelle_fr, to_css(parse_rgb(risque.couleur_legende))
+            )
+        risques_couleurs = [
+            {"risque": libelle, "couleur": couleur}
+            for libelle, couleur in sorted(couleurs_par_risque.items())
+        ]
 
         features.append({
             "type": "Feature",
-            "geometry": _geom_to_geojson(zone.geom),
+            "geometry": _geom_to_geojson(zone_obj.geom),
             "properties": {
                 "fill": to_css(base_color),
                 "layer": "zone",
-                "nom": zone.nom,
+                "nom": zone_obj.nom,
                 "risques": risques_labels,
+                "risques_couleurs": risques_couleurs,
             },
         })
 
@@ -90,7 +111,7 @@ def build_risk_map_geojson(conduite_a_tenir=None):
                 "properties": {
                     "fill": to_css(patch_color),
                     "layer": "exclusion",
-                    "nom": zone.nom,
+                    "nom": zone_obj.nom,
                     "risque_exclu": excluded.conduite_a_tenir.risque.libelle_fr,
                 },
             })
@@ -105,13 +126,26 @@ def _conduite_a_tenir_from_request(request):
     return get_object_or_404(ConduiteATenir, pk=pk)
 
 
+def _zone_from_request(request):
+    pk = request.GET.get("zone")
+    if not pk:
+        return None
+    return get_object_or_404(Zone, pk=pk)
+
+
 @staff_member_required
 def risk_map_geojson(request):
     conduite_a_tenir = _conduite_a_tenir_from_request(request)
-    return JsonResponse(build_risk_map_geojson(conduite_a_tenir))
+    zone = _zone_from_request(request)
+    return JsonResponse(build_risk_map_geojson(conduite_a_tenir, zone))
 
 
 @staff_member_required
 def risk_map_view(request):
     conduite_a_tenir = _conduite_a_tenir_from_request(request)
-    return render(request, "risks/risk_map.html", {"conduite_a_tenir": conduite_a_tenir})
+    zone = _zone_from_request(request)
+    return render(
+        request,
+        "risks/risk_map.html",
+        {"conduite_a_tenir": conduite_a_tenir, "zone": zone},
+    )

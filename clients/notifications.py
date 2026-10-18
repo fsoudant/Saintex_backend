@@ -12,12 +12,15 @@ un envoi réussi — un branchement réel (Brevo, etc.) remplacera uniquement
 `SENDERS`, sans toucher à la logique de décision.
 """
 
+import html
 import logging
 from datetime import timedelta
 
 from django.utils import timezone
 
-from .models import NotificationLog, Utilisateur, VaccinationRisque
+from risks.richtext import html_to_text, sanitize_html
+
+from .models import NotificationLog, Utilisateur
 
 logger = logging.getLogger("saintex.notifications")
 
@@ -37,7 +40,10 @@ class NotificationSender:
     qu'aucun prestataire n'est choisi, les implémentations se contentent de
     journaliser et de simuler un succès."""
 
-    def send(self, destinataire, message):
+    def send(self, destinataire, message, message_html=None):
+        """`message` : texte brut (tous les canaux). `message_html` : version
+        mise en forme, transmise uniquement au canal email (SMS, push et
+        notification locale n'affichent pas de HTML)."""
         raise NotImplementedError
 
 
@@ -49,7 +55,7 @@ class _LoggingSender(NotificationSender):
     def __init__(self, label):
         self.label = label
 
-    def send(self, destinataire, message):
+    def send(self, destinataire, message, message_html=None):
         logger.info("%s (stub, non transmis) → %s : %s", self.label, destinataire, message)
         return True
 
@@ -61,67 +67,46 @@ SENDERS = {
 }
 
 
-def _est_vaccine(utilisateur, risque):
-    """Cf. Utilisateur.voyage_en_famille : même requête, sémantique différente
-    selon le profil — "cet utilisateur est vacciné" pour un individuel, "tous
-    les membres de la famille sont protégés" pour un voyageur en famille.
-    C'est _composer_recommandation qui applique la bonne lecture ; cette
-    fonction se contente de lire la déclaration brute."""
-    return VaccinationRisque.objects.filter(
-        utilisateur=utilisateur, risque=risque, vaccine=True
-    ).exists()
+def _composer_recommandation_html(conduite):
+    """Texte de conduite à tenir transmis au voyageur, en HTML assaini (texte
+    enrichi : gras, italique, taille, liens hypertexte — cf. risks.richtext
+    et saintex-spec-technique.md §8) : un texte unique par conduite à tenir,
+    identique pour tous les voyageurs. La modulation selon une couverture
+    vaccinale déclarée (et le profil famille) a été abandonnée en octobre
+    2026 : ces déclarations ne sont pas fiables (cf. decisions-and-principles).
 
-
-def _composer_recommandation(conduite, utilisateur):
-    """Texte de conduite à tenir pour cette conduite/cet utilisateur (cf.
-    saintex-spec-technique.md §8, décision réunion médicale) :
-
-    - individuel protégé (vacciné) -> recommandation_protege_fr
-    - individuel non protégé -> recommandation_non_protege_fr
-    - famille, "tous protégés" déclaré -> recommandation_protege_fr (comme un
-      individuel protégé : toute la famille est couverte)
-    - famille, "tous protégés" non déclaré -> message composite couvrant les
-      deux cas, faute de savoir qui précisément dans la famille est protégé
-      ("Pour les membres non protégés contre X, ... Pour les membres
-      protégés, ...")
-
-    Tant que recommandation_protege_fr n'est pas rédigé par l'équipe médicale
-    pour une conduite donnée, on retombe sur recommandation_non_protege_fr :
-    jamais de texte vide envoyé, et la modulation vaccinale ne fait jamais
-    disparaître l'alerte (cf. decisions-and-principles).
+    Si la recommandation n'est pas encore rédigée par l'équipe médicale, on
+    retombe sur la description du risque (texte brut, converti en HTML) :
+    jamais de texte vide envoyé. `sanitize_html` est réappliqué ici par
+    défense en profondeur (un `update()` en base contourne ConduiteATenir.save).
     """
-    risque = conduite.risque
-    non_protege = conduite.recommandation_non_protege_fr or risque.nature_du_risque_fr
-    protege = conduite.recommandation_protege_fr or non_protege
-
-    tous_proteges = _est_vaccine(utilisateur, risque)
-
-    if utilisateur.voyage_en_famille and not tous_proteges:
-        return (
-            f"Pour les membres non protégés contre {risque.libelle_fr}, {non_protege} "
-            f"Pour les membres protégés, {protege}"
-        ).strip()
-
-    return protege if tous_proteges else non_protege
+    return sanitize_html(conduite.recommandation_fr) or sanitize_html(
+        conduite.risque.nature_du_risque_fr
+    )
 
 
-def _composer_message(endemie, utilisateur, type_notification):
-    """Compose le texte transmis, figé au moment de l'envoi (cf.
-    NotificationLog.message). La conduite à tenir varie selon la couverture
-    vaccinale déclarée et le profil individuel/famille de l'utilisateur (cf.
-    _composer_recommandation) — texte validé par l'équipe médicale dans les
-    deux cas, jamais de placeholder non validé (cf. spec §8).
+def _composer_message(endemie, type_notification):
+    """Compose le message transmis, figé au moment de l'envoi (cf.
+    NotificationLog.message / message_html) : en-tête (entrée ou rappel) +
+    conduite à tenir validée par l'équipe médicale (cf. spec §8).
+
+    Retourne (texte_brut, html) : le texte brut sert au SMS, au push et à la
+    notification locale (liens réduits à « texte (url) ») ; le HTML, à l'email.
     """
     conduite = endemie.conduite_a_tenir
     risque = conduite.risque
-    recommandation = _composer_recommandation(conduite, utilisateur)
+    recommandation_html = _composer_recommandation_html(conduite)
+    recommandation = html_to_text(recommandation_html)
 
     if type_notification == NotificationLog.TypeNotification.RAPPEL_ZONE:
         entete = f"[Rappel] Vous êtes toujours en zone à risque : {risque.libelle_fr}."
     else:
         entete = f"Vous entrez dans une zone à risque : {risque.libelle_fr}."
 
-    return f"{entete} {recommandation}".strip()
+    separateur = "\n" if "\n" in recommandation else " "
+    texte = f"{entete}{separateur}{recommandation}".strip()
+    message_html = f"<p><strong>{html.escape(entete, quote=False)}</strong></p>{recommandation_html}"
+    return texte, message_html
 
 
 def _canaux_actifs(utilisateur):
@@ -148,15 +133,17 @@ def _composer_message_relance_silence(utilisateur, moment):
     )
 
 
-def _envoyer(utilisateur, message, type_notification, endemie=None, point=None):
+def _envoyer(utilisateur, message, type_notification, endemie=None, point=None, message_html=""):
     """Envoi générique, commun aux trois types de notification (alerte/rappel
     de zone, relance silence) : compose une entrée NotificationLog par canal
     actif pour cet utilisateur. `endemie`/`point` restent nuls pour une
     relance_silence, qui ne porte par définition ni zone ni position
-    (cf. NotificationLog.endemie/position, et spec §7)."""
+    (cf. NotificationLog.endemie/position, et spec §7). `message_html`
+    (texte enrichi) n'est transmis et journalisé que pour le canal email."""
     logs = []
     for canal, destinataire in _canaux_actifs(utilisateur):
-        ok = SENDERS[canal].send(destinataire, message)
+        html_canal = message_html if canal == NotificationLog.Canal.EMAIL else ""
+        ok = SENDERS[canal].send(destinataire, message, html_canal or None)
         logs.append(
             NotificationLog.objects.create(
                 utilisateur=utilisateur,
@@ -164,6 +151,7 @@ def _envoyer(utilisateur, message, type_notification, endemie=None, point=None):
                 endemie=endemie,
                 position=point,
                 message=message,
+                message_html=html_canal,
                 destinataire=destinataire,
                 canal=canal,
                 statut=NotificationLog.Statut.ENVOYE if ok else NotificationLog.Statut.ECHEC,
@@ -177,9 +165,10 @@ def envoyer_alerte_entree(utilisateur, statut_zone, point):
     création du UserRiskZoneStatus (nouvelle zone détectée pour cet
     utilisateur)."""
     endemie = statut_zone.endemie
-    message = _composer_message(endemie, utilisateur, NotificationLog.TypeNotification.ALERTE_ZONE)
+    message, message_html = _composer_message(endemie, NotificationLog.TypeNotification.ALERTE_ZONE)
     return _envoyer(
-        utilisateur, message, NotificationLog.TypeNotification.ALERTE_ZONE, endemie=endemie, point=point
+        utilisateur, message, NotificationLog.TypeNotification.ALERTE_ZONE,
+        endemie=endemie, point=point, message_html=message_html,
     )
 
 
@@ -201,9 +190,10 @@ def envoyer_rappel_si_echeance(utilisateur, statut_zone, point, moment=None):
         return []
 
     endemie = statut_zone.endemie
-    message = _composer_message(endemie, utilisateur, NotificationLog.TypeNotification.RAPPEL_ZONE)
+    message, message_html = _composer_message(endemie, NotificationLog.TypeNotification.RAPPEL_ZONE)
     logs = _envoyer(
-        utilisateur, message, NotificationLog.TypeNotification.RAPPEL_ZONE, endemie=endemie, point=point
+        utilisateur, message, NotificationLog.TypeNotification.RAPPEL_ZONE,
+        endemie=endemie, point=point, message_html=message_html,
     )
     statut_zone.last_reminded_at = moment
     statut_zone.save(update_fields=["last_reminded_at"])

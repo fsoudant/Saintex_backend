@@ -9,11 +9,19 @@
   #map { height: 100%; }
   .bar { padding: 10px 14px; background: #1f2937; color: white; font-size: 15px; }
   .bar a { color: #93c5fd; margin-left: 12px; }
+  .legend { background: white; padding: 8px 10px; border-radius: 6px; box-shadow: 0 1px 5px rgba(0,0,0,.4); font-size: 13px; line-height: 1.5; }
+  .legend b { display: block; margin-bottom: 4px; }
+  .swatch { display: inline-block; width: 14px; height: 14px; border: 1px solid #64748b; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+  .swatch.none { background: repeating-linear-gradient(45deg, #fff, #fff 3px, #e2e8f0 3px, #e2e8f0 6px); }
+  .legend .hint { color: #64748b; font-size: 12px; }
 </style>
 </head>
 <body>
   <div class="bar">
-    {% if conduite_a_tenir %}
+    {% if zone %}
+      🗺️ Carte de la zone — {{ zone.nom }} — couleur = risques des endémies de cette zone, transparent = zone saine
+      <a href="{% url 'admin:risks_zone_change' zone.pk %}">← retour à la fiche</a>
+    {% elif conduite_a_tenir %}
       🗺️ Carte des risques — {{ conduite_a_tenir.code }} ({{ conduite_a_tenir.risque.libelle_fr }}) — couleur = zones où cette conduite s'applique, transparent = zone saine
       <a href="{% url 'admin:risks_conduiteatenir_change' conduite_a_tenir.pk %}">← retour à la fiche</a>
     {% else %}
@@ -30,7 +38,12 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const geojsonUrl = "{% url 'risk_map_geojson' %}{% if conduite_a_tenir %}?conduite_a_tenir={{ conduite_a_tenir.pk }}{% endif %}";
+    const geojsonUrl = "{% url 'risk_map_geojson' %}{% if zone %}?zone={{ zone.pk }}{% elif conduite_a_tenir %}?conduite_a_tenir={{ conduite_a_tenir.pk }}{% endif %}";
+
+    // Échappe le texte injecté dans les popups/légende (noms issus de la base).
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
 
     fetch(geojsonUrl)
       .then(r => r.json())
@@ -46,22 +59,46 @@
           onEachFeature: (f, layer) => {
             if (f.properties.layer === 'exclusion') {
               layer.bindPopup(
-                `<b>${f.properties.nom}</b><br>Zone saine pour : ${f.properties.risque_exclu}`
+                `<b>${esc(f.properties.nom)}</b><br>Zone saine pour : ${esc(f.properties.risque_exclu)}`
               );
             } else {
               layer.bindPopup(
-                `<b>${f.properties.nom}</b><br>Risques : ${f.properties.risques.join(', ') || 'aucun'}`
+                `<b>${esc(f.properties.nom)}</b><br>Risques : ${f.properties.risques.map(esc).join(', ') || 'aucun'}`
               );
             }
           }
         }).addTo(map);
 
-        {% if conduite_a_tenir %}
+        {% if zone or conduite_a_tenir %}
         // Vue filtrée : recadrer automatiquement sur les zones concernées
         // plutôt que de garder le cadrage "monde entier" par défaut.
         if (layer.getBounds().isValid()) {
           map.fitBounds(layer.getBounds(), { padding: [20, 20] });
         }
+        {% endif %}
+
+        {% if zone %}
+        // Légende de la vue "zone" : la couleur propre à chaque risque, car
+        // la zone elle-même est coloriée avec leur moyenne quand il y en a
+        // plusieurs. Un risque sans couleur définie (Risque.couleur_legende
+        // vide) n'est pas visible sur la carte : on le signale.
+        const zoneFeature = data.features.find(f => f.properties.layer === 'zone');
+        const legend = L.control({ position: 'topright' });
+        legend.onAdd = () => {
+          const div = L.DomUtil.create('div', 'legend');
+          const risques = zoneFeature ? zoneFeature.properties.risques_couleurs : [];
+          if (!zoneFeature) {
+            div.innerHTML = '<b>Zone sans géométrie</b><span class="hint">Rien à afficher sur la carte.</span>';
+          } else if (risques.length === 0) {
+            div.innerHTML = '<b>Aucun risque</b><span class="hint">Aucune endémie ne référence cette zone.</span>';
+          } else {
+            div.innerHTML = '<b>Risques de la zone</b>' + risques.map(r =>
+              `<div><span class="swatch${r.couleur ? '' : ' none'}" ${r.couleur ? `style="background:${esc(r.couleur)}"` : ''}></span>${esc(r.risque)}${r.couleur ? '' : ' <span class="hint">(couleur non définie)</span>'}</div>`
+            ).join('');
+          }
+          return div;
+        };
+        legend.addTo(map);
         {% endif %}
       });
   </script>

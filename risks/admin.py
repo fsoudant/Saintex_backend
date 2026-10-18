@@ -9,7 +9,8 @@ import shapely.wkt
 
 from .geo_utils import _shift_west_parts, touches_antimeridian, zone_center_lonlat
 from .models import MOIS_CHOICES, ConduiteATenir, Endemie, Pays, Risque, Zone
-from .widgets import RGBColorField
+from .richtext import html_to_text
+from .widgets import RGBColorField, RichTextWidget
 
 _MOIS_LABELS = dict(MOIS_CHOICES)
 
@@ -105,13 +106,29 @@ class PaysAdmin(GISModelAdmin):
 
 
 @admin.register(Zone)
-class ZoneAdmin(GISModelAdmin):
+class ZoneAdmin(admin.ModelAdmin):
+    # ModelAdmin et non GISModelAdmin : la fiche de la zone n'embarque plus de
+    # carte (cf. bouton "Voir la carte de la zone", template
+    # admin/risks/zone/change_form.html, qui ouvre la carte du monde centrée sur
+    # la zone et colorée par risque). La géométrie reste modifiable en texte
+    # (EWKT) dans un bloc replié, pour les corrections ponctuelles (cf. Zone.note).
     list_display = ("nom", "source_id", "has_geometry", "pays_display", "note")
     list_filter = ("note", "pays")
     search_fields = ("nom", "source_id")
     autocomplete_fields = ("pays",)
     readonly_fields = ("apercu_antimeridien",)
-    gis_widget_kwargs = {"attrs": {"default_zoom": 3}}
+    fieldsets = (
+        (None, {"fields": ("source_id", "nom", "pays", "note")}),
+        (
+            "Géométrie (avancé — pour la visualiser, utiliser le bouton « Voir la carte de la zone »)",
+            {"classes": ("collapse",), "fields": ("geom", "apercu_antimeridien")},
+        ),
+    )
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == "geom":
+            kwargs["widget"] = forms.Textarea(attrs={"rows": 8, "style": "width: 95%; font-family: monospace;"})
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     @admin.display(boolean=True, description="Géométrie", ordering="geom")
     def has_geometry(self, obj):
@@ -157,17 +174,19 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
         "risque_display",
         "legende_fr_courte",
         "facteurs_de_risque_fr_courte",
-        "recommandation_non_protege_fr_courte",
-        "recommandation_protege_fr_courte",
+        "recommandation_fr_courte",
         "saison_display",
     )
     list_filter = (("risque", _RisqueAlphaFilter),)
-    search_fields = ("code", "legende_fr", "recommandation_non_protege_fr", "recommandation_protege_fr", "facteurs_de_risque_fr")
+    search_fields = ("code", "legende_fr", "recommandation_fr", "facteurs_de_risque_fr")
     autocomplete_fields = ("risque",)
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == "couleur":
             return RGBColorField(help_text=db_field.help_text)
+        if db_field.name in ("recommandation_fr", "recommandation_en"):
+            # Texte enrichi (gras, italique, taille, liens...) — cf. risks.richtext.
+            kwargs["widget"] = RichTextWidget
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     @admin.display(description="Risque", ordering="risque__libelle_fr")
@@ -190,25 +209,15 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
             Truncator(obj.facteurs_de_risque_fr).chars(80),
         )
 
-    @admin.display(description="Recommandation non protégé (fr)", ordering="recommandation_non_protege_fr")
-    def recommandation_non_protege_fr_courte(self, obj):
+    @admin.display(description="Recommandation (fr)", ordering="recommandation_fr")
+    def recommandation_fr_courte(self, obj):
+        # Le champ contient du HTML (texte enrichi) : on affiche sa version
+        # texte brut dans la liste, sans balises.
+        texte = html_to_text(obj.recommandation_fr)
         return format_html(
             '<span title="{}">{}</span>',
-            obj.recommandation_non_protege_fr,
-            Truncator(obj.recommandation_non_protege_fr).chars(80),
-        )
-
-    @admin.display(description="Recommandation protégé (fr)", ordering="recommandation_protege_fr")
-    def recommandation_protege_fr_courte(self, obj):
-        if not obj.recommandation_protege_fr:
-            # Cf. help_text du champ : tant qu'il n'est pas rédigé, le moteur
-            # de notification retombe sur la version non protégé — l'admin
-            # le signale ici pour que l'équipe médicale voie ce qui reste à écrire.
-            return format_html('<em style="color:#999">(non rédigé — repli sur non protégé)</em>')
-        return format_html(
-            '<span title="{}">{}</span>',
-            obj.recommandation_protege_fr,
-            Truncator(obj.recommandation_protege_fr).chars(80),
+            texte,
+            Truncator(texte).chars(80),
         )
 
     @admin.display(description="Saison", ordering="saison_mois_debut")

@@ -193,3 +193,53 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
         self.assertEqual(zone_feature["properties"]["risques"], ["Paludisme"])
         exclusion = next(f for f in data["features"] if f["properties"]["layer"] == "exclusion")
         self.assertIsNone(exclusion["properties"]["fill"])
+
+    def test_vue_zone_expose_la_couleur_de_chaque_risque(self):
+        # Cf. bouton "Voir la carte de la zone" : la zone est colorée avec la
+        # moyenne de ses risques, la légende a besoin de la couleur de chacun.
+        paludisme = _risque("rgb(255,0,0)", "Paludisme")
+        dengue = _risque("rgb(0,0,255)", "Dengue")
+        zon = _zone("Kuntaur", _geom(), [
+            _endemie(10, _conduite(1, "P_T3_A", paludisme)),
+            _endemie(11, _conduite(2, "D_T3_A", dengue)),
+        ])
+        self._patch_zones([zon])
+
+        data = build_risk_map_geojson(zone=zon)
+
+        self.assertEqual(len(data["features"]), 1)
+        props = data["features"][0]["properties"]
+        self.assertEqual(props["fill"], "rgb(127,0,127)")
+        self.assertEqual(props["risques_couleurs"], [
+            {"risque": "Dengue", "couleur": "rgb(0,0,255)"},
+            {"risque": "Paludisme", "couleur": "rgb(255,0,0)"},
+        ])
+
+    def test_vue_zone_risque_sans_couleur_signale(self):
+        # 10 Risque sur 19 n'ont pas encore de couleur_legende : la légende
+        # doit pouvoir le signaler plutôt que d'afficher une zone invisible.
+        risque = _risque(None, "Dengue")
+        zon = _zone("Kuntaur", _geom(), [_endemie(10, _conduite(1, "D_T3_A", risque))])
+        self._patch_zones([zon])
+
+        data = build_risk_map_geojson(zone=zon)
+
+        props = data["features"][0]["properties"]
+        self.assertIsNone(props["fill"])
+        self.assertEqual(props["risques_couleurs"], [{"risque": "Dengue", "couleur": None}])
+
+    def test_vue_zone_sans_endemie_reste_affichee(self):
+        zon = _zone("Zone saine", _geom(), [])
+        self._patch_zones([zon])
+
+        data = build_risk_map_geojson(zone=zon)
+
+        self.assertEqual(len(data["features"]), 1)
+        props = data["features"][0]["properties"]
+        self.assertIsNone(props["fill"])
+        self.assertEqual(props["risques"], [])
+        self.assertEqual(props["risques_couleurs"], [])
+
+    def test_carte_globale_ignore_toujours_les_zones_sans_endemie(self):
+        self._patch_zones([_zone("Zone saine", _geom(), [])])
+        self.assertEqual(build_risk_map_geojson()["features"], [])

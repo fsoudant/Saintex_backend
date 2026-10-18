@@ -27,7 +27,7 @@ class UtilisateurPreferencesSerializer(serializers.ModelSerializer):
         model = Utilisateur
         fields = [
             "email", "phone", "email_active", "push_active", "reminder_delay",
-            "voyage_en_famille", "subscription_status",
+            "subscription_status",
         ]
         read_only_fields = ["email", "phone", "subscription_status"]
 
