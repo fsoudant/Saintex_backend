@@ -130,6 +130,7 @@ class ParametreContratTests(TestCase):
         ParametreContrat.get_solo()
         ParametreContrat.objects.create(horizon_max_mois=6)
         self.assertEqual(ParametreContrat.objects.count(), 1)
+        self.assertEqual(ParametreContrat.get_solo().horizon_max_mois, 6)
 
     def test_valider_date_debut_contrat_utilise_le_parametre_en_base(self):
         ParametreContrat.objects.create(horizon_max_mois=6)
