@@ -23,6 +23,9 @@
   .saintex-rte-area { min-height: 8em; padding: 8px; background: var(--body-bg, #fff); color: var(--body-fg, #000); border: 1px solid var(--border-color, #ccc); overflow: auto; }
   .saintex-rte-area p { margin: 0 0 .7em; }
   .saintex-rte-area a { color: #2563eb; text-decoration: underline; }
+  /* Retrait des listes : le défaut du navigateur (40px par niveau) est large. */
+  .saintex-rte-area ul, .saintex-rte-area ol { margin: 0 0 .5em; padding-left: 1.3em; }
+  .saintex-rte-area li ul, .saintex-rte-area li ol { margin: 0; padding-left: 1.1em; }
 </style>
 <script>
 (function () {
