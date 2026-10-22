@@ -94,6 +94,21 @@ class HtmlToTextTests(SimpleTestCase):
     def test_liste_a_puces(self):
         self.assertEqual(html_to_text("<p>A faire :</p><ul><li>Un</li><li>Deux</li></ul>"), "A faire :\n\n- Un\n- Deux")
 
+    def test_liste_a_plusieurs_niveaux(self):
+        html = "<ul><li>Un<ul><li>Un-a</li><li>Un-b<ul><li>Un-b-i</li></ul></li></ul></li><li>Deux</li></ul>"
+        self.assertEqual(
+            html_to_text(html),
+            "- Un\n  - Un-a\n  - Un-b\n    - Un-b-i\n- Deux",
+        )
+
+    def test_liste_numerotee_et_sous_liste_a_puces(self):
+        html = "<ol><li>Un<ul><li>detail</li></ul></li><li>Deux</li></ol>"
+        self.assertEqual(html_to_text(html), "1. Un\n  - detail\n2. Deux")
+
+    def test_sanitize_conserve_les_listes_imbriquees(self):
+        html = "<ul><li>Un<ul><li>Un-a</li></ul></li><li>Deux</li></ul>"
+        self.assertEqual(sanitize_html(html), html)
+
     def test_entites_decodees(self):
         self.assertEqual(html_to_text("<p>a &amp; b &lt;1500 m</p>"), "a & b <1500 m")
 

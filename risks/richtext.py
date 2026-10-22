@@ -87,6 +87,7 @@ class _ConvertisseurTexte(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.out = ""
         self._liens = []  # pile de (href, position de début dans self.out)
+        self._listes = []  # pile de ["ul"|"ol", compteur] : listes imbriquées
 
     def _saut(self, n):
         """Garantit au moins `n` retours à la ligne en fin de sortie (sans en
@@ -104,9 +105,17 @@ class _ConvertisseurTexte(HTMLParser):
             self._saut(2)
         elif tag in ("ul", "ol"):
             self._saut(1)
+            self._listes.append([tag, 0])
         elif tag == "li":
             self._saut(1)
-            self.out += "- "
+            if self._listes:
+                self._listes[-1][1] += 1
+                type_liste, rang = self._listes[-1]
+                marqueur = f"{rang}. " if type_liste == "ol" else "- "
+                # Deux espaces par niveau d'imbrication.
+                self.out += "  " * (len(self._listes) - 1) + marqueur
+            else:
+                self.out += "- "
         elif tag == "a":
             href = dict(attrs).get("href")
             self._liens.append((href, len(self.out)))
@@ -114,7 +123,11 @@ class _ConvertisseurTexte(HTMLParser):
     def handle_endtag(self, tag):
         if tag in ("p", "h3"):
             self._saut(2)
-        elif tag in ("ul", "ol", "li"):
+        elif tag in ("ul", "ol"):
+            if self._listes:
+                self._listes.pop()
+            self._saut(1)
+        elif tag == "li":
             self._saut(1)
         elif tag == "a" and self._liens:
             href, debut = self._liens.pop()

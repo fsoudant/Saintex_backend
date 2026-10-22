@@ -6,6 +6,9 @@
     <button type="button" data-cmd="big" title="Texte plus grand"><big>A</big>+</button>
     <button type="button" data-cmd="title" title="Titre">Titre</button>
     <button type="button" data-cmd="list" title="Liste à puces">&bull; Liste</button>
+    <button type="button" data-cmd="olist" title="Liste numérotée">1. Liste</button>
+    <button type="button" data-cmd="indent" title="Descendre d'un niveau (sous-liste) — ou touche Tab dans une liste">→ Niveau</button>
+    <button type="button" data-cmd="outdent" title="Remonter d'un niveau — ou Maj+Tab dans une liste">← Niveau</button>
     <button type="button" data-cmd="link" title="Insérer un lien (sélectionner d'abord le texte)">🔗 Lien</button>
     <button type="button" data-cmd="unlink" title="Retirer le lien">Retirer le lien</button>
     <button type="button" data-cmd="clear" title="Effacer la mise en forme de la sélection">Effacer le format</button>
@@ -55,6 +58,84 @@
         document.execCommand("createLink", false, url);
       }
 
+      // --- Listes à plusieurs niveaux ---------------------------------------
+      // Fait "à la main" plutôt que via execCommand("indent"), dont le résultat
+      // varie d'un navigateur à l'autre (listes imbriquées parfois invalides).
+      // Limite : agit sur l'élément de liste où se trouve le curseur (début de la
+      // sélection), pas sur plusieurs éléments à la fois. 3 niveaux maximum.
+      var MAX_NIVEAUX = 3;
+
+      function currentItem() {
+        var sel = window.getSelection();
+        var node = sel.rangeCount ? sel.anchorNode : null;
+        while (node && node !== area) {
+          if (node.nodeName === "LI") return node;
+          node = node.parentNode;
+        }
+        return null;
+      }
+
+      function listDepth(li) {
+        var depth = 0, node = li.parentNode;
+        while (node && node !== area) {
+          if (node.nodeName === "UL" || node.nodeName === "OL") depth++;
+          node = node.parentNode;
+        }
+        return depth;
+      }
+
+      function placeCaret(li) {
+        var range = document.createRange();
+        range.selectNodeContents(li);
+        range.collapse(false);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+
+      function lastSublist(li) {
+        var last = li.lastElementChild;
+        return last && (last.nodeName === "UL" || last.nodeName === "OL") ? last : null;
+      }
+
+      function indentItem() {
+        var li = currentItem();
+        if (!li) return false;
+        var prev = li.previousElementSibling;
+        if (!prev || prev.nodeName !== "LI" || listDepth(li) >= MAX_NIVEAUX) return true;
+        var sub = lastSublist(prev);
+        if (!sub) {
+          sub = document.createElement(li.parentNode.nodeName.toLowerCase());
+          prev.appendChild(sub);
+        }
+        sub.appendChild(li);
+        placeCaret(li);
+        return true;
+      }
+
+      function outdentItem() {
+        var li = currentItem();
+        if (!li) return false;
+        var list = li.parentNode;
+        var parentLi = list.parentNode;
+        if (!parentLi || parentLi.nodeName !== "LI") return true;  // déjà au niveau 1
+        // Les éléments qui suivent deviennent les enfants de l'item remonté (l'ordre est conservé).
+        if (li.nextElementSibling) {
+          var sub = lastSublist(li);
+          if (!sub) {
+            sub = document.createElement(list.nodeName.toLowerCase());
+            li.appendChild(sub);
+          }
+          while (li.nextElementSibling !== null && li.nextElementSibling !== sub) {
+            sub.appendChild(li.nextElementSibling);
+          }
+        }
+        parentLi.parentNode.insertBefore(li, parentLi.nextSibling);
+        if (!list.children.length) list.remove();
+        placeCaret(li);
+        return true;
+      }
+
       var actions = {
         bold: function () { document.execCommand("bold"); },
         italic: function () { document.execCommand("italic"); },
@@ -62,6 +143,9 @@
         big: function () { wrapSelection("big"); },
         title: function () { document.execCommand("formatBlock", false, "h3"); },
         list: function () { document.execCommand("insertUnorderedList"); },
+        olist: function () { document.execCommand("insertOrderedList"); },
+        indent: function () { if (!indentItem()) alert("Placez d'abord le curseur dans un élément de liste."); },
+        outdent: function () { if (!outdentItem()) alert("Placez d'abord le curseur dans un élément de liste."); },
         link: addLink,
         unlink: function () { document.execCommand("unlink"); },
         clear: function () { document.execCommand("removeFormat"); document.execCommand("formatBlock", false, "p"); }
@@ -78,6 +162,14 @@
       });
 
       area.addEventListener("input", sync);
+      // Tab / Maj+Tab dans une liste : descendre / remonter d'un niveau (hors liste,
+      // Tab garde son rôle habituel : passer au champ suivant).
+      area.addEventListener("keydown", function (e) {
+        if (e.key !== "Tab" || !currentItem()) return;
+        e.preventDefault();
+        if (e.shiftKey) outdentItem(); else indentItem();
+        sync();
+      });
       // Collage : texte brut uniquement (évite d'importer la mise en forme de Word/web).
       area.addEventListener("paste", function (e) {
         e.preventDefault();
