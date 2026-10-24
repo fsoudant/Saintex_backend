@@ -17,6 +17,17 @@ class PositionInSerializer(serializers.Serializer):
         return Point(self.validated_data["lon"], self.validated_data["lat"], srid=4326)
 
 
+class CacheRequestSerializer(PositionInSerializer):
+    """Demande de cache (cf. saintex-spec-technique.md §5) : la position
+    (déjà arrondie par le téléphone, §9) autour de laquelle centrer le cache,
+    et, facultativement, la version du cache déjà détenue — si elle est
+    identique à celle qui serait renvoyée, le serveur répond "inchangé" sans
+    retransmettre les géométries.
+    """
+
+    cache_version = serializers.CharField(required=False, allow_blank=True, max_length=64)
+
+
 class UtilisateurPreferencesSerializer(serializers.ModelSerializer):
     """Écran "préférences de notification" (cf. saintex-spec-technique.md §4) :
     lecture et mise à jour des seuls champs que l'utilisateur peut modifier

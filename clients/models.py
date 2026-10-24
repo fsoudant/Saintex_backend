@@ -42,6 +42,16 @@ class ParametreContrat(models.Model):
             "non arrêté au PV de réunion)."
         ),
     )
+    cache_rayon_km = models.PositiveSmallIntegerField(
+        default=500,
+        help_text=(
+            "Rayon (en km) autour de la dernière position connue du téléphone dans "
+            "lequel le serveur lui transmet les zones à risque et leurs "
+            "recommandations (cache hors ligne, cf. §5). Modifiable sans nouvelle "
+            "version de l'appli ; à ajuster après mesure de la taille réelle du "
+            "cache (commande mesurer_cache)."
+        ),
+    )
 
     class Meta:
         verbose_name = "Paramétrage du contrat"
@@ -53,7 +63,7 @@ class ParametreContrat(models.Model):
     def save(self, *args, **kwargs):
         self.pk = 1  # force le singleton, quelle que soit la façon dont l'objet a été instancié
         # objects.create() force un INSERT : sur un singleton déjà présent, on veut
-    	# une mise à jour de la ligne 1, pas une violation d'unicité.
+        # une mise à jour de la ligne 1, pas une violation d'unicité.
         kwargs["force_insert"] = False
         super().save(*args, **kwargs)
 
