@@ -11,6 +11,7 @@ opaque), sans mot de passe ni notion de session web.
 
 import calendar
 import secrets
+from datetime import timedelta
 
 from django.contrib.gis.db import models as gis_models
 from django.core.exceptions import ValidationError
@@ -204,6 +205,30 @@ class Utilisateur(models.Model):
         ),
     )
 
+    localisation_toujours = models.BooleanField(
+        null=True,
+        blank=True,
+        help_text=(
+            "Permission de localisation « Toujours » active sur le téléphone, selon "
+            "son dernier contact (nul tant qu'aucun état n'a été reçu). Sert à "
+            "détecter une protection dégradée (cf. saintex-spec-technique.md §8)."
+        ),
+    )
+    notifications_autorisees = models.BooleanField(
+        null=True,
+        blank=True,
+        help_text=(
+            "Notifications autorisées sur le téléphone, selon son dernier contact "
+            "(nul tant qu'aucun état n'a été reçu). Sert à détecter une protection "
+            "dégradée (cf. saintex-spec-technique.md §8)."
+        ),
+    )
+    sante_declaree_le = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Horodatage de la dernière déclaration d'état de santé de l'appli par le téléphone.",
+    )
+
     consent_status = models.BooleanField(
         default=False, help_text="Consentement RGPD explicite donné au premier lancement"
     )
@@ -383,6 +408,7 @@ class NotificationLog(models.Model):
         ALERTE_ZONE = "alerte_zone", "Alerte entrée en zone à risque"
         RAPPEL_ZONE = "rappel_zone", "Rappel de séjour prolongé"
         RELANCE_SILENCE = "relance_silence", "Relance appli silencieuse"
+        PROTECTION_DEGRADEE = "protection_degradee", "Protection dégradée de l'appli"
 
     class Canal(models.TextChoices):
         SMS = "sms", "SMS"
@@ -443,3 +469,91 @@ class NotificationLog(models.Model):
 
     def __str__(self):
         return f"{self.utilisateur.email} — {self.get_type_notification_display()} ({self.canal}, {self.statut})"
+
+
+class AlertReport(models.Model):
+    """Rapport d'une alerte ou d'un rappel affiché par le TÉLÉPHONE (cf.
+    saintex-spec-technique.md §5 "Rapports d'alerte" et §7, révision d'octobre
+    2026) : depuis que la détection se fait sur le téléphone, c'est lui qui
+    affiche l'alerte, puis la remonte au serveur au contact suivant. Ces
+    rapports alimentent le journal de preuve (avec NotificationLog, qui ne
+    garde plus que les messages envoyés par le serveur) et permettent de
+    mesurer la fiabilité réelle du dispositif (alertes ouvertes, délai de
+    remontée).
+
+    Aucune coordonnée GPS : la zone, à la précision du kilomètre, suffit à
+    documenter l'alerte. La zone et le risque sont aussi recopiés en texte
+    (`zone_nom`, `risque_code`), car l'endemie référencée peut disparaître ou
+    évoluer ensuite côté back-office : ce qui compte en cas de litige, c'est ce
+    qui a été rapporté au moment de la réception.
+
+    Valeur probatoire : déclarative (c'est le téléphone qui rapporte, avec son
+    horloge) — cf. §9. `recue_le` est l'horodatage du serveur.
+    """
+
+    class Type(models.TextChoices):
+        ENTREE = "entree", "Entrée en zone à risque"
+        RAPPEL = "rappel", "Rappel de séjour prolongé"
+
+    utilisateur = models.ForeignKey(
+        Utilisateur, on_delete=models.CASCADE, related_name="rapports_alerte"
+    )
+    identifiant_client = models.UUIDField(
+        help_text=(
+            "Identifiant généré par le téléphone pour cette alerte : permet de recevoir "
+            "le même rapport plusieurs fois (nouvel essai après une coupure réseau, mise "
+            "à jour de l'ouverture) sans créer de doublon."
+        )
+    )
+    endemie = models.ForeignKey(
+        "risks.Endemie",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="rapports_alerte",
+        help_text="Nulle si l'endémie rapportée n'existe pas (ou plus) côté serveur.",
+    )
+    zone_nom = models.CharField(
+        max_length=255, blank=True, help_text="Nom de la zone, figé à la réception du rapport"
+    )
+    risque_code = models.CharField(
+        max_length=32, blank=True, help_text="Code du risque, figé à la réception du rapport"
+    )
+    type_alerte = models.CharField(max_length=10, choices=Type.choices)
+    affichee_le = models.DateTimeField(
+        help_text="Horodatage d'affichage de l'alerte, selon l'horloge du téléphone"
+    )
+    ouverte_le = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Horodatage d'ouverture de l'alerte par l'utilisateur, nul si jamais ouverte",
+    )
+    cache_version = models.CharField(
+        max_length=64, blank=True, help_text="Version du cache détenu par le téléphone au moment de l'alerte"
+    )
+    recue_le = models.DateTimeField(
+        auto_now_add=True, help_text="Horodatage de réception par le serveur"
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["utilisateur", "identifiant_client"],
+                name="un_rapport_par_utilisateur_et_identifiant",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["utilisateur", "-recue_le"], name="alertrep_user_recue_idx"),
+        ]
+        ordering = ["-recue_le"]
+        verbose_name = "Rapport d'alerte"
+        verbose_name_plural = "Rapports d'alerte"
+
+    def __str__(self):
+        return f"{self.utilisateur.email} — {self.get_type_alerte_display()} ({self.zone_nom or '?'})"
+
+    @property
+    def retard_de_remontee(self):
+        """Délai entre l'affichage (horloge du téléphone) et la réception par le
+        serveur ; jamais négatif (horloge du téléphone en avance)."""
+        return max(self.recue_le - self.affichee_le, timedelta(0))

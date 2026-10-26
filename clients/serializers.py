@@ -2,7 +2,7 @@ from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
-from .models import ParametreContrat, Utilisateur, valider_date_debut_contrat
+from .models import AlertReport, ParametreContrat, Utilisateur, valider_date_debut_contrat
 
 
 class PositionInSerializer(serializers.Serializer):
@@ -17,17 +17,49 @@ class PositionInSerializer(serializers.Serializer):
         return Point(self.validated_data["lon"], self.validated_data["lat"], srid=4326)
 
 
+class RapportAlerteSerializer(serializers.Serializer):
+    """Un rapport d'alerte affichée par le téléphone (cf. spec §5, "Rapports
+    d'alerte") : aucune coordonnée, seulement l'endémie (identifiant fourni par
+    le cache), le type et les horodatages du téléphone.
+    """
+
+    id = serializers.UUIDField()
+    endemie = serializers.IntegerField(min_value=1)
+    type = serializers.ChoiceField(choices=AlertReport.Type.choices)
+    affichee_le = serializers.DateTimeField()
+    ouverte_le = serializers.DateTimeField(required=False, allow_null=True)
+    cache_version = serializers.CharField(required=False, allow_blank=True, max_length=64)
+
+
+class SanteAppliSerializer(serializers.Serializer):
+    """État de santé de l'appli déclaré à chaque contact (cf. spec §4 et §8) :
+    permet au serveur de détecter une protection dégradée."""
+
+    localisation_toujours = serializers.BooleanField()
+    notifications_autorisees = serializers.BooleanField()
+
+
+# Plafond de rapports par contact : un téléphone resté longtemps hors ligne peut en
+# accumuler, mais pas des milliers (au-delà il renverrait le reste au contact suivant).
+MAX_RAPPORTS_PAR_CONTACT = 100
+
+
 class CacheRequestSerializer(serializers.Serializer):
-    """Contact du téléphone pour rafraîchir son cache (cf.
-    saintex-spec-technique.md §5). Aucune position : le cache est mondial. Seule
-    la version du cache déjà détenue peut être transmise (facultatif) — si elle
-    est identique à la version courante, le serveur répond "inchangé" sans
-    retransmettre les géométries. Tout autre champ envoyé (par exemple une
-    ancienne version de l'appli qui joindrait encore lat/lon) est ignoré, et
-    jamais conservé.
+    """Contact du téléphone avec le serveur (cf. saintex-spec-technique.md §4 et
+    §5). Aucune position : le cache est mondial. Peuvent être transmis, tous
+    facultatifs :
+    - `cache_version` : la version du cache déjà détenue — si elle est identique
+      à la version courante, le serveur répond "inchangé" sans retransmettre
+      les géométries ;
+    - `sante` : l'état de santé de l'appli (permissions) ;
+    - `rapports` : les rapports d'alerte en attente de remontée.
+    Tout autre champ envoyé (par exemple une ancienne version de l'appli qui
+    joindrait encore lat/lon) est ignoré, et jamais conservé.
     """
 
     cache_version = serializers.CharField(required=False, allow_blank=True, max_length=64)
+    sante = SanteAppliSerializer(required=False)
+    rapports = RapportAlerteSerializer(many=True, required=False, max_length=MAX_RAPPORTS_PAR_CONTACT)
 
 
 class UtilisateurPreferencesSerializer(serializers.ModelSerializer):

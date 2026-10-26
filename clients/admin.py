@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import (
+    AlertReport,
     NotificationLog,
     ParametreContrat,
     PreferenceChangeLog,
@@ -24,7 +25,10 @@ class UtilisateurAdmin(admin.ModelAdmin):
     )
     list_filter = ("subscription_status", "email_active", "push_active", "consent_status")
     search_fields = ("email", "phone")
-    readonly_fields = ("api_token", "created_at", "last_contact_at", "contract_expiry_date_display")
+    readonly_fields = (
+        "api_token", "created_at", "last_contact_at", "contract_expiry_date_display",
+        "localisation_toujours", "notifications_autorisees", "sante_declaree_le",
+    )
     inlines = [PushTokenInline]
 
     def contract_expiry_date_display(self, obj):
@@ -77,6 +81,26 @@ class NotificationLogAdmin(admin.ModelAdmin):
     search_fields = ("utilisateur__email", "destinataire")
     autocomplete_fields = ("utilisateur",)
     date_hierarchy = "sent_at"
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(AlertReport)
+class AlertReportAdmin(admin.ModelAdmin):
+    # Lecture seule : rapports remontés par les téléphones (cf. spec §5, §9),
+    # jamais saisis/modifiés à la main — journal probatoire.
+    list_display = (
+        "utilisateur", "type_alerte", "zone_nom", "risque_code",
+        "affichee_le", "ouverte_le", "recue_le",
+    )
+    list_filter = ("type_alerte", "risque_code")
+    search_fields = ("utilisateur__email", "zone_nom")
+    autocomplete_fields = ("utilisateur",)
+    date_hierarchy = "recue_le"
 
     def has_add_permission(self, request):
         return False

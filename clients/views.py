@@ -17,7 +17,8 @@ from risks.cache import cache_mondial_courant
 from risks.detection import zones_actives_pour_point
 
 from .models import PreferenceChangeLog, UserRiskZoneStatus
-from .notifications import envoyer_alerte_entree, envoyer_rappel_si_echeance
+from .notifications import envoyer_alerte_entree, envoyer_rappel_si_echeance, verifier_protection_appli
+from .rapports import enregistrer_rapports
 from .serializers import (
     CacheRequestSerializer,
     PositionInSerializer,
@@ -32,19 +33,27 @@ class CacheView(APIView):
     se fait sur le téléphone, à partir d'un cache fourni par le serveur).
 
     Aucune position n'est transmise : le cache est MONDIAL et identique pour
-    tous les téléphones (cf. risks.cache). La requête ne porte que, facultativement,
-    la version du cache déjà détenue. Met à jour `last_contact_at` (relance
-    "appli silencieuse", §8) et renvoie :
+    tous les téléphones (cf. risks.cache). La requête peut porter, tous champs
+    facultatifs :
+    - `cache_version` : la version du cache déjà détenue ;
+    - `sante` : l'état de santé de l'appli (permissions de localisation « Toujours »
+      et de notifications) — une protection dégradée pendant le contrat vaut au
+      voyageur un SMS (et un email), au plus une fois par jour (§8) ;
+    - `rapports` : les rapports d'alerte affichées par le téléphone depuis le dernier
+      contact (cf. clients.rapports) ; chaque nouvelle alerte d'entrée déclenche
+      un SMS court de sauvegarde (option B du §8).
+
+    Met à jour `last_contact_at` (relance "appli silencieuse", §8) et renvoie :
     - `contrat` : dates de début et d'expiration, pour que le téléphone reste
       muet avant/après, même hors ligne (§6) ;
     - `cache` : toutes les zones à risque avec leurs recommandations (cf.
       risks.cache pour le format). Si le client envoie la version qu'il détient
       déjà et qu'elle est identique, `cache` se réduit à
-      `{"version": ..., "inchange": true}` — cas le plus fréquent.
+      `{"version": ..., "inchange": true}` — cas le plus fréquent ;
+    - `rapports_recus` : identifiants des rapports enregistrés (ou déjà connus),
+      que le téléphone peut retirer de sa file d'attente.
 
-    Le serveur ne reçoit donc plus la position du voyageur (§7, §9). Les rapports
-    d'alerte et l'état de santé de l'appli (permissions) rejoindront ce même
-    contact dans une étape suivante.
+    Le serveur ne reçoit donc plus la position du voyageur (§7, §9).
 
     Coexiste pour l'instant avec PositionPollView (ancien contact, qui déclenche
     encore le moteur d'alerte côté serveur), le temps de migrer l'appli.
@@ -55,10 +64,23 @@ class CacheView(APIView):
     def post(self, request):
         serializer = CacheRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        donnees = serializer.validated_data
 
+        maintenant = timezone.now()
         utilisateur = request.user
-        utilisateur.last_contact_at = timezone.now()
-        utilisateur.save(update_fields=["last_contact_at"])
+        utilisateur.last_contact_at = maintenant
+        champs = ["last_contact_at"]
+        sante = donnees.get("sante")
+        if sante is not None:
+            utilisateur.localisation_toujours = sante["localisation_toujours"]
+            utilisateur.notifications_autorisees = sante["notifications_autorisees"]
+            utilisateur.sante_declaree_le = maintenant
+            champs += ["localisation_toujours", "notifications_autorisees", "sante_declaree_le"]
+        utilisateur.save(update_fields=champs)
+
+        rapports_recus = enregistrer_rapports(utilisateur, donnees.get("rapports", []), maintenant)
+        if sante is not None:
+            verifier_protection_appli(utilisateur, maintenant)
 
         cache = cache_mondial_courant()
         if serializer.validated_data.get("cache_version") == cache["version"]:
@@ -72,6 +94,7 @@ class CacheView(APIView):
                 "expiration": expiration.isoformat() if expiration else None,
             },
             "cache": cache,
+            "rapports_recus": rapports_recus,
         })
 
 
