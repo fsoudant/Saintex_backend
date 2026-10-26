@@ -1,10 +1,11 @@
 import datetime
 
 from django.contrib.gis.geos import MultiPolygon, Polygon
+from django.core.cache import cache
 from django.urls import reverse
 from rest_framework.test import APITestCase
 
-from clients.models import NotificationLog, ParametreContrat, Utilisateur, UserRiskZoneStatus
+from clients.models import NotificationLog, Utilisateur, UserRiskZoneStatus
 from risks.models import ConduiteATenir, Endemie, Risque, Zone
 
 
@@ -17,6 +18,11 @@ def _rect(lon_min, lat_min, lon_max, lat_max):
 
 class CacheViewTests(APITestCase):
     def setUp(self):
+        # Le cache mondial est gardé en mémoire quelques minutes (risks.cache) :
+        # on le vide pour que chaque test parte des données qu'il a créées.
+        cache.clear()
+        self.addCleanup(cache.clear)
+
         self.utilisateur = Utilisateur.objects.create(
             email="a@example.com", phone="+33600000000",
             contract_start_date=datetime.date(2026, 11, 1), contract_duration=3,
@@ -36,7 +42,7 @@ class CacheViewTests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.utilisateur.api_token}")
 
     def _post(self, **donnees):
-        return self.client.post(self.url, {"lat": 10.5, "lon": 10.5, **donnees}, format="json")
+        return self.client.post(self.url, donnees, format="json")
 
     def test_rejette_une_requete_non_authentifiee(self):
         self.client.credentials()
@@ -59,6 +65,28 @@ class CacheViewTests(APITestCase):
         self.utilisateur.save()
 
         self.assertEqual(self._post().json()["contrat"], {"debut": None, "expiration": None})
+
+    def test_le_cache_est_mondial_sans_position(self):
+        # Zones aux antipodes l'une de l'autre : toutes deux dans le cache, sans
+        # qu'aucune position ait été transmise.
+        loin = Zone.objects.create(source_id=2, nom="Zone lointaine", geom=_rect(170, -40, 172, -38))
+        e_loin = Endemie.objects.create(zone=loin, conduite_a_tenir=self.conduite)
+
+        corps = self._post().json()
+
+        self.assertEqual(
+            sorted(e["id"] for e in corps["cache"]["endemies"]),
+            sorted([self.endemie.pk, e_loin.pk]),
+        )
+        self.assertIsNone(corps["cache"]["rayon_km"])
+
+    def test_une_position_envoyee_est_ignoree(self):
+        # Une ancienne version de l'appli pourrait joindre lat/lon : sans effet,
+        # le cache reste identique et mondial.
+        sans = self._post().json()["cache"]
+        avec = self._post(lat=10.5, lon=10.5).json()["cache"]
+
+        self.assertEqual(sans["version"], avec["version"])
 
     def test_met_a_jour_last_contact_at(self):
         self._post()
@@ -85,21 +113,14 @@ class CacheViewTests(APITestCase):
         self.assertIn("endemies", corps["cache"])
         self.assertNotIn("inchange", corps["cache"])
 
-    def test_le_rayon_vient_du_parametrage(self):
-        # Zone à ~390 km du point.
-        loin = Zone.objects.create(source_id=2, nom="Zone lointaine", geom=_rect(13, 13, 14, 14))
-        e_loin = Endemie.objects.create(zone=loin, conduite_a_tenir=self.conduite)
+    def test_le_cache_est_garde_en_memoire_puis_reconstruit_apres_expiration(self):
+        premier = self._post().json()["cache"]["version"]
 
-        ids = [e["id"] for e in self._post().json()["cache"]["endemies"]]
-        self.assertIn(e_loin.pk, ids)
+        # Modification en base : la version mémorisée est encore servie...
+        self.conduite.recommandation_fr = "<p>Nouveau texte.</p>"
+        self.conduite.save()
+        self.assertEqual(self._post().json()["cache"]["version"], premier)
 
-        parametre = ParametreContrat.get_solo()
-        parametre.cache_rayon_km = 100
-        parametre.save()
-
-        ids = [e["id"] for e in self._post().json()["cache"]["endemies"]]
-        self.assertNotIn(e_loin.pk, ids)
-        self.assertIn(self.endemie.pk, ids)
-
-    def test_position_invalide(self):
-        self.assertEqual(self._post(lat=95).status_code, 400)
+        # ... jusqu'à expiration de la mémoire (simulée ici en la vidant).
+        cache.clear()
+        self.assertNotEqual(self._post().json()["cache"]["version"], premier)

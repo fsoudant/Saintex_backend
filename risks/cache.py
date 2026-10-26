@@ -3,9 +3,16 @@ Cache hors ligne transmis au téléphone (cf. saintex-spec-technique.md §5).
 
 Depuis la révision d'octobre 2026, c'est le téléphone qui détecte l'entrée en
 zone à risque et affiche l'alerte : le serveur lui fournit, à chaque contact,
-les zones à risque situées dans un rayon autour de sa dernière position, avec
-les recommandations associées. Le cache est remplacé intégralement à chaque
-contact (jamais cumulé).
+TOUTES les zones à risque avec les recommandations associées — un cache
+mondial, identique pour tous les téléphones. Mesuré sur les données réelles en
+octobre 2026 : 508 endémies, 264 géométries, 386 Ko compressés. Conséquences :
+plus d'angle mort en cas de trajet en avion, et le serveur n'a plus besoin de
+connaître la position du téléphone. Le cache est remplacé intégralement à
+chaque contact (jamais cumulé) ; comme il change rarement, la plupart des
+contacts se réduisent à une réponse « inchangé » (cf. clients.views.CacheView).
+
+`construire_cache` sait aussi se limiter à un rayon autour d'un point (mesures
+de taille, ou repli si le cache mondial devenait un jour trop gros).
 
 Deux fonctions :
 - `construire_cache` : génère le cache (côté serveur) ;
@@ -22,7 +29,7 @@ les textes et géométries partagés entre endémies) :
     {
       "version": "a1b2c3d4e5f60718",   # empreinte du contenu (hors date)
       "genere_le": "2026-10-24T10:00:00+00:00",
-      "rayon_km": 500,
+      "rayon_km": null,                 # null = monde entier (cas normal)
       "conduites": {                    # une entrée par conduite à tenir
         "PAL_T3": {
           "risque": {"code", "libelle_fr", "libelle_en", "couleur"},
@@ -67,6 +74,7 @@ from datetime import datetime
 import shapely.geometry
 import shapely.wkt
 from django.contrib.gis.measure import D
+from django.core.cache import cache as cache_django
 from django.db.models import Q
 from django.utils import timezone
 from shapely.validation import make_valid
@@ -74,7 +82,6 @@ from shapely.validation import make_valid
 from .models import Endemie
 from .richtext import sanitize_html
 
-RAYON_DEFAUT_KM = 500
 # ≈ 1 km en degrés (cf. spec §5 : précision cible kilométrique, simplification
 # de l'ordre du kilomètre sans perte de sens pour l'utilisateur).
 TOLERANCE_SIMPLIFICATION_DEG = 0.01
@@ -135,19 +142,22 @@ def _iso(valeur):
     return valeur.isoformat() if valeur else None
 
 
-def construire_cache(point, rayon_km=RAYON_DEFAUT_KM, moment=None, tolerance=TOLERANCE_SIMPLIFICATION_DEG):
-    """Construit le cache pour un téléphone dont la dernière position connue
-    est `point` (GEOS Point, srid 4326). Renvoie un dict sérialisable en JSON
-    (format décrit dans la docstring du module).
+def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE_SIMPLIFICATION_DEG):
+    """Construit le cache : par défaut le cache MONDIAL (toutes les zones à
+    risque). Si `point` (GEOS Point, srid 4326) et `rayon_km` sont fournis,
+    il se limite aux zones à moins de `rayon_km` de ce point. Renvoie un dict
+    sérialisable en JSON (format décrit dans la docstring du module).
 
     `tolerance` : simplification en degrés (0 pour la désactiver, utile aux
     tests de cohérence exacts).
     """
     moment = moment or timezone.now()
 
+    endemies = Endemie.objects.filter(zone__geom__isnull=False)
+    if point is not None and rayon_km is not None:
+        endemies = endemies.filter(zone__geom__dwithin=(point, D(km=rayon_km)))
     endemies = (
-        Endemie.objects.filter(zone__geom__dwithin=(point, D(km=rayon_km)))
-        .filter(Q(date_fin__isnull=True) | Q(date_fin__gte=moment))
+        endemies.filter(Q(date_fin__isnull=True) | Q(date_fin__gte=moment))
         .select_related("zone", "conduite_a_tenir", "conduite_a_tenir__risque")
         .order_by("pk")
     )
@@ -217,6 +227,25 @@ def construire_cache(point, rayon_km=RAYON_DEFAUT_KM, moment=None, tolerance=TOL
     ).hexdigest()[:16]
 
     return {"version": version, "genere_le": moment.isoformat(), **contenu}
+
+
+CLE_CACHE_MONDIAL = "risks:cache_mondial"
+# Un contact par téléphone toutes les 6 h : reconstruire le cache mondial (changement
+# de zones simplifiées, JSON...) à chaque appel coûterait inutilement. Il est donc
+# gardé en mémoire quelques minutes, ce qui borne aussi le délai de prise en
+# compte d'une modification faite dans le back-office (en plus du cycle de 6 h
+# des téléphones). Mémoire propre à chaque processus Gunicorn.
+DUREE_CACHE_MONDIAL_SECONDES = 300
+
+
+def cache_mondial_courant():
+    """Cache mondial à transmettre aux téléphones, construit au plus une fois
+    toutes les `DUREE_CACHE_MONDIAL_SECONDES` secondes par processus."""
+    valeur = cache_django.get(CLE_CACHE_MONDIAL)
+    if valeur is None:
+        valeur = construire_cache()
+        cache_django.set(CLE_CACHE_MONDIAL, valeur, DUREE_CACHE_MONDIAL_SECONDES)
+    return valeur
 
 
 def _en_saison(saison, moment):

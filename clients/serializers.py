@@ -17,12 +17,14 @@ class PositionInSerializer(serializers.Serializer):
         return Point(self.validated_data["lon"], self.validated_data["lat"], srid=4326)
 
 
-class CacheRequestSerializer(PositionInSerializer):
-    """Demande de cache (cf. saintex-spec-technique.md §5) : la position
-    (déjà arrondie par le téléphone, §9) autour de laquelle centrer le cache,
-    et, facultativement, la version du cache déjà détenue — si elle est
-    identique à celle qui serait renvoyée, le serveur répond "inchangé" sans
-    retransmettre les géométries.
+class CacheRequestSerializer(serializers.Serializer):
+    """Contact du téléphone pour rafraîchir son cache (cf.
+    saintex-spec-technique.md §5). Aucune position : le cache est mondial. Seule
+    la version du cache déjà détenue peut être transmise (facultatif) — si elle
+    est identique à la version courante, le serveur répond "inchangé" sans
+    retransmettre les géométries. Tout autre champ envoyé (par exemple une
+    ancienne version de l'appli qui joindrait encore lat/lon) est ignoré, et
+    jamais conservé.
     """
 
     cache_version = serializers.CharField(required=False, allow_blank=True, max_length=64)

@@ -78,6 +78,16 @@ class ConstruireCacheTests(_Fixtures, TestCase):
         self.assertIn(e_loin.pk, ids_500)
         self.assertNotIn(e_loin.pk, ids_100)
 
+    def test_cache_mondial_par_defaut(self):
+        # Sans position ni rayon : toutes les zones, y compris aux antipodes.
+        loin = self._zone(2, "Zone aux antipodes", multi(rect(-170, -40, -168, -38)))
+        e_loin = Endemie.objects.create(zone=loin, conduite_a_tenir=self.conduite)
+
+        cache = construire_cache()
+
+        self.assertEqual(sorted(e["id"] for e in cache["endemies"]), sorted([self.endemie.pk, e_loin.pk]))
+        self.assertIsNone(cache["rayon_km"])
+
     def test_conduite_et_geometrie_partagees_entre_endemies(self):
         autre = Endemie.objects.create(zone=self.zone, conduite_a_tenir=self.conduite)
 

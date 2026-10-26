@@ -42,16 +42,6 @@ class ParametreContrat(models.Model):
             "non arrêté au PV de réunion)."
         ),
     )
-    cache_rayon_km = models.PositiveSmallIntegerField(
-        default=500,
-        help_text=(
-            "Rayon (en km) autour de la dernière position connue du téléphone dans "
-            "lequel le serveur lui transmet les zones à risque et leurs "
-            "recommandations (cache hors ligne, cf. §5). Modifiable sans nouvelle "
-            "version de l'appli ; à ajuster après mesure de la taille réelle du "
-            "cache (commande mesurer_cache)."
-        ),
-    )
 
     class Meta:
         verbose_name = "Paramétrage du contrat"

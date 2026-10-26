@@ -13,10 +13,10 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from risks.cache import construire_cache
+from risks.cache import cache_mondial_courant
 from risks.detection import zones_actives_pour_point
 
-from .models import ParametreContrat, PreferenceChangeLog, UserRiskZoneStatus
+from .models import PreferenceChangeLog, UserRiskZoneStatus
 from .notifications import envoyer_alerte_entree, envoyer_rappel_si_echeance
 from .serializers import (
     CacheRequestSerializer,
@@ -31,18 +31,20 @@ class CacheView(APIView):
     saintex-spec-technique.md §4 et §5, révision d'octobre 2026 : la détection
     se fait sur le téléphone, à partir d'un cache fourni par le serveur).
 
-    Reçoit la dernière position du téléphone (arrondie par lui à 5-10 km, §9),
-    met à jour `last_contact_at` (relance "appli silencieuse", §8) et renvoie :
+    Aucune position n'est transmise : le cache est MONDIAL et identique pour
+    tous les téléphones (cf. risks.cache). La requête ne porte que, facultativement,
+    la version du cache déjà détenue. Met à jour `last_contact_at` (relance
+    "appli silencieuse", §8) et renvoie :
     - `contrat` : dates de début et d'expiration, pour que le téléphone reste
       muet avant/après, même hors ligne (§6) ;
-    - `cache` : les zones à risque dans le rayon paramétré (ParametreContrat),
-      avec leurs recommandations (cf. risks.cache pour le format). Si le client
-      envoie la version qu'il détient déjà et qu'elle est identique,
-      `cache` se réduit à `{"version": ..., "inchange": true}`.
+    - `cache` : toutes les zones à risque avec leurs recommandations (cf.
+      risks.cache pour le format). Si le client envoie la version qu'il détient
+      déjà et qu'elle est identique, `cache` se réduit à
+      `{"version": ..., "inchange": true}` — cas le plus fréquent.
 
-    La position reçue n'est jamais persistée (§7) : elle ne sert qu'à centrer
-    le cache, puis est écartée. Les rapports d'alerte et l'état de santé de
-    l'appli (permissions) rejoindront ce même contact dans une étape suivante.
+    Le serveur ne reçoit donc plus la position du voyageur (§7, §9). Les rapports
+    d'alerte et l'état de santé de l'appli (permissions) rejoindront ce même
+    contact dans une étape suivante.
 
     Coexiste pour l'instant avec PositionPollView (ancien contact, qui déclenche
     encore le moteur d'alerte côté serveur), le temps de migrer l'appli.
@@ -58,9 +60,7 @@ class CacheView(APIView):
         utilisateur.last_contact_at = timezone.now()
         utilisateur.save(update_fields=["last_contact_at"])
 
-        cache = construire_cache(
-            serializer.to_point(), rayon_km=ParametreContrat.get_solo().cache_rayon_km
-        )
+        cache = cache_mondial_courant()
         if serializer.validated_data.get("cache_version") == cache["version"]:
             cache = {"version": cache["version"], "inchange": True}
 
