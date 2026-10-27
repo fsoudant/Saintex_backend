@@ -142,6 +142,19 @@ def _iso(valeur):
     return valeur.isoformat() if valeur else None
 
 
+def recommandation_html(conduite, langue="fr"):
+    """Recommandation d'une conduite à tenir telle qu'elle est transmise dans le
+    cache (et affichée par le téléphone), en HTML assaini (cf. risks.richtext).
+    Jamais de texte vide : tant que l'équipe médicale n'a pas rédigé la
+    conduite, on retombe sur la description du risque. `sanitize_html` est
+    réappliqué ici par défense en profondeur (un `update()` en base contourne
+    ConduiteATenir.save)."""
+    risque = conduite.risque
+    if langue == "en":
+        return sanitize_html(conduite.recommandation_en) or sanitize_html(risque.nature_du_risque_en)
+    return sanitize_html(conduite.recommandation_fr) or sanitize_html(risque.nature_du_risque_fr)
+
+
 def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE_SIMPLIFICATION_DEG):
     """Construit le cache : par défaut le cache MONDIAL (toutes les zones à
     risque). Si `point` (GEOS Point, srid 4326) et `rayon_km` sont fournis,
@@ -200,10 +213,8 @@ def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE
                 "saison": saison,
                 # Jamais de texte vide transmis : repli sur la description du
                 # risque tant que l'équipe médicale n'a pas rédigé la conduite.
-                "recommandation_fr": sanitize_html(conduite.recommandation_fr)
-                or sanitize_html(risque.nature_du_risque_fr),
-                "recommandation_en": sanitize_html(conduite.recommandation_en)
-                or sanitize_html(risque.nature_du_risque_en),
+                "recommandation_fr": recommandation_html(conduite, "fr"),
+                "recommandation_en": recommandation_html(conduite, "en"),
             }
 
         entrees.append({

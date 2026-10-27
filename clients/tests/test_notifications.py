@@ -1,79 +1,58 @@
-"""Tests du moteur de décision/envoi (Phase 3, cf. clients.notifications)."""
+"""Tests des messages envoyés par le serveur (cf. clients.notifications).
+
+Les alertes et rappels de zone sont désormais affichés par le téléphone (cf.
+saintex-spec-technique.md §4/§5) : leur envoi côté serveur n'existe plus. Les
+SMS d'alerte rapportée et les avertissements de protection dégradée sont
+testés dans test_rapports.py ; ce fichier couvre les canaux et la composition.
+"""
 
 from datetime import timedelta
+from types import SimpleNamespace
 
-from django.contrib.gis.geos import Point
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 
-from clients.models import (
-    NotificationLog,
-    PushToken,
-    Utilisateur,
-    UserRiskZoneStatus,
+from clients.models import NotificationLog, PushToken, Utilisateur
+from clients.notifications import (
+    SEUIL_RETARD_SMS_ALERTE,
+    composer_sms_alerte,
+    envoyer_relance_silence,
 )
-from clients.notifications import envoyer_alerte_entree, envoyer_rappel_si_echeance
-from risks.models import ConduiteATenir, Endemie, Risque, Zone
 
 
-class _EndemieFixtureMixin:
-    def _endemie(self, recommandation_fr="Prenez un traitement préventif."):
-        zone = Zone.objects.create(source_id=1, nom="Zone test")
-        risque = Risque.objects.create(
-            code="PAL",
-            libelle_fr="Paludisme",
-            libelle_en="Malaria",
-            nature_du_risque_fr="Transmission par moustique.",
-            nature_du_risque_en="...",
-        )
-        conduite = ConduiteATenir.objects.create(
-            code="PAL_T1",
-            risque=risque,
-            nature_du_risque_fr="...",
-            nature_du_risque_en="...",
-            recommandation_fr=recommandation_fr,
-        )
-        return Endemie.objects.create(zone=zone, conduite_a_tenir=conduite)
+class CanauxActifsTests(TestCase):
+    """Les canaux sont communs à tous les messages du serveur ; la relance
+    "appli silencieuse" les utilise tous (SMS, email, push)."""
 
-
-class EnvoyerAlerteEntreeTests(_EndemieFixtureMixin, TestCase):
     def setUp(self):
         self.utilisateur = Utilisateur.objects.create(email="a@example.com", phone="+33600000000")
-        self.endemie = self._endemie()
-        self.statut = UserRiskZoneStatus.objects.create(
-            utilisateur=self.utilisateur, endemie=self.endemie
-        )
-        self.point = Point(2.35, 48.85, srid=4326)
+        self.utilisateur.last_contact_at = timezone.now() - timedelta(hours=8)
+        self.utilisateur.save()
+
+    def _canaux(self):
+        return {log.canal for log in envoyer_relance_silence(self.utilisateur)}
 
     def test_sms_toujours_envoye(self):
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        canaux = {log.canal for log in logs}
-        self.assertIn(NotificationLog.Canal.SMS, canaux)
+        self.assertIn(NotificationLog.Canal.SMS, self._canaux())
 
     def test_email_envoye_si_actif(self):
         self.utilisateur.email_active = True
         self.utilisateur.push_active = False
         self.utilisateur.save()
 
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        canaux = {log.canal for log in logs}
-        self.assertIn(NotificationLog.Canal.EMAIL, canaux)
+        self.assertIn(NotificationLog.Canal.EMAIL, self._canaux())
 
     def test_email_absent_si_desactive(self):
         self.utilisateur.email_active = False
         self.utilisateur.save()
 
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        canaux = {log.canal for log in logs}
-        self.assertNotIn(NotificationLog.Canal.EMAIL, canaux)
+        self.assertNotIn(NotificationLog.Canal.EMAIL, self._canaux())
 
     def test_push_absent_sans_device_enregistre(self):
         self.utilisateur.push_active = True
         self.utilisateur.save()
 
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        canaux = {log.canal for log in logs}
-        self.assertNotIn(NotificationLog.Canal.PUSH, canaux)
+        self.assertNotIn(NotificationLog.Canal.PUSH, self._canaux())
 
     def test_push_envoye_si_actif_et_device_enregistre(self):
         self.utilisateur.push_active = True
@@ -82,132 +61,59 @@ class EnvoyerAlerteEntreeTests(_EndemieFixtureMixin, TestCase):
             utilisateur=self.utilisateur, plateforme=PushToken.Plateforme.IOS, token="tok-1"
         )
 
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        canaux = {log.canal for log in logs}
-        self.assertIn(NotificationLog.Canal.PUSH, canaux)
+        self.assertIn(NotificationLog.Canal.PUSH, self._canaux())
 
-    def test_logs_portent_le_bon_type_et_la_position(self):
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
+    def test_logs_figent_le_message_et_le_destinataire(self):
+        logs = envoyer_relance_silence(self.utilisateur)
+
         for log in logs:
-            self.assertEqual(log.type_notification, NotificationLog.TypeNotification.ALERTE_ZONE)
-            self.assertEqual(log.endemie, self.endemie)
-            self.assertEqual(log.position, self.point)
+            self.assertEqual(log.type_notification, NotificationLog.TypeNotification.RELANCE_SILENCE)
             self.assertEqual(log.statut, NotificationLog.Statut.ENVOYE)
-
-    def test_message_contient_la_recommandation(self):
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        self.assertIn("Prenez un traitement préventif.", logs[0].message)
-
-    def test_message_identique_pour_tous_les_voyageurs(self):
-        # Cf. §8, décision d'octobre 2026 : plus de modulation selon une
-        # couverture vaccinale déclarée, un seul texte pour tout le monde.
-        autre = Utilisateur.objects.create(email="b@example.com", phone="+33600000001")
-        statut_autre = UserRiskZoneStatus.objects.create(
-            utilisateur=autre, endemie=self.endemie
+            self.assertIn("8 h", log.message)
+        self.assertEqual(
+            {log.destinataire for log in logs}, {"+33600000000", "a@example.com"}
         )
-        logs_a = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        logs_b = envoyer_alerte_entree(autre, statut_autre, self.point)
-        self.assertEqual(logs_a[0].message, logs_b[0].message)
 
-    def test_message_retombe_sur_la_nature_du_risque_si_recommandation_vide(self):
-        # Jamais de texte vide envoyé tant que l'équipe médicale n'a pas
-        # rédigé la recommandation.
-        conduite = self.endemie.conduite_a_tenir
-        conduite.recommandation_fr = ""
-        conduite.save(update_fields=["recommandation_fr"])
 
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        self.assertIn("Transmission par moustique.", logs[0].message)
+class ComposerSmsAlerteTests(SimpleTestCase):
+    """Texte du SMS court de sauvegarde (option B du §8)."""
 
-    def test_email_porte_le_html_et_le_sms_le_texte_brut(self):
-        # Cf. §8, texte enrichi : seul l'email affiche la mise en forme, SMS et
-        # push reçoivent une version texte brut (lien -> "texte (url)").
-        conduite = self.endemie.conduite_a_tenir
-        conduite.recommandation_fr = (
-            '<p><strong>Protégez-vous.</strong> Voir <a href="https://www.who.int/fr">l\'OMS</a>.</p>'
+    MOMENT = timezone.now()
+
+    def _rapport(self, retard, libelle="Paludisme"):
+        endemie = (
+            SimpleNamespace(conduite_a_tenir=SimpleNamespace(risque=SimpleNamespace(libelle_fr=libelle)))
+            if libelle
+            else None
         )
-        conduite.save()
+        return SimpleNamespace(endemie=endemie, affichee_le=self.MOMENT - retard)
 
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        par_canal = {log.canal: log for log in logs}
-
-        email = par_canal[NotificationLog.Canal.EMAIL]
-        self.assertIn("<strong>Protégez-vous.</strong>", email.message_html)
-        self.assertIn('href="https://www.who.int/fr"', email.message_html)
-
-        sms = par_canal[NotificationLog.Canal.SMS]
-        self.assertEqual(sms.message_html, "")
-        self.assertNotIn("<", sms.message)
-        self.assertIn("Protégez-vous. Voir l'OMS (https://www.who.int/fr).", sms.message)
-
-    def test_recommandation_non_rediges_donne_aussi_un_email_html(self):
-        conduite = self.endemie.conduite_a_tenir
-        conduite.recommandation_fr = ""
-        conduite.save()
-
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        email = next(log for log in logs if log.canal == NotificationLog.Canal.EMAIL)
-        self.assertIn("<p>Transmission par moustique.</p>", email.message_html)
-
-    def test_message_ne_contient_plus_de_mention_non_protege(self):
-        logs = envoyer_alerte_entree(self.utilisateur, self.statut, self.point)
-        self.assertNotIn("NON PROTÉGÉ", logs[0].message.upper())
-
-
-class EnvoyerRappelSiEcheanceTests(_EndemieFixtureMixin, TestCase):
-    def setUp(self):
-        self.utilisateur = Utilisateur.objects.create(
-            email="a@example.com",
-            phone="+33600000000",
-            reminder_delay=Utilisateur.DelaiRappel.QUOTIDIEN,
+    def test_alerte_recente(self):
+        texte = composer_sms_alerte(self._rapport(timedelta(minutes=5)), self.MOMENT)
+        self.assertEqual(
+            texte,
+            "Saintex : vous entrez dans une zone à risque (Paludisme). "
+            "Consultez l'application pour la conduite à tenir.",
         )
-        self.endemie = self._endemie()
-        self.statut = UserRiskZoneStatus.objects.create(
-            utilisateur=self.utilisateur, endemie=self.endemie
-        )
-        self.point = Point(2.35, 48.85, srid=4326)
 
-    def test_aucun_rappel_avant_echeance(self):
-        moment = self.statut.entered_at + timedelta(hours=1)
-        logs = envoyer_rappel_si_echeance(self.utilisateur, self.statut, self.point, moment=moment)
-        self.assertEqual(logs, [])
+    def test_alerte_en_retard_en_heures(self):
+        texte = composer_sms_alerte(self._rapport(timedelta(hours=5, minutes=30)), self.MOMENT)
+        self.assertTrue(texte.startswith("Saintex : il y a 5 h, vous êtes entré(e) dans une zone à risque (Paludisme)."))
 
-    def test_rappel_envoye_apres_echeance(self):
-        moment = self.statut.entered_at + timedelta(days=1, minutes=1)
-        logs = envoyer_rappel_si_echeance(self.utilisateur, self.statut, self.point, moment=moment)
+    def test_alerte_en_retard_en_jours(self):
+        texte = composer_sms_alerte(self._rapport(timedelta(days=3)), self.MOMENT)
+        self.assertIn("il y a 3 j,", texte)
 
-        self.assertTrue(len(logs) > 0)
-        self.assertTrue(
-            all(
-                log.type_notification == NotificationLog.TypeNotification.RAPPEL_ZONE
-                for log in logs
-            )
-        )
-        self.statut.refresh_from_db()
-        self.assertEqual(self.statut.last_reminded_at, moment)
+    def test_seuil_de_retard(self):
+        juste_avant = composer_sms_alerte(self._rapport(SEUIL_RETARD_SMS_ALERTE - timedelta(seconds=1)), self.MOMENT)
+        juste_apres = composer_sms_alerte(self._rapport(SEUIL_RETARD_SMS_ALERTE), self.MOMENT)
+        self.assertNotIn("il y a", juste_avant)
+        self.assertIn("il y a 1 h,", juste_apres)
 
-    def test_aucun_rappel_si_delai_une_fois(self):
-        self.utilisateur.reminder_delay = Utilisateur.DelaiRappel.UNE_FOIS
-        self.utilisateur.save()
-        moment = self.statut.entered_at + timedelta(days=30)
+    def test_horloge_du_telephone_en_avance_n_affiche_pas_de_duree(self):
+        texte = composer_sms_alerte(self._rapport(timedelta(hours=-2)), self.MOMENT)
+        self.assertNotIn("il y a", texte)
 
-        logs = envoyer_rappel_si_echeance(self.utilisateur, self.statut, self.point, moment=moment)
-        self.assertEqual(logs, [])
-
-    def test_pas_de_second_rappel_avant_nouvelle_echeance(self):
-        premier_moment = self.statut.entered_at + timedelta(days=1, minutes=1)
-        envoyer_rappel_si_echeance(self.utilisateur, self.statut, self.point, moment=premier_moment)
-        self.statut.refresh_from_db()
-
-        second_moment = premier_moment + timedelta(hours=1)
-        logs = envoyer_rappel_si_echeance(
-            self.utilisateur, self.statut, self.point, moment=second_moment
-        )
-        self.assertEqual(logs, [])
-
-    def test_moment_par_defaut_est_maintenant(self):
-        self.statut.entered_at = timezone.now() - timedelta(days=2)
-        self.statut.save(update_fields=["entered_at"])
-
-        logs = envoyer_rappel_si_echeance(self.utilisateur, self.statut, self.point)
-        self.assertTrue(len(logs) > 0)
+    def test_endemie_inconnue(self):
+        texte = composer_sms_alerte(self._rapport(timedelta(0), libelle=None), self.MOMENT)
+        self.assertTrue(texte.startswith("Saintex : vous entrez dans une zone à risque."))

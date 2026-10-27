@@ -90,7 +90,6 @@ class RapportsAlerteTests(_ContactFixtures):
         self.assertEqual(sms.endemie, self.endemie)
         self.assertIn("vous entrez dans une zone à risque (Paludisme)", sms.message)
         self.assertEqual(sms.message_html, "")
-        self.assertIsNone(sms.position)
 
     def test_le_sms_tient_dans_l_alphabet_sms_standard(self):
         self._contact(rapports=[self._rapport()])

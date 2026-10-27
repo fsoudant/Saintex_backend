@@ -1,9 +1,16 @@
 import { getApiToken } from './storage';
-import type { OnboardingPayload, Preferences, PreferencesUpdate } from './types';
+import type {
+  ContactRequest,
+  ContactResponse,
+  OnboardingPayload,
+  Preferences,
+  PreferencesUpdate,
+} from './types';
 
 // TODO: externaliser (build config Capacitor par environnement) plutôt que
 // coder en dur — utile dès qu'un environnement de test/staging existe.
-const API_BASE = 'https://saintex-backend.onrender.com/api';
+// Production = Mac dédié auto-hébergé (Render/Neon abandonnés).
+const API_BASE = 'https://saintex.myddns.me/api';
 
 class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -43,14 +50,21 @@ export async function updatePreferences(update: PreferencesUpdate): Promise<Pref
   return response.json();
 }
 
-// POST /api/positions/ — polling GPS (spec §4). Normalement déclenché par
-// le module natif Swift en tâche de fond, pas par cette coque UI ; exposé
-// ici surtout pour permettre un test manuel pendant le développement.
-export async function pollPosition(lat: number, lon: number): Promise<void> {
-  await authorizedFetch('/positions/', {
+// POST /api/cache/ — contact avec le serveur (spec §4 et §5) : remplace
+// l'ancien envoi de position (/api/positions/, supprimé). Aucune position :
+// le cache est mondial et identique pour tous. Envoie, tous champs
+// facultatifs, la version du cache détenu, l'état de santé de l'appli
+// (permissions) et les rapports d'alerte en attente ; reçoit les dates du
+// contrat (le téléphone reste muet avant/après), le cache — ou "inchangé" —
+// et les identifiants de rapports acquittés (à retirer de la file d'attente).
+// Normalement appelé par le module natif en tâche de fond toutes les 6 h,
+// pas par cette coque UI ; exposé ici pour les tests manuels.
+export async function contactServeur(requete: ContactRequest = {}): Promise<ContactResponse> {
+  const response = await authorizedFetch('/cache/', {
     method: 'POST',
-    body: JSON.stringify({ lat, lon }),
+    body: JSON.stringify(requete),
   });
+  return response.json();
 }
 
 // --- Fonctions non encore branchées à un vrai endpoint backend ---

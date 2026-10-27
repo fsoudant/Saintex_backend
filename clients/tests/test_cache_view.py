@@ -5,7 +5,7 @@ from django.core.cache import cache
 from django.urls import reverse
 from rest_framework.test import APITestCase
 
-from clients.models import NotificationLog, Utilisateur, UserRiskZoneStatus
+from clients.models import NotificationLog, Utilisateur
 from risks.models import ConduiteATenir, Endemie, Risque, Zone
 
 
@@ -93,11 +93,10 @@ class CacheViewTests(APITestCase):
         self.utilisateur.refresh_from_db()
         self.assertIsNotNone(self.utilisateur.last_contact_at)
 
-    def test_n_enclenche_pas_le_moteur_d_alerte_serveur(self):
-        # La détection se fait sur le téléphone (spec §4/§5) : ce contact ne
-        # crée ni statut de zone ni notification côté serveur.
+    def test_n_envoie_rien_sans_rapport_ni_etat_de_sante(self):
+        # La détection se fait sur le téléphone (spec §4/§5) : un simple contact
+        # ne déclenche aucun message côté serveur.
         self._post()
-        self.assertFalse(UserRiskZoneStatus.objects.exists())
         self.assertFalse(NotificationLog.objects.exists())
 
     def test_version_identique_repond_inchange(self):

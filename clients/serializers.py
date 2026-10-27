@@ -1,20 +1,7 @@
-from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
 from .models import AlertReport, ParametreContrat, Utilisateur, valider_date_debut_contrat
-
-
-class PositionInSerializer(serializers.Serializer):
-    """Entrée du polling client (cf. saintex-spec-technique.md §4) : juste
-    lat/lon, la position est envoyée telle quelle, sans intelligence côté client.
-    """
-
-    lat = serializers.FloatField(min_value=-90, max_value=90)
-    lon = serializers.FloatField(min_value=-180, max_value=180)
-
-    def to_point(self):
-        return Point(self.validated_data["lon"], self.validated_data["lat"], srid=4326)
 
 
 class RapportAlerteSerializer(serializers.Serializer):

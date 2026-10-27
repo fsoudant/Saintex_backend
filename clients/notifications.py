@@ -1,38 +1,33 @@
 """
-Décision et envoi des notifications (cf. saintex-spec-technique.md §8) —
-Phase 3 du moteur de notification, suite de risks.detection (Phase 2, qui se
-contente de détecter les zones actives) et des modèles clients (Phase 1).
+Messages envoyés PAR LE SERVEUR aux voyageurs (cf. saintex-spec-technique.md §8).
+
+Depuis la révision d'octobre 2026, la détection des zones à risque et
+l'affichage des alertes et rappels se font sur le TÉLÉPHONE (cache mondial,
+§5) : le serveur n'envoie plus lui-même ces alertes. Il envoie uniquement des
+messages de service :
+
+- le SMS court de sauvegarde, à chaque alerte d'entrée en zone rapportée par
+  le téléphone (option B du §8) ;
+- la relance "appli silencieuse" (cf. clients.watchdog) ;
+- l'avertissement de protection dégradée (permissions retirées).
 
 Sépare volontairement la DÉCISION (quoi envoyer, à qui, sur quel canal) de
 l'ENVOI (comment l'acheminer réellement) : le choix des prestataires SMS et
-email (Brevo pressenti côté email, cf. spec §10 "Points encore ouverts")
-n'est pas encore arrêté. Les `NotificationSender` ci-dessous ne sont donc,
-pour l'instant, que des implémentations "stub" qui journalisent et simulent
-un envoi réussi — un branchement réel (Brevo, etc.) remplacera uniquement
-`SENDERS`, sans toucher à la logique de décision.
+email (Brevo pressenti côté email) n'est pas encore arrêté. Les
+`NotificationSender` ci-dessous ne sont donc, pour l'instant, que des
+implémentations "stub" qui journalisent et simulent un envoi réussi — un
+branchement réel (Brevo, etc.) remplacera uniquement `SENDERS`, sans toucher
+à la logique de décision.
 """
 
-import html
 import logging
 from datetime import timedelta
 
 from django.utils import timezone
 
-from risks.richtext import html_to_text, sanitize_html
-
-from .models import NotificationLog, Utilisateur
+from .models import NotificationLog
 
 logger = logging.getLogger("saintex.notifications")
-
-# Mapping Utilisateur.DelaiRappel -> délai avant le prochain rappel de
-# séjour prolongé (cf. spec §7/§8). None = pas de rappel après l'alerte
-# d'entrée initiale ("une fois").
-DELAI_RAPPEL = {
-    Utilisateur.DelaiRappel.UNE_FOIS: None,
-    Utilisateur.DelaiRappel.QUOTIDIEN: timedelta(days=1),
-    Utilisateur.DelaiRappel.DEUX_JOURS: timedelta(days=2),
-    Utilisateur.DelaiRappel.HEBDOMADAIRE: timedelta(weeks=1),
-}
 
 # SMS court de sauvegarde à chaque alerte d'entrée rapportée par le téléphone
 # (option B du §8, tranchée en octobre 2026) : au-delà de ce délai entre
@@ -54,8 +49,8 @@ class NotificationSender:
 
     def send(self, destinataire, message, message_html=None):
         """`message` : texte brut (tous les canaux). `message_html` : version
-        mise en forme, transmise uniquement au canal email (SMS, push et
-        notification locale n'affichent pas de HTML)."""
+        mise en forme, pour le canal email — inutilisée à ce jour, les
+        messages du serveur étant courts et en texte brut."""
         raise NotImplementedError
 
 
@@ -79,48 +74,6 @@ SENDERS = {
 }
 
 
-def _composer_recommandation_html(conduite):
-    """Texte de conduite à tenir transmis au voyageur, en HTML assaini (texte
-    enrichi : gras, italique, taille, liens hypertexte — cf. risks.richtext
-    et saintex-spec-technique.md §8) : un texte unique par conduite à tenir,
-    identique pour tous les voyageurs. La modulation selon une couverture
-    vaccinale déclarée (et le profil famille) a été abandonnée en octobre
-    2026 : ces déclarations ne sont pas fiables (cf. decisions-and-principles).
-
-    Si la recommandation n'est pas encore rédigée par l'équipe médicale, on
-    retombe sur la description du risque (texte brut, converti en HTML) :
-    jamais de texte vide envoyé. `sanitize_html` est réappliqué ici par
-    défense en profondeur (un `update()` en base contourne ConduiteATenir.save).
-    """
-    return sanitize_html(conduite.recommandation_fr) or sanitize_html(
-        conduite.risque.nature_du_risque_fr
-    )
-
-
-def _composer_message(endemie, type_notification):
-    """Compose le message transmis, figé au moment de l'envoi (cf.
-    NotificationLog.message / message_html) : en-tête (entrée ou rappel) +
-    conduite à tenir validée par l'équipe médicale (cf. spec §8).
-
-    Retourne (texte_brut, html) : le texte brut sert au SMS, au push et à la
-    notification locale (liens réduits à « texte (url) ») ; le HTML, à l'email.
-    """
-    conduite = endemie.conduite_a_tenir
-    risque = conduite.risque
-    recommandation_html = _composer_recommandation_html(conduite)
-    recommandation = html_to_text(recommandation_html)
-
-    if type_notification == NotificationLog.TypeNotification.RAPPEL_ZONE:
-        entete = f"[Rappel] Vous êtes toujours en zone à risque : {risque.libelle_fr}."
-    else:
-        entete = f"Vous entrez dans une zone à risque : {risque.libelle_fr}."
-
-    separateur = "\n" if "\n" in recommandation else " "
-    texte = f"{entete}{separateur}{recommandation}".strip()
-    message_html = f"<p><strong>{html.escape(entete, quote=False)}</strong></p>{recommandation_html}"
-    return texte, message_html
-
-
 def _canaux_actifs(utilisateur):
     """Canaux sur lesquels notifier cet utilisateur, avec le destinataire à
     journaliser pour chacun (cf. spec §8 : SMS toujours actif, email/push
@@ -140,36 +93,29 @@ def _composer_message_relance_silence(utilisateur, moment):
     l'absence de contact ne présuge d'aucune zone à risque particulière."""
     heures = int((moment - utilisateur.last_contact_at).total_seconds() // 3600)
     return (
-        f"Nous n'avons plus de nouvelles de votre position depuis {heures} h. "
+        f"Nous n'avons plus de nouvelles de votre appli depuis {heures} h. "
         "Merci d'ouvrir l'application Saintex pour confirmer que tout va bien."
     )
 
 
-def _envoyer(
-    utilisateur, message, type_notification, endemie=None, point=None, message_html="", canaux=None
-):
-    """Envoi générique, commun aux types de notification (alerte/rappel de
-    zone, relance silence, protection dégradée) : compose une entrée
-    NotificationLog par canal actif pour cet utilisateur. `endemie`/`point`
-    restent nuls pour une relance_silence, qui ne porte par définition ni zone
-    ni position (cf. NotificationLog.endemie/position, et spec §7).
-    `message_html` (texte enrichi) n'est transmis et journalisé que pour le
-    canal email. `canaux`, si fourni, restreint l'envoi à ces canaux (ensemble
-    de NotificationLog.Canal) parmi les canaux actifs de l'utilisateur."""
+def _envoyer(utilisateur, message, type_notification, endemie=None, canaux=None):
+    """Envoi générique, commun aux types de message du serveur : compose une
+    entrée NotificationLog par canal actif pour cet utilisateur. `endemie`
+    n'est renseignée que pour le SMS d'une alerte d'entrée (cf.
+    NotificationLog.endemie). `canaux`, si fourni, restreint l'envoi à ces
+    canaux (ensemble de NotificationLog.Canal) parmi les canaux actifs de
+    l'utilisateur."""
     logs = []
     for canal, destinataire in _canaux_actifs(utilisateur):
         if canaux is not None and canal not in canaux:
             continue
-        html_canal = message_html if canal == NotificationLog.Canal.EMAIL else ""
-        ok = SENDERS[canal].send(destinataire, message, html_canal or None)
+        ok = SENDERS[canal].send(destinataire, message)
         logs.append(
             NotificationLog.objects.create(
                 utilisateur=utilisateur,
                 type_notification=type_notification,
                 endemie=endemie,
-                position=point,
                 message=message,
-                message_html=html_canal,
                 destinataire=destinataire,
                 canal=canal,
                 statut=NotificationLog.Statut.ENVOYE if ok else NotificationLog.Statut.ECHEC,
@@ -178,52 +124,11 @@ def _envoyer(
     return logs
 
 
-def envoyer_alerte_entree(utilisateur, statut_zone, point):
-    """Alerte d'entrée en zone à risque (§8) — à déclencher une fois, à la
-    création du UserRiskZoneStatus (nouvelle zone détectée pour cet
-    utilisateur)."""
-    endemie = statut_zone.endemie
-    message, message_html = _composer_message(endemie, NotificationLog.TypeNotification.ALERTE_ZONE)
-    return _envoyer(
-        utilisateur, message, NotificationLog.TypeNotification.ALERTE_ZONE,
-        endemie=endemie, point=point, message_html=message_html,
-    )
-
-
-def envoyer_rappel_si_echeance(utilisateur, statut_zone, point, moment=None):
-    """Rappel de séjour prolongé (§8), uniquement si l'échéance de
-    `reminder_delay` est atteinte depuis le dernier rappel (ou depuis
-    l'entrée si aucun rappel n'a encore été envoyé). Ne rattrape pas les
-    échéances manquées en rafale : au plus un rappel par appel, et
-    `last_reminded_at` est réaligné sur `moment` (pas sur l'échéance
-    théorique), pour repartir sur un délai plein à partir de maintenant."""
-    moment = moment or timezone.now()
-
-    delai = DELAI_RAPPEL[utilisateur.reminder_delay]
-    if delai is None:
-        return []
-
-    reference = statut_zone.last_reminded_at or statut_zone.entered_at
-    if moment - reference < delai:
-        return []
-
-    endemie = statut_zone.endemie
-    message, message_html = _composer_message(endemie, NotificationLog.TypeNotification.RAPPEL_ZONE)
-    logs = _envoyer(
-        utilisateur, message, NotificationLog.TypeNotification.RAPPEL_ZONE,
-        endemie=endemie, point=point, message_html=message_html,
-    )
-    statut_zone.last_reminded_at = moment
-    statut_zone.save(update_fields=["last_reminded_at"])
-    return logs
-
-
 def envoyer_relance_silence(utilisateur, moment=None):
-    """Relance "appli silencieuse" (§8) — ne porte ni zone ni position, cf.
-    NotificationLog.endemie/position (nuls pour ce type). Le déclenchement
-    (seuil de 7h puis relances toutes les 6h) est décidé en amont par
-    clients.watchdog ; cette fonction ne fait qu'envoyer et journaliser,
-    comme envoyer_alerte_entree/envoyer_rappel_si_echeance ci-dessus."""
+    """Relance "appli silencieuse" (§8) — ne porte ni zone ni position. Le
+    déclenchement (seuil de 7h puis relances toutes les 6h) est décidé en
+    amont par clients.watchdog ; cette fonction ne fait qu'envoyer et
+    journaliser."""
     moment = moment or timezone.now()
     message = _composer_message_relance_silence(utilisateur, moment)
     return _envoyer(utilisateur, message, NotificationLog.TypeNotification.RELANCE_SILENCE)
@@ -235,7 +140,7 @@ def _duree_lisible(duree):
     return f"{heures} h" if heures < 48 else f"{heures // 24} j"
 
 
-def _composer_sms_alerte(rapport, moment):
+def composer_sms_alerte(rapport, moment):
     """SMS court de sauvegarde pour une alerte d'entrée rapportée par le
     téléphone (option B du §8). Reste dans l'alphabet SMS standard (GSM-7 : pas de
     guillemets typographiques, ni d'apostrophe courbe, ni de « ê », « î »...) pour
@@ -264,7 +169,7 @@ def envoyer_sms_alerte(utilisateur, rapport, moment=None):
     moment = moment or timezone.now()
     return _envoyer(
         utilisateur,
-        _composer_sms_alerte(rapport, moment),
+        composer_sms_alerte(rapport, moment),
         NotificationLog.TypeNotification.ALERTE_ZONE,
         endemie=rapport.endemie,
         canaux={NotificationLog.Canal.SMS},

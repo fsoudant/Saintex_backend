@@ -7,6 +7,7 @@ from django.core.management.base import CommandError
 from django.test import SimpleTestCase, TestCase
 
 from clients.management.commands.apercu_notification import estimer_segments_sms
+from clients.models import AlertReport, NotificationLog
 from risks.models import ConduiteATenir, Risque
 
 
@@ -38,16 +39,23 @@ class ApercuNotificationCommandTests(TestCase):
     def test_liste_les_conduites_sans_argument(self):
         self.assertIn("PAL_T1 — Paludisme", self._appeler())
 
-    def test_affiche_texte_brut_et_html(self):
+    def test_affiche_notification_detail_et_sms(self):
         sortie = self._appeler("PAL_T1")
-        self.assertIn("Vous entrez dans une zone à risque : Paludisme.", sortie)
+
+        # Notification locale du téléphone
+        self.assertIn("Zone à risque : Paludisme", sortie)
+        self.assertIn("Touchez pour lire la conduite à tenir.", sortie)
+        # Écran de détail : HTML tel que transmis dans le cache, puis texte brut
+        self.assertIn("<strong>Protégez-vous.</strong>", sortie)
         self.assertIn("l'OMS (https://www.who.int/fr)", sortie)
         self.assertIn("  - Un-a", sortie)
-        self.assertIn("segment(s) SMS", sortie)
-        self.assertIn("<strong>Protégez-vous.</strong>", sortie)
+        # SMS de sauvegarde et sa taille
+        self.assertIn("Saintex : vous entrez dans une zone à risque (Paludisme).", sortie)
+        self.assertIn("GSM-7 → 1 segment(s) SMS", sortie)
 
-    def test_option_rappel(self):
-        self.assertIn("[Rappel]", self._appeler("PAL_T1", "--rappel"))
+    def test_sms_d_une_alerte_rapportee_avec_retard(self):
+        sortie = self._appeler("PAL_T1", "--retard-heures", "5")
+        self.assertIn("il y a 5 h, vous êtes entré(e) dans une zone à risque (Paludisme)", sortie)
 
     def test_ecrit_la_page_html(self):
         with TemporaryDirectory() as dossier:
@@ -55,16 +63,16 @@ class ApercuNotificationCommandTests(TestCase):
             self._appeler("PAL_T1", "--html-fichier", str(chemin))
             contenu = chemin.read_text(encoding="utf-8")
         self.assertIn('href="https://www.who.int/fr"', contenu)
+        self.assertIn("Zone à risque : Paludisme", contenu)
 
     def test_code_inconnu(self):
         with self.assertRaises(CommandError):
             self._appeler("INCONNU")
 
     def test_n_ecrit_rien_en_base(self):
-        from clients.models import NotificationLog
-
         self._appeler("PAL_T1")
         self.assertEqual(NotificationLog.objects.count(), 0)
+        self.assertEqual(AlertReport.objects.count(), 0)
 
 
 class EstimerSegmentsSmsTests(SimpleTestCase):

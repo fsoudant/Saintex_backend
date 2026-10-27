@@ -7,7 +7,6 @@ from .models import (
     PreferenceChangeLog,
     PushToken,
     Utilisateur,
-    UserRiskZoneStatus,
 )
 
 
@@ -53,26 +52,9 @@ class PreferenceChangeLogAdmin(admin.ModelAdmin):
         return False
 
 
-@admin.register(UserRiskZoneStatus)
-class UserRiskZoneStatusAdmin(admin.ModelAdmin):
-    # Lecture seule : état calculé/maintenu par le moteur de détection de
-    # zone à risque, pas un enregistrement à créer/modifier depuis l'admin.
-    list_display = ("utilisateur", "endemie", "entered_at", "last_reminded_at")
-    list_filter = ("endemie",)
-    search_fields = ("utilisateur__email",)
-    autocomplete_fields = ("utilisateur",)
-    date_hierarchy = "entered_at"
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
-
-
 @admin.register(NotificationLog)
 class NotificationLogAdmin(admin.ModelAdmin):
-    # Lecture seule : journal probatoire produit par le moteur d'envoi
+    # Lecture seule : journal probatoire des messages envoyés par le serveur
     # (cf. §9), jamais saisi/modifié à la main.
     list_display = (
         "utilisateur", "type_notification", "canal", "statut", "destinataire", "sent_at",

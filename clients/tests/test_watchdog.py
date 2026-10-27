@@ -115,7 +115,7 @@ class TraiterRelancesSilenceTests(TestCase):
             ).exists()
         )
 
-    def test_relance_ne_porte_ni_zone_ni_position(self):
+    def test_relance_ne_porte_pas_de_zone(self):
         moment = timezone.now()
         u = Utilisateur.objects.create(email="a@example.com", phone="+33600000000")
         u.last_contact_at = moment - timedelta(hours=8)
@@ -129,7 +129,6 @@ class TraiterRelancesSilenceTests(TestCase):
             canal=NotificationLog.Canal.SMS,
         )
         self.assertIsNone(log.endemie)
-        self.assertIsNone(log.position)
 
     def test_second_appel_immediat_ne_duplique_pas(self):
         moment = timezone.now()

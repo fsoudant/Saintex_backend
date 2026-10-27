@@ -13,7 +13,6 @@ import calendar
 import secrets
 from datetime import timedelta
 
-from django.contrib.gis.db import models as gis_models
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -341,72 +340,22 @@ class PreferenceChangeLog(models.Model):
         )
 
 
-class UserRiskZoneStatus(models.Model):
-    """État courant d'une zone à risque active pour un utilisateur
-    (cf. saintex-spec-technique.md §7 "UserRiskZoneStatus") — permet de
-    savoir si une alerte d'entrée a déjà été envoyée pour cette zone, et
-    quand déclencher le prochain rappel de séjour prolongé (§8).
-
-    Référence une Endemie (zone + conduite à tenir + période de validité)
-    plutôt que la seule Zone géométrique : une même Zone peut porter
-    plusieurs risques actifs simultanément (ex. paludisme et encéphalite à
-    tiques sur une même zone géographique), et c'est bien un risque précis
-    — pas la géométrie seule — qui doit être suivi/notifié individuellement.
-
-    Ne stocke jamais de coordonnées GPS (cf. §7 : "référence à la zone,
-    jamais de coordonnées GPS") — seul NotificationLog conserve une
-    position, et uniquement au moment d'un envoi effectif.
-    """
-
-    utilisateur = models.ForeignKey(
-        Utilisateur, on_delete=models.CASCADE, related_name="zones_actives"
-    )
-    endemie = models.ForeignKey(
-        "risks.Endemie", on_delete=models.CASCADE, related_name="utilisateurs_actifs"
-    )
-    entered_at = models.DateTimeField(
-        auto_now_add=True, help_text="Première détection d'entrée dans cette zone à risque"
-    )
-    last_reminded_at = models.DateTimeField(
-        null=True,
-        blank=True,
-        help_text=(
-            "Dernier rappel envoyé pour cette zone (séjour prolongé) — sert à "
-            "calculer le prochain rappel selon Utilisateur.reminder_delay (§8)"
-        ),
-    )
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["utilisateur", "endemie"], name="un_statut_par_utilisateur_et_endemie"
-            ),
-        ]
-        verbose_name = "Statut de zone à risque"
-        verbose_name_plural = "Statuts de zone à risque"
-
-    def __str__(self):
-        return f"{self.utilisateur.email} @ {self.endemie}"
-
-
 class NotificationLog(models.Model):
-    """Journal de toute notification effectivement envoyée à un voyageur
-    (cf. saintex-spec-technique.md §7 "NotificationLog") — conservé à des
-    fins probatoires (§9), durée de rétention à valider avec un juriste/DPO.
+    """Journal des messages envoyés PAR LE SERVEUR à un voyageur (cf.
+    saintex-spec-technique.md §7 "NotificationLog") — SMS court de sauvegarde
+    d'une alerte d'entrée, relance "appli silencieuse", avertissement de
+    protection dégradée. Les alertes et rappels de zone, eux, sont affichés par
+    le téléphone et journalisés par AlertReport. Conservé à des fins
+    probatoires (§9), durée de rétention à valider avec un juriste/DPO.
 
-    Seule table du domaine "clients" qui conserve une position GPS, et
-    uniquement au moment d'un envoi effectif — la position brute du check-in
-    n'est jamais persistée ailleurs (cf. §7 : minimisation maximale, calcul
-    en mémoire puis position écartée ; seul UserRiskZoneStatus garde une
-    trace, sans coordonnées). `message` est un texte figé au moment de
-    l'envoi (pas une référence vivante à la ConduiteATenir, qui peut évoluer
-    ensuite) : ce qui compte en cas de contentieux, c'est ce qui a
-    réellement été transmis.
+    Aucune position GPS : le serveur ne reçoit plus la position du voyageur
+    (cache mondial, §5). `message` est un texte figé au moment de l'envoi (pas
+    une référence vivante à la ConduiteATenir, qui peut évoluer ensuite) : ce
+    qui compte en cas de contentieux, c'est ce qui a réellement été transmis.
     """
 
     class TypeNotification(models.TextChoices):
         ALERTE_ZONE = "alerte_zone", "Alerte entrée en zone à risque"
-        RAPPEL_ZONE = "rappel_zone", "Rappel de séjour prolongé"
         RELANCE_SILENCE = "relance_silence", "Relance appli silencieuse"
         PROTECTION_DEGRADEE = "protection_degradee", "Protection dégradée de l'appli"
 
@@ -430,18 +379,7 @@ class NotificationLog(models.Model):
         null=True,
         blank=True,
         related_name="notifications",
-        help_text="Renseigné pour alerte_zone/rappel_zone, nul pour relance_silence",
-    )
-    position = gis_models.PointField(
-        geography=True,
-        srid=4326,
-        null=True,
-        blank=True,
-        help_text=(
-            "Position ayant déclenché la notification (alerte/rappel de zone). "
-            "Nulle pour une relance_silence, qui ne porte par définition aucune "
-            "position (c'est justement l'absence de contact qui la déclenche)."
-        ),
+        help_text="Renseignée pour le SMS court d'une alerte d'entrée en zone (alerte_zone), nulle pour les autres types",
     )
     message = models.TextField(help_text="Texte effectivement transmis, figé au moment de l'envoi")
     message_html = models.TextField(

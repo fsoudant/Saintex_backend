@@ -1,27 +1,37 @@
 """
-Aperçu des messages de notification d'une conduite à tenir, sans rien envoyer
+Aperçu de ce qu'un voyageur voit pour une conduite à tenir, sans rien envoyer
 ni écrire en base — pour que l'équipe médicale voie comment la mise en forme
-de sa recommandation (gras, listes, liens...) est transformée selon le canal
-(cf. saintex-spec-technique.md §8, texte enrichi) :
+de sa recommandation (gras, listes, liens...) est rendue (cf.
+saintex-spec-technique.md §5 et §8, texte enrichi).
 
-- texte brut : SMS, push et notification locale hors ligne (liens réduits à
-  « texte (url) », listes conservées) + taille estimée en segments SMS ;
-- HTML : email.
+Depuis octobre 2026 les alertes sont affichées par le TÉLÉPHONE ; la commande
+montre donc :
+
+- la notification locale (texte court) ;
+- l'écran de détail : la recommandation complète en HTML, telle que transmise
+  dans le cache, et sa version texte brut ;
+- le SMS court de sauvegarde envoyé par le serveur (option B du §8), avec sa
+  taille estimée en segments SMS.
 
 Usage :
     python manage.py apercu_notification                 # liste les conduites
-    python manage.py apercu_notification PAL_T1          # alerte d'entrée en zone
-    python manage.py apercu_notification PAL_T1 --rappel # message de rappel
+    python manage.py apercu_notification PAL_T1          # aperçu d'une conduite
+    python manage.py apercu_notification PAL_T1 --retard-heures 5     # SMS d'une alerte rapportée avec retard
     python manage.py apercu_notification PAL_T1 --html-fichier /tmp/apercu.html
 """
 
+from datetime import timedelta
+from html import escape
 from pathlib import Path
+from types import SimpleNamespace
 
 from django.core.management.base import BaseCommand, CommandError
+from django.utils import timezone
 
-from clients.models import NotificationLog
-from clients.notifications import _composer_message
-from risks.models import ConduiteATenir, Endemie
+from clients.notifications import composer_sms_alerte
+from risks.cache import recommandation_html
+from risks.models import ConduiteATenir
+from risks.richtext import html_to_text
 
 # Alphabet SMS standard (GSM 03.38) : 160 caractères par SMS seul, 153 par
 # segment quand le message est découpé. Un caractère hors alphabet (ex. « ê »,
@@ -49,8 +59,8 @@ def estimer_segments_sms(texte):
 
 class Command(BaseCommand):
     help = (
-        "Affiche, sans l'envoyer, le message de notification d'une conduite à "
-        "tenir : version texte brut (SMS/push) et version HTML (email)."
+        "Affiche, sans rien envoyer, ce que voit le voyageur pour une conduite à "
+        "tenir : notification, écran de détail (HTML et texte brut) et SMS de sauvegarde."
     )
 
     def add_arguments(self, parser):
@@ -59,12 +69,12 @@ class Command(BaseCommand):
             help="Code de la conduite à tenir (ex. PAL_T1). Sans code : liste des conduites.",
         )
         parser.add_argument(
-            "--rappel", action="store_true",
-            help="Aperçu du message de rappel plutôt que de l'alerte d'entrée en zone.",
+            "--retard-heures", type=float, default=0,
+            help="Aperçu du SMS d'une alerte rapportée avec ce retard (en heures).",
         )
         parser.add_argument(
             "--html-fichier", metavar="CHEMIN",
-            help="Écrit aussi la version email dans une page HTML à ouvrir dans un navigateur.",
+            help="Écrit aussi l'écran de détail dans une page HTML à ouvrir dans un navigateur.",
         )
 
     def handle(self, *args, **options):
@@ -81,34 +91,40 @@ class Command(BaseCommand):
                 "(lancer la commande sans argument pour lister les codes)."
             )
 
-        type_notification = (
-            NotificationLog.TypeNotification.RAPPEL_ZONE
-            if options["rappel"]
-            else NotificationLog.TypeNotification.ALERTE_ZONE
-        )
-        # Endemie non enregistrée : le message ne dépend que de la conduite à tenir.
-        texte, message_html = _composer_message(Endemie(conduite_a_tenir=conduite), type_notification)
+        risque = conduite.risque
+        detail_html = recommandation_html(conduite, "fr")
 
-        encodage, longueur, segments = estimer_segments_sms(texte)
-
-        self.stdout.write(self.style.MIGRATE_HEADING(
-            f"\n=== {conduite.code} — {conduite.risque.libelle_fr} "
-            f"({'rappel' if options['rappel'] else 'alerte d’entrée en zone'}) ==="
-        ))
-        self.stdout.write(self.style.MIGRATE_LABEL(
-            "\n--- Texte brut (SMS, push, notification locale) ---"
-        ))
-        self.stdout.write(texte)
-        self.stdout.write(
-            f"\n[{longueur} caractères, {encodage} → {segments} segment(s) SMS]"
+        maintenant = timezone.now()
+        rapport = SimpleNamespace(
+            endemie=SimpleNamespace(conduite_a_tenir=conduite),
+            affichee_le=maintenant - timedelta(hours=options["retard_heures"]),
         )
+        sms = composer_sms_alerte(rapport, maintenant)
+        encodage, longueur, segments = estimer_segments_sms(sms)
+
+        self.stdout.write(self.style.MIGRATE_HEADING(f"\n=== {conduite.code} — {risque.libelle_fr} ==="))
+
+        self.stdout.write(self.style.MIGRATE_LABEL("\n--- Notification affichée par le téléphone ---"))
+        self.stdout.write(f"Zone à risque : {risque.libelle_fr}")
+        self.stdout.write("Touchez pour lire la conduite à tenir.")
+
+        self.stdout.write(self.style.MIGRATE_LABEL("\n--- Écran de détail (HTML, tel que transmis dans le cache) ---"))
+        self.stdout.write(detail_html)
+
+        self.stdout.write(self.style.MIGRATE_LABEL("\n--- Même texte en texte brut ---"))
+        self.stdout.write(html_to_text(detail_html))
+
+        legende_retard = f" (alerte rapportée avec {options['retard_heures']:g} h de retard)" if options["retard_heures"] else ""
+        self.stdout.write(self.style.MIGRATE_LABEL(f"\n--- SMS de sauvegarde envoyé par le serveur{legende_retard} ---"))
+        self.stdout.write(sms)
+        self.stdout.write(f"\n[{longueur} caractères, {encodage} → {segments} segment(s) SMS]")
         if encodage == "UCS-2":
             self.stdout.write(self.style.WARNING(
                 "Un caractère hors alphabet SMS standard (ex. apostrophe typographique, "
-                "« œ », « ê », emoji) double le coût : le remplacer garde le SMS en GSM-7."
+                "« œ », « ê », emoji) double le coût : le remplacer garde le SMS en GSM-7. "
+                "Le texte du SMS est composé par le serveur (libellé du risque compris) : "
+                "vérifier le libellé du risque."
             ))
-        self.stdout.write(self.style.MIGRATE_LABEL("\n--- HTML (email) ---"))
-        self.stdout.write(message_html)
 
         if options["html_fichier"]:
             chemin = Path(options["html_fichier"]).expanduser()
@@ -116,7 +132,7 @@ class Command(BaseCommand):
                 '<!doctype html><html lang="fr"><head><meta charset="utf-8">'
                 f"<title>Aperçu {conduite.code}</title></head>"
                 '<body style="font-family:sans-serif;max-width:640px;margin:2em auto">'
-                f"{message_html}</body></html>",
+                f"<h3>Zone à risque : {escape(risque.libelle_fr)}</h3>{detail_html}</body></html>",
                 encoding="utf-8",
             )
             self.stdout.write(self.style.SUCCESS(f"\nPage HTML écrite : {chemin}"))

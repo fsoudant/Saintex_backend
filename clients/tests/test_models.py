@@ -1,8 +1,6 @@
 import datetime
 
-from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.utils import timezone
 
@@ -12,7 +10,6 @@ from clients.models import (
     ParametreContrat,
     PreferenceChangeLog,
     Utilisateur,
-    UserRiskZoneStatus,
     valider_date_debut_contrat,
 )
 from risks.models import ConduiteATenir, Endemie, Risque, Zone
@@ -168,8 +165,8 @@ class PreferenceChangeLogTests(TestCase):
 
 class _EndemieFixtureMixin:
     """Fabrique une Endemie minimale (Zone + Risque + ConduiteATenir) pour
-    les tests de UserRiskZoneStatus/NotificationLog, qui n'ont besoin que
-    d'une référence valide, pas d'un scénario médical réaliste.
+    les tests de NotificationLog, qui n'ont besoin que d'une référence
+    valide, pas d'un scénario médical réaliste.
     """
 
     def _endemie(self):
@@ -187,47 +184,34 @@ class _EndemieFixtureMixin:
         return Endemie.objects.create(zone=zone, conduite_a_tenir=conduite)
 
 
-class UserRiskZoneStatusTests(_EndemieFixtureMixin, TestCase):
-    def setUp(self):
-        self.utilisateur = Utilisateur.objects.create(email="a@example.com", phone="+33600000000")
-        self.endemie = self._endemie()
-
-    def test_entered_at_set_automatically(self):
-        statut = UserRiskZoneStatus.objects.create(utilisateur=self.utilisateur, endemie=self.endemie)
-        self.assertIsNotNone(statut.entered_at)
-        self.assertIsNone(statut.last_reminded_at)
-
-    def test_un_seul_statut_par_utilisateur_et_endemie(self):
-        UserRiskZoneStatus.objects.create(utilisateur=self.utilisateur, endemie=self.endemie)
-        with self.assertRaises(IntegrityError), transaction.atomic():
-            UserRiskZoneStatus.objects.create(utilisateur=self.utilisateur, endemie=self.endemie)
-
-
 class NotificationLogTests(_EndemieFixtureMixin, TestCase):
     def setUp(self):
         self.utilisateur = Utilisateur.objects.create(email="a@example.com", phone="+33600000000")
 
-    def test_creation_alerte_zone_avec_position(self):
+    def test_creation_alerte_zone_avec_endemie(self):
         log = NotificationLog.objects.create(
             utilisateur=self.utilisateur,
             type_notification=NotificationLog.TypeNotification.ALERTE_ZONE,
             endemie=self._endemie(),
-            position=Point(2.35, 48.85, srid=4326),
-            message="Vous entrez dans une zone à risque de paludisme.",
-            destinataire="a@example.com",
-            canal=NotificationLog.Canal.EMAIL,
+            message="Saintex : vous entrez dans une zone à risque (Paludisme).",
+            destinataire="+33600000000",
+            canal=NotificationLog.Canal.SMS,
         )
         self.assertEqual(log.statut, NotificationLog.Statut.EN_ATTENTE)
 
-    def test_creation_relance_silence_sans_position_ni_endemie(self):
+    def test_creation_relance_silence_sans_endemie(self):
         # Cf. docstring du modèle : une relance "appli silencieuse" ne porte
-        # par définition aucune position ni endemie associée.
+        # par définition aucune endemie associée.
         log = NotificationLog.objects.create(
             utilisateur=self.utilisateur,
             type_notification=NotificationLog.TypeNotification.RELANCE_SILENCE,
-            message="Nous n'avons plus de nouvelles de votre position depuis 7h.",
+            message="Nous n'avons plus de nouvelles de votre appli depuis 7h.",
             destinataire="+33600000000",
             canal=NotificationLog.Canal.SMS,
         )
         self.assertIsNone(log.endemie)
-        self.assertIsNone(log.position)
+
+    def test_aucune_position_n_est_conservee(self):
+        # Cf. §7/§9 (révision d'octobre 2026) : le serveur ne reçoit plus de position.
+        champs = {champ.name for champ in NotificationLog._meta.get_fields()}
+        self.assertNotIn("position", champs)
