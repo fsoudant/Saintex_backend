@@ -70,6 +70,7 @@ Choix de conception :
 import hashlib
 import json
 from datetime import datetime
+from datetime import timezone as dt_timezone
 
 import shapely.geometry
 import shapely.wkt
@@ -261,10 +262,13 @@ def cache_mondial_courant():
 
 def _en_saison(saison, moment):
     """Même règle que ConduiteATenir.is_in_season (mois seulement, périodes
-    à cheval sur le nouvel an comprises)."""
+    à cheval sur le nouvel an comprises). Le mois est celui de l'instant
+    EXPRIMÉ EN UTC : un `moment` avec un décalage horaire est d'abord ramené à
+    UTC (règle à reproduire dans les modules natifs, cf. tests_partages)."""
     if saison is None:
         return True
-    mois, debut, fin = moment.month, saison["debut"], saison["fin"]
+    mois = moment.astimezone(dt_timezone.utc).month
+    debut, fin = saison["debut"], saison["fin"]
     if debut <= fin:
         return debut <= mois <= fin
     return mois >= debut or mois <= fin
