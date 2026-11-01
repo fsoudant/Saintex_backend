@@ -1,7 +1,7 @@
 """Tests de la construction du GeoJSON de la carte des risques
 (risks.views.build_risk_map_geojson).
 
-Zones, endémies et conduites à tenir sont simulées en mémoire : la base de
+Zones, endémies et risques sont simulés en mémoire : la base de
 données est remplacée par un mock (Zone.objects) pour ne tester que la
 logique de coloration/moyenne.
 """
@@ -43,24 +43,18 @@ def _geom_a_cheval_antimeridien():
 
 def _risque(couleur, libelle):
     r = mock.MagicMock()
+    r.pk = libelle  # clé primaire distincte d'un risque à l'autre (le code, en base)
+    r.code = libelle
     r.couleur_legende = couleur
     r.libelle_fr = libelle
     return r
 
 
-def _conduite(pk, code, risque):
-    c = mock.MagicMock()
-    c.pk = pk
-    c.code = code
-    c.risque = risque
-    return c
-
-
-def _endemie(eid, conduite, exclue=None):
+def _endemie(eid, risque, exclue=None):
     e = mock.MagicMock()
     e.id = eid
-    e.conduite_a_tenir = conduite
-    e.conduite_a_tenir_id = conduite.pk
+    e.risque = risque
+    e.risque_id = risque.pk
     e.zone_exclue = exclue
     return e
 
@@ -95,11 +89,9 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
     def test_zone_avec_deux_risques_couleur_moyenne(self):
         paludisme = _risque("rgb(255,0,0)", "Paludisme")
         dengue = _risque("rgb(0,0,255)", "Dengue")
-        c_pal = _conduite(1, "P_T3_A", paludisme)
-        c_deng = _conduite(2, "D_T3_A", dengue)
         zon = _zone("Kuntaur", _geom(), [
-            _endemie(10, c_pal),
-            _endemie(11, c_deng),
+            _endemie(10, paludisme),
+            _endemie(11, dengue),
         ])
         self._patch_zones([zon])
 
@@ -117,9 +109,8 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
 
     def test_exclusion_sans_autre_risque_transparente(self):
         paludisme = _risque("rgb(255,0,0)", "Paludisme")
-        c_pal = _conduite(1, "P_T3_A", paludisme)
         zon = _zone("Kuntaur", _geom(), [
-            _endemie(10, c_pal, exclue=_geom()),
+            _endemie(10, paludisme, exclue=_geom()),
         ])
         self._patch_zones([zon])
 
@@ -137,12 +128,10 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
     def test_exclusion_coloree_avec_les_autres_risques_de_la_zone(self):
         paludisme = _risque("rgb(255,0,0)", "Paludisme")
         dengue = _risque("rgb(0,0,255)", "Dengue")
-        c_pal = _conduite(1, "P_T3_A", paludisme)
-        c_deng = _conduite(2, "D_T3_A", dengue)
         # Palu porte l'exclusion ; la dengue reste active partout.
         zon = _zone("Kuntaur", _geom(), [
-            _endemie(10, c_pal, exclue=_geom()),
-            _endemie(11, c_deng),
+            _endemie(10, paludisme, exclue=_geom()),
+            _endemie(11, dengue),
         ])
         self._patch_zones([zon])
 
@@ -159,8 +148,7 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
         # sortirait tel quel, avec les deux carres separes aux bords
         # opposes (-180/-179 et 179/180) plutot qu'un bloc continu 179/181.
         paludisme = _risque("rgb(255,0,0)", "Paludisme")
-        c_pal = _conduite(1, "P_T3_A", paludisme)
-        zon = _zone("Fidji", _geom_a_cheval_antimeridien(), [_endemie(10, c_pal)])
+        zon = _zone("Fidji", _geom_a_cheval_antimeridien(), [_endemie(10, paludisme)])
         self._patch_zones([zon])
 
         data = build_risk_map_geojson()
@@ -171,19 +159,17 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
         self.assertAlmostEqual(min(xs), 179.0)
         self.assertAlmostEqual(max(xs), 181.0)
 
-    def test_vue_filtree_par_conduite(self):
+    def test_vue_filtree_par_risque(self):
         paludisme = _risque("rgb(255,0,0)", "Paludisme")
         dengue = _risque("rgb(0,0,255)", "Dengue")
-        c_pal = _conduite(1, "P_T3_A", paludisme)
-        c_deng = _conduite(2, "D_T3_A", dengue)
-        # La zone porte les deux risques ; on affiche "à travers" c_pal.
+        # La zone porte les deux risques ; on affiche "à travers" le paludisme.
         zon = _zone("Kuntaur", _geom(), [
-            _endemie(10, c_pal, exclue=_geom()),
-            _endemie(11, c_deng),
+            _endemie(10, paludisme, exclue=_geom()),
+            _endemie(11, dengue),
         ])
         self._patch_zones([zon])
 
-        data = build_risk_map_geojson(conduite_a_tenir=c_pal)
+        data = build_risk_map_geojson(risque=paludisme)
 
         # Une seule feature zone + l'exclusion (transparente, plus de mélange
         # avec les risques hors périmètre).
@@ -200,8 +186,8 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
         paludisme = _risque("rgb(255,0,0)", "Paludisme")
         dengue = _risque("rgb(0,0,255)", "Dengue")
         zon = _zone("Kuntaur", _geom(), [
-            _endemie(10, _conduite(1, "P_T3_A", paludisme)),
-            _endemie(11, _conduite(2, "D_T3_A", dengue)),
+            _endemie(10, paludisme),
+            _endemie(11, dengue),
         ])
         self._patch_zones([zon])
 
@@ -219,7 +205,7 @@ class BuildRiskMapGeoJsonTests(SimpleTestCase):
         # 10 Risque sur 19 n'ont pas encore de couleur_legende : la légende
         # doit pouvoir le signaler plutôt que d'afficher une zone invisible.
         risque = _risque(None, "Dengue")
-        zon = _zone("Kuntaur", _geom(), [_endemie(10, _conduite(1, "D_T3_A", risque))])
+        zon = _zone("Kuntaur", _geom(), [_endemie(10, risque)])
         self._patch_zones([zon])
 
         data = build_risk_map_geojson(zone=zon)

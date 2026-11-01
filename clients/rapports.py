@@ -36,7 +36,7 @@ def enregistrer_rapports(utilisateur, rapports, moment=None):
     for donnees in rapports:
         try:
             endemie = (
-                Endemie.objects.select_related("zone", "conduite_a_tenir__risque")
+                Endemie.objects.select_related("zone", "risque")
                 .filter(pk=donnees["endemie"])
                 .first()
             )
@@ -48,7 +48,7 @@ def enregistrer_rapports(utilisateur, rapports, moment=None):
                     # Zone et risque recopiés en texte : l'endémie peut disparaître
                     # ou évoluer ensuite, ce qui compte c'est ce qui a été rapporté.
                     "zone_nom": endemie.zone.nom if endemie else "",
-                    "risque_code": endemie.conduite_a_tenir.risque.code if endemie else "",
+                    "risque_code": endemie.risque.code if endemie else "",
                     "type_alerte": donnees["type"],
                     "affichee_le": donnees["affichee_le"],
                     "ouverte_le": donnees.get("ouverte_le"),

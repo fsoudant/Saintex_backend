@@ -13,14 +13,23 @@ Le dossier doit contenir :
     endemie_202608222243.json
     zonesaine_202608241320.json
 
-Idempotent sur Pays/Zone/Risque/ConduiteATenir (update_or_create sur la clé
-naturelle). Endemie n'a pas de clé naturelle fiable dans l'export : la table
-est vidée puis entièrement recréée à chaque exécution.
+Idempotent sur Pays/Zone/Risque (update_or_create sur la clé naturelle).
+Depuis l'évolution « Modulation » d'octobre 2026, les conduites à tenir de
+l'export ne sont plus des objets : elles servent seulement à rattacher chaque
+endémie à son Risque, et à reprendre la recommandation (et la couleur) d'un
+risque qui n'en a pas encore. Les Modulation existantes sont rattachées aux
+endémies de même code ; aucune n'est créée ni modifiée.
+
+ATTENTION — Endemie n'a pas de clé naturelle fiable dans l'export : la table
+est vidée puis entièrement recréée à chaque exécution. Ne PAS rejouer cette
+commande sur une base de production dont les endémies ont été corrigées à la
+main depuis l'import initial.
 
 zonesaine.json ne peuple plus une table à part (ZoneSaine, supprimée) : ses
 points sont transformés en polygones (buffer ~20 km) et appliqués comme
-`Endemie.zone_exclue`, sur le couple (zone, conduite à tenir) précis qu'ils
-concernent — pas sur toute la Zone, qui peut porter plusieurs risques.
+`Endemie.zone_exclue`, sur les endémies de la zone qui portent le risque de la
+conduite à tenir concernée — pas sur toute la Zone, qui peut porter plusieurs
+risques.
 """
 
 import json
@@ -35,7 +44,7 @@ from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Point, Polygon
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from risks.models import ConduiteATenir, Endemie, Pays, Risque, Zone
+from risks.models import Endemie, Modulation, Pays, Risque, Zone
 
 # Corrige le défaut de format observé dans l'export ("11." sans décimale
 # après le point, ex. Amerique_2_FJ) avant le parsing JSON strict.
@@ -297,29 +306,34 @@ class Command(BaseCommand):
             count += 1
         return count
 
+    # {code de conduite historique: code de risque}, rempli par import_conduites.
+    _risque_par_conduite = {}
+
     def import_conduites(self, path):
         data = json.loads(path.read_text(encoding="utf-8"))
         count = 0
         skipped = 0
+        self._risque_par_conduite = {}
         for c in data["conduiteatenir"]:
             try:
                 risque = Risque.objects.get(code=c["risque_uid"])
             except Risque.DoesNotExist:
                 skipped += 1
                 continue
-            ConduiteATenir.objects.update_or_create(
-                code=c["code"],
-                defaults=dict(
-                    risque=risque,
-                    nature_du_risque_fr=c["naturedurisque_fr"] or "",
-                    nature_du_risque_en=c["naturedurisque_en"] or "",
-                    recommandation_fr=c["recommandation_fr"] or "",
-                    recommandation_en=c["recommandation_en"] or "",
-                    legende_fr=c["legende_fr"] or "",
-                    legende_en=c["legende_en"] or "",
-                    couleur=c["couleur"],
-                ),
-            )
+            self._risque_par_conduite[c["code"]] = risque.code
+            # Recommandation unique du risque : reprise de la première conduite
+            # renseignée, seulement si le risque n'en a pas encore (ne jamais
+            # écraser un texte rédigé par l'équipe médicale).
+            modifie = False
+            if not (risque.recommandation_fr or "").strip() and (c["recommandation_fr"] or "").strip():
+                risque.recommandation_fr = c["recommandation_fr"]
+                risque.recommandation_en = c["recommandation_en"] or ""
+                modifie = True
+            if not risque.couleur_legende and c["couleur"]:
+                risque.couleur_legende = c["couleur"]
+                modifie = True
+            if modifie:
+                risque.save()
             count += 1
         return count, skipped
 
@@ -327,17 +341,23 @@ class Command(BaseCommand):
         data = json.loads(path.read_text(encoding="utf-8"))
         skipped = 0
         Endemie.objects.all().delete()  # pas de clé naturelle fiable -> réimport complet
+        modulations = {m.code: m for m in Modulation.objects.all()}
         to_create = []
         for e in data["endemie"]:
+            code = e["conduiteatenir_code"]
+            risque_code = self._risque_par_conduite.get(code)
             try:
                 zone = Zone.objects.get(source_id=e["zone_id"])
-                conduite = ConduiteATenir.objects.get(code=e["conduiteatenir_code"])
-            except (Zone.DoesNotExist, ConduiteATenir.DoesNotExist):
+            except Zone.DoesNotExist:
+                skipped += 1
+                continue
+            if risque_code is None:
                 skipped += 1
                 continue
             to_create.append(Endemie(
                 zone=zone,
-                conduite_a_tenir=conduite,
+                risque_id=risque_code,
+                modulation=modulations.get(code),
                 date_debut=e["datedeb"],
                 date_fin=e["datefin"],
             ))
@@ -346,21 +366,22 @@ class Command(BaseCommand):
 
     def apply_zone_exclusions(self, path):
         """Convertit chaque point zonesaine en polygone d'exclusion, appliqué
-        aux Endemie correspondant exactement à (zone, conduite à tenir) —
-        jamais à la Zone entière (cf. Endemie.zone_exclue).
+        aux Endemie de la zone portant le risque de la conduite à tenir
+        concernée — jamais à la Zone entière (cf. Endemie.zone_exclue).
         """
         data = json.loads(path.read_text(encoding="utf-8"))
         applied = 0
         skipped = 0
         for z in data["zonesaine"]:
             code = z["endemie_cat_code"]
-            if not code or z["endemie_zone_id"] is None or z["lat"] is None or z["long"] is None:
+            risque_code = self._risque_par_conduite.get(code)
+            if not code or risque_code is None or z["endemie_zone_id"] is None or z["lat"] is None or z["long"] is None:
                 skipped += 1
                 continue
 
             matching = Endemie.objects.filter(
                 zone__source_id=z["endemie_zone_id"],
-                conduite_a_tenir__code=code,
+                risque_id=risque_code,
             )
             if not matching.exists():
                 skipped += 1

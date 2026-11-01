@@ -34,7 +34,7 @@ from django.conf import settings
 
 from .cache import endemies_actives_dans_cache
 
-VERSION_FORMAT = 1
+VERSION_FORMAT = 2
 
 REGLES = [
     "Coordonnées : [longitude, latitude] en degrés, longitude dans [-180, 180] (ordre GeoJSON).",
@@ -43,34 +43,38 @@ REGLES = [
     "Période de validité : valide_du et valide_au sont des instants ISO 8601, bornes INCLUSES ; une borne nulle signifie « sans limite ».",
     "Saison : saison.debut et saison.fin sont des mois 1-12, bornes incluses ; si debut > fin, la saison est à cheval sur le nouvel an (ex. 11 à 2 = novembre à février).",
     "Le mois évalué est celui de l'instant EXPRIMÉ EN UTC : un instant avec décalage horaire est d'abord converti en UTC.",
-    "Une endémie est active si et seulement si : instant dans la période de validité ET mois dans la saison de sa conduite ET position dans sa géométrie.",
+    "Une endémie est active si et seulement si : instant dans la période de validité ET mois dans la saison de sa modulation (une endémie sans modulation, \"modulation\": null, ou dont la modulation n'a pas de saison, est active toute l'année) ET position dans sa géométrie.",
     "Le résultat attendu est la liste des identifiants d'endémies actives, dans l'ordre croissant des identifiants.",
 ]
 
 # --- Cache de test ---------------------------------------------------------
 
-_RISQUE = {"code": "PAL", "libelle_fr": "Paludisme", "libelle_en": "Malaria", "couleur": "rgb(255,0,0)"}
+_RISQUE = {
+    "libelle_fr": "Paludisme",
+    "libelle_en": "Malaria",
+    "couleur": "rgb(255,0,0)",
+    "description_fr": "Maladie parasitaire transmise par la piqûre de moustiques.",
+    "description_en": "Parasitic disease transmitted by mosquito bites.",
+    "recommandation_fr": "<p>Protégez-vous des piqûres de moustiques.</p>",
+    "recommandation_en": "<p>Protect yourself from mosquito bites.</p>",
+}
 
 
-def _conduite(saison, texte):
-    return {
-        "risque": _RISQUE,
-        "saison": saison,
-        "recommandation_fr": f"<p>{texte}</p>",
-        "recommandation_en": f"<p>{texte} (en)</p>",
-    }
+def _modulation(saison, texte):
+    return {"fr": texte, "en": f"{texte} (en)", "saison": saison}
 
 
 def _rect(lon_min, lat_min, lon_max, lat_max):
     return [[lon_min, lat_min], [lon_max, lat_min], [lon_max, lat_max], [lon_min, lat_max], [lon_min, lat_min]]
 
 
-def _endemie(identifiant, zone_id, conduite, geometrie, valide_du=None, valide_au=None):
+def _endemie(identifiant, zone_id, modulation, geometrie, valide_du=None, valide_au=None):
     return {
         "id": identifiant,
         "zone_id": zone_id,
         "zone_nom": f"Zone {zone_id}",
-        "conduite": conduite,
+        "risque": "PAL",
+        "modulation": modulation,
         "geometrie": geometrie,
         "valide_du": valide_du,
         "valide_au": valide_au,
@@ -80,11 +84,13 @@ def _endemie(identifiant, zone_id, conduite, geometrie, valide_du=None, valide_a
 CACHE_TEST = {
     "version": "vecteurs-test-1",
     "genere_le": "2026-01-01T00:00:00+00:00",
+    "format": 2,
     "rayon_km": None,
-    "conduites": {
-        "TOUTE_ANNEE": _conduite(None, "Toute l'année"),
-        "SAISON_ETE": _conduite({"debut": 6, "fin": 9}, "Juin à septembre"),
-        "SAISON_HIVER": _conduite({"debut": 11, "fin": 2}, "Novembre à février"),
+    "risques": {"PAL": _RISQUE},
+    "modulations": {
+        "SANS_SAISON": _modulation(None, "Le risque est majoré si vous séjournez en milieu rural."),
+        "SAISON_ETE": _modulation({"debut": 6, "fin": 9}, "Juin à septembre"),
+        "SAISON_HIVER": _modulation({"debut": 11, "fin": 2}, "Novembre à février"),
     },
     "geometries": {
         # Carré simple.
@@ -111,11 +117,12 @@ CACHE_TEST = {
         },
     },
     "endemies": [
-        _endemie(1, 1, "TOUTE_ANNEE", "z1"),
+        # Sans modulation (toute l'année) ou avec une modulation sans saison : actives toute l'année.
+        _endemie(1, 1, None, "z1"),
         _endemie(2, 2, "SAISON_ETE", "e2"),
-        _endemie(3, 3, "TOUTE_ANNEE", "z3"),
+        _endemie(3, 3, "SANS_SAISON", "z3"),
         _endemie(4, 4, "SAISON_HIVER", "z4"),
-        _endemie(5, 5, "TOUTE_ANNEE", "z5", "2026-08-01T00:00:00+00:00", "2026-12-31T23:59:59+00:00"),
+        _endemie(5, 5, None, "z5", "2026-08-01T00:00:00+00:00", "2026-12-31T23:59:59+00:00"),
         # Deuxième endémie sur la même zone et la même géométrie que la première.
         _endemie(6, 1, "SAISON_ETE", "z1"),
     ],

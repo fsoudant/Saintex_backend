@@ -146,7 +146,7 @@ def composer_sms_alerte(rapport, moment):
     guillemets typographiques, ni d'apostrophe courbe, ni de « ê », « î »...) pour
     tenir en un seul SMS. Le détail de la conduite à tenir reste dans l'appli."""
     endemie = rapport.endemie
-    risque = f" ({endemie.conduite_a_tenir.risque.libelle_fr})" if endemie else ""
+    risque = f" ({endemie.risque.libelle_fr})" if endemie else ""
 
     retard = moment - rapport.affichee_le
     if retard >= SEUIL_RETARD_SMS_ALERTE:

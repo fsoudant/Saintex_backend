@@ -6,11 +6,11 @@ from django.shortcuts import get_object_or_404, render
 
 from .colors import average_rgb, parse_rgb, to_css
 from .geo_utils import recompose_antimeridian
-from .models import ConduiteATenir, Zone
+from .models import Risque, Zone
 
 
 def _risk_colors(endemies):
-    return [parse_rgb(e.conduite_a_tenir.risque.couleur_legende) for e in endemies]
+    return [parse_rgb(e.risque.couleur_legende) for e in endemies]
 
 
 def _geom_to_geojson(geom):
@@ -24,7 +24,7 @@ def _geom_to_geojson(geom):
     return shapely.geometry.mapping(recompose_antimeridian(geom))
 
 
-def build_risk_map_geojson(conduite_a_tenir=None, zone=None):
+def build_risk_map_geojson(risque=None, zone=None):
     """Construit une FeatureCollection GeoJSON :
     - une feature par Zone (géométrie complète), coloriée avec la moyenne
       des couleurs `Risque` de toutes les endémies qui s'y appliquent ;
@@ -33,13 +33,13 @@ def build_risk_map_geojson(conduite_a_tenir=None, zone=None):
       transparente si aucun autre risque ne s'applique à cet endroit
       (vraie "zone saine").
 
-    Si `conduite_a_tenir` est fourni, la carte se limite aux zones dont au
-    moins une Endemie pointe vers cette conduite précise (vue depuis le
-    bouton "Voir la carte des risques" de sa fiche détail) : chaque zone
-    n'est alors colorée/étiquetée qu'avec cette conduite, sans mélange avec
-    d'autres risques hors périmètre ; les exclusions deviennent de simples
-    zones saines transparentes plutôt qu'une moyenne d'"autres risques"
-    puisqu'aucun autre risque n'est affiché dans cette vue.
+    Si `risque` est fourni, la carte se limite aux zones dont au moins une
+    Endemie pointe vers ce risque (vue depuis le bouton "Voir la carte des
+    risques" de sa fiche détail) : chaque zone n'est alors colorée/étiquetée
+    qu'avec ce risque, sans mélange avec d'autres risques hors périmètre ;
+    les exclusions deviennent de simples zones saines transparentes plutôt
+    qu'une moyenne d'"autres risques" puisqu'aucun autre risque n'est
+    affiché dans cette vue.
 
     Si `zone` est fourni (vue depuis le bouton "Voir la carte de la zone" de
     sa fiche détail), la carte se limite à cette seule zone, colorée avec la
@@ -57,27 +57,27 @@ def build_risk_map_geojson(conduite_a_tenir=None, zone=None):
 
     zones = (
         Zone.objects.filter(geom__isnull=False)
-        .prefetch_related("endemies__conduite_a_tenir__risque")
+        .prefetch_related("endemies__risque")
     )
-    if conduite_a_tenir is not None:
-        zones = zones.filter(endemies__conduite_a_tenir=conduite_a_tenir).distinct()
+    if risque is not None:
+        zones = zones.filter(endemies__risque=risque).distinct()
     if zone is not None:
         zones = zones.filter(pk=zone.pk)
 
     for zone_obj in zones:
         endemies = list(zone_obj.endemies.all())
-        if conduite_a_tenir is not None:
-            endemies = [e for e in endemies if e.conduite_a_tenir_id == conduite_a_tenir.pk]
+        if risque is not None:
+            endemies = [e for e in endemies if e.risque_id == risque.pk]
         if not endemies and zone is None:
             continue
 
         base_color = average_rgb(_risk_colors(endemies))
-        risques_labels = sorted({e.conduite_a_tenir.risque.libelle_fr for e in endemies})
+        risques_labels = sorted({e.risque.libelle_fr for e in endemies})
         couleurs_par_risque = {}
         for e in endemies:
-            risque = e.conduite_a_tenir.risque
+            risque_e = e.risque
             couleurs_par_risque.setdefault(
-                risque.libelle_fr, to_css(parse_rgb(risque.couleur_legende))
+                risque_e.libelle_fr, to_css(parse_rgb(risque_e.couleur_legende))
             )
         risques_couleurs = [
             {"risque": libelle, "couleur": couleur}
@@ -97,8 +97,8 @@ def build_risk_map_geojson(conduite_a_tenir=None, zone=None):
         })
 
         for excluded in (e for e in endemies if e.zone_exclue):
-            if conduite_a_tenir is not None:
-                # Vue focalisée sur une seule conduite : la patch
+            if risque is not None:
+                # Vue focalisée sur un seul risque : la patch
                 # d'exclusion est une simple zone saine transparente, sans
                 # moyenne avec des risques hors périmètre affiché.
                 patch_color = None
@@ -112,18 +112,18 @@ def build_risk_map_geojson(conduite_a_tenir=None, zone=None):
                     "fill": to_css(patch_color),
                     "layer": "exclusion",
                     "nom": zone_obj.nom,
-                    "risque_exclu": excluded.conduite_a_tenir.risque.libelle_fr,
+                    "risque_exclu": excluded.risque.libelle_fr,
                 },
             })
 
     return {"type": "FeatureCollection", "features": features}
 
 
-def _conduite_a_tenir_from_request(request):
-    pk = request.GET.get("conduite_a_tenir")
+def _risque_from_request(request):
+    pk = request.GET.get("risque")
     if not pk:
         return None
-    return get_object_or_404(ConduiteATenir, pk=pk)
+    return get_object_or_404(Risque, pk=pk)
 
 
 def _zone_from_request(request):
@@ -135,17 +135,17 @@ def _zone_from_request(request):
 
 @staff_member_required
 def risk_map_geojson(request):
-    conduite_a_tenir = _conduite_a_tenir_from_request(request)
+    risque = _risque_from_request(request)
     zone = _zone_from_request(request)
-    return JsonResponse(build_risk_map_geojson(conduite_a_tenir, zone))
+    return JsonResponse(build_risk_map_geojson(risque, zone))
 
 
 @staff_member_required
 def risk_map_view(request):
-    conduite_a_tenir = _conduite_a_tenir_from_request(request)
+    risque = _risque_from_request(request)
     zone = _zone_from_request(request)
     return render(
         request,
         "risks/risk_map.html",
-        {"conduite_a_tenir": conduite_a_tenir, "zone": zone},
+        {"risque": risque, "zone": zone},
     )

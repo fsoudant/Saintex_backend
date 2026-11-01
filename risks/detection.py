@@ -27,8 +27,9 @@ def zones_actives_pour_point(point, moment=None):
     - les Endemie dont `zone_exclue` couvre aussi `point` (cf.
       Endemie.zone_exclue — ex. une ville épargnée dans une zone à risque) ;
     - les Endemie hors de leur période de validité (`date_debut`/`date_fin`) ;
-    - les Endemie dont la ConduiteATenir liée est hors saison
-      (cf. ConduiteATenir.is_in_season).
+    - les Endemie dont la Modulation liée est hors saison
+      (cf. Modulation.is_in_season) ; une Endemie sans modulation est active
+      toute l'année.
 
     Renvoie une liste (pas un queryset) car le filtre de saisonnalité est
     fait en Python — is_in_season() n'est pas traduisible en requête SQL
@@ -41,7 +42,7 @@ def zones_actives_pour_point(point, moment=None):
         .filter(Q(date_debut__isnull=True) | Q(date_debut__lte=moment))
         .filter(Q(date_fin__isnull=True) | Q(date_fin__gte=moment))
         .exclude(zone_exclue__covers=point)
-        .select_related("conduite_a_tenir", "conduite_a_tenir__risque", "zone")
+        .select_related("risque", "modulation", "zone")
     )
 
-    return [e for e in candidats if e.conduite_a_tenir.is_in_season(moment)]
+    return [e for e in candidats if e.modulation is None or e.modulation.is_in_season(moment)]

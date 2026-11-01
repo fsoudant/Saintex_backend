@@ -350,7 +350,7 @@ class NotificationLog(models.Model):
 
     Aucune position GPS : le serveur ne reçoit plus la position du voyageur
     (cache mondial, §5). `message` est un texte figé au moment de l'envoi (pas
-    une référence vivante à la ConduiteATenir, qui peut évoluer ensuite) : ce
+    une référence vivante au Risque, qui peut évoluer ensuite) : ce
     qui compte en cas de contentieux, c'est ce qui a réellement été transmis.
     """
 

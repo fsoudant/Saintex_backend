@@ -8,7 +8,7 @@ from django.utils.text import Truncator
 import shapely.wkt
 
 from .geo_utils import _shift_west_parts, touches_antimeridian, zone_center_lonlat
-from .models import MOIS_CHOICES, ConduiteATenir, Endemie, Pays, Risque, Zone
+from .models import MOIS_CHOICES, Endemie, Modulation, Pays, Risque, Zone
 from .richtext import html_to_text
 from .widgets import RGBColorField, RichTextWidget
 
@@ -157,57 +157,17 @@ class ZoneAdmin(admin.ModelAdmin):
 
 @admin.register(Risque)
 class RisqueAdmin(admin.ModelAdmin):
-    list_display = ("code", "libelle_fr", "libelle_en", "ordre")
+    list_display = ("code", "libelle_fr", "libelle_en", "recommandation_fr_courte", "ordre")
     search_fields = ("code", "libelle_fr", "libelle_en")
     ordering = ("ordre", "code")
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == "couleur_legende":
             return RGBColorField(help_text=db_field.help_text)
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
-
-
-@admin.register(ConduiteATenir)
-class ConduiteATenirAdmin(admin.ModelAdmin):
-    list_display = (
-        "code",
-        "risque_display",
-        "legende_fr_courte",
-        "facteurs_de_risque_fr_courte",
-        "recommandation_fr_courte",
-        "saison_display",
-    )
-    list_filter = (("risque", _RisqueAlphaFilter),)
-    search_fields = ("code", "legende_fr", "recommandation_fr", "facteurs_de_risque_fr")
-    autocomplete_fields = ("risque",)
-
-    def formfield_for_dbfield(self, db_field, request, **kwargs):
-        if db_field.name == "couleur":
-            return RGBColorField(help_text=db_field.help_text)
         if db_field.name in ("recommandation_fr", "recommandation_en"):
             # Texte enrichi (gras, italique, taille, liens...) — cf. risks.richtext.
             kwargs["widget"] = RichTextWidget
         return super().formfield_for_dbfield(db_field, request, **kwargs)
-
-    @admin.display(description="Risque", ordering="risque__libelle_fr")
-    def risque_display(self, obj):
-        return obj.risque
-
-    @admin.display(description="Légende (fr)", ordering="legende_fr")
-    def legende_fr_courte(self, obj):
-        return format_html(
-            '<span title="{}">{}</span>',
-            obj.legende_fr,
-            Truncator(obj.legende_fr).chars(50),
-        )
-
-    @admin.display(description="Facteurs de risque (fr)", ordering="facteurs_de_risque_fr")
-    def facteurs_de_risque_fr_courte(self, obj):
-        return format_html(
-            '<span title="{}">{}</span>',
-            obj.facteurs_de_risque_fr,
-            Truncator(obj.facteurs_de_risque_fr).chars(80),
-        )
 
     @admin.display(description="Recommandation (fr)", ordering="recommandation_fr")
     def recommandation_fr_courte(self, obj):
@@ -220,7 +180,21 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
             Truncator(texte).chars(80),
         )
 
-    @admin.display(description="Saison", ordering="saison_mois_debut")
+
+@admin.register(Modulation)
+class ModulationAdmin(admin.ModelAdmin):
+    list_display = ("code", "modulation_fr_courte", "saison_display")
+    search_fields = ("code", "modulation_fr", "modulation_en")
+
+    @admin.display(description="Modulation (fr)", ordering="modulation_fr")
+    def modulation_fr_courte(self, obj):
+        return format_html(
+            '<span title="{}">{}</span>',
+            obj.modulation_fr,
+            Truncator(obj.modulation_fr).chars(100),
+        )
+
+    @admin.display(description="Période", ordering="saison_mois_debut")
     def saison_display(self, obj):
         if obj.saison_mois_debut is None:
             return "Toute l'année"
@@ -229,10 +203,11 @@ class ConduiteATenirAdmin(admin.ModelAdmin):
 
 @admin.register(Endemie)
 class EndemieAdmin(GISModelAdmin):
-    list_display = ("zone_display", "conduite_a_tenir", "date_debut", "date_fin", "has_exclusion")
-    list_filter = (("conduite_a_tenir__risque", _RisqueAlphaFilter),)
-    search_fields = ("zone__nom", "conduite_a_tenir__code")
-    autocomplete_fields = ("zone", "conduite_a_tenir")
+    list_display = ("zone_display", "risque", "modulation", "date_debut", "date_fin", "has_exclusion")
+    list_filter = (("risque", _RisqueAlphaFilter),)
+    list_select_related = ("zone", "risque", "modulation")
+    search_fields = ("zone__nom", "risque__libelle_fr", "modulation__code")
+    autocomplete_fields = ("zone", "risque", "modulation")
     gis_widget_kwargs = {"attrs": {"default_zoom": 5}}
 
     @admin.display(description="Zone", ordering="zone__nom")

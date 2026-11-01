@@ -29,13 +29,21 @@ les textes et géométries partagés entre endémies) :
     {
       "version": "a1b2c3d4e5f60718",   # empreinte du contenu (hors date)
       "genere_le": "2026-10-24T10:00:00+00:00",
+      "format": 2,                     # format du contenu (2 = risques + modulations)
       "rayon_km": null,                 # null = monde entier (cas normal)
-      "conduites": {                    # une entrée par conduite à tenir
-        "PAL_T3": {
-          "risque": {"code", "libelle_fr", "libelle_en", "couleur"},
-          "saison": {"debut": 8, "fin": 11} | null,
-          "recommandation_fr": "<p>…</p>",   # HTML assaini (cf. risks.richtext)
-          "recommandation_en": "<p>…</p>"
+      "risques": {                      # une entrée par risque (texte commun)
+        "PAL": {
+          "libelle_fr", "libelle_en", "couleur",
+          "description_fr", "description_en",     # nature du risque (texte brut)
+          "recommandation_fr": "<p>…</p>",      # HTML assaini (cf. risks.richtext),
+          "recommandation_en": "<p>…</p>"       # recommandation UNIQUE du risque
+        }
+      },
+      "modulations": {                  # une entrée par modulation utilisée
+        "P_T3_A_SR": {
+          "fr": "Le risque est majoré si vous séjournez en milieu rural.",
+          "en": "…",
+          "saison": {"debut": 8, "fin": 11} | null
         }
       },
       "geometries": {                   # géométries EFFECTIVES, simplifiées
@@ -43,7 +51,8 @@ les textes et géométries partagés entre endémies) :
         "e345": {...}                                             # zone moins zone exclue
       },
       "endemies": [
-        {"id": 345, "zone_id": 12, "zone_nom": "…", "conduite": "PAL_T3",
+        {"id": 345, "zone_id": 12, "zone_nom": "…", "risque": "PAL",
+         "modulation": "P_T3_A_SR" | null,   # null = sans précision, toute l'année
          "geometrie": "e345", "valide_du": iso | null, "valide_au": iso | null}
       ]
     }
@@ -71,6 +80,7 @@ import hashlib
 import json
 from datetime import datetime
 from datetime import timezone as dt_timezone
+from html import escape
 
 import shapely.geometry
 import shapely.wkt
@@ -143,17 +153,50 @@ def _iso(valeur):
     return valeur.isoformat() if valeur else None
 
 
-def recommandation_html(conduite, langue="fr"):
-    """Recommandation d'une conduite à tenir telle qu'elle est transmise dans le
+def recommandation_html(risque, langue="fr"):
+    """Recommandation unique d'un risque telle qu'elle est transmise dans le
     cache (et affichée par le téléphone), en HTML assaini (cf. risks.richtext).
-    Jamais de texte vide : tant que l'équipe médicale n'a pas rédigé la
-    conduite, on retombe sur la description du risque. `sanitize_html` est
-    réappliqué ici par défense en profondeur (un `update()` en base contourne
-    ConduiteATenir.save)."""
-    risque = conduite.risque
+    Peut être vide tant que l'équipe médicale ne l'a pas rédigée : le message
+    affiché comporte toujours la description du risque (`description_fr/en`).
+    `sanitize_html` est réappliqué ici par défense en profondeur (un `update()`
+    en base contourne Risque.save)."""
     if langue == "en":
-        return sanitize_html(conduite.recommandation_en) or sanitize_html(risque.nature_du_risque_en)
-    return sanitize_html(conduite.recommandation_fr) or sanitize_html(risque.nature_du_risque_fr)
+        return sanitize_html(risque.recommandation_en)
+    return sanitize_html(risque.recommandation_fr)
+
+
+PHRASE_ALERTE = {
+    "fr": "Vous vous trouvez actuellement dans une zone où existe un risque de {risque}.",
+    "en": "You are currently in an area where there is a risk of {risque}.",
+}
+
+
+def message_detail_html(risque, modulation=None, langue="fr"):
+    """Message de l'écran de détail pour une endémie, en HTML : IMPLÉMENTATION
+    DE RÉFÉRENCE de l'assemblage que fait le téléphone (cf. spec §8,
+    « Composition du message »), dans cet ordre :
+
+    1. phrase d'alerte, composée à partir du libellé du risque (non stockée) ;
+    2. phrase de modulation de l'endémie, si elle en a une ;
+    3. description du risque (`nature_du_risque`, texte brut) ;
+    4. recommandation unique du risque (HTML assaini), si rédigée.
+
+    `risque` et `modulation` sont les objets du modèle (`modulation` peut être
+    None)."""
+    en = langue == "en"
+    libelle = risque.libelle_en if en else risque.libelle_fr
+    blocs = [f"<p>{escape(PHRASE_ALERTE[langue].format(risque=libelle))}</p>"]
+    if modulation is not None:
+        phrase = (modulation.modulation_en if en else modulation.modulation_fr).strip()
+        if phrase:
+            blocs.append(f"<p>{escape(phrase)}</p>")
+    description = (risque.nature_du_risque_en if en else risque.nature_du_risque_fr).strip()
+    if description:
+        blocs.append(f"<p>{escape(description)}</p>")
+    recommandation = recommandation_html(risque, langue)
+    if recommandation:
+        blocs.append(recommandation)
+    return "".join(blocs)
 
 
 def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE_SIMPLIFICATION_DEG):
@@ -172,17 +215,19 @@ def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE
         endemies = endemies.filter(zone__geom__dwithin=(point, D(km=rayon_km)))
     endemies = (
         endemies.filter(Q(date_fin__isnull=True) | Q(date_fin__gte=moment))
-        .select_related("zone", "conduite_a_tenir", "conduite_a_tenir__risque")
+        .select_related("zone", "risque", "modulation")
         .order_by("pk")
     )
 
-    conduites = {}
+    risques = {}
+    modulations = {}
     geometries = {}
     entrees = []
 
     for endemie in endemies:
         zone = endemie.zone
-        conduite = endemie.conduite_a_tenir
+        risque = endemie.risque
+        modulation = endemie.modulation
 
         if endemie.zone_exclue is None:
             cle_geometrie = f"z{zone.pk}"
@@ -199,38 +244,43 @@ def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE
                 continue
             geometries[cle_geometrie] = _en_geojson(geom)
 
-        if conduite.pk not in conduites:
-            risque = conduite.risque
+        if risque.pk not in risques:
+            risques[risque.pk] = {
+                "libelle_fr": risque.libelle_fr,
+                "libelle_en": risque.libelle_en,
+                "couleur": risque.couleur_legende,
+                "description_fr": risque.nature_du_risque_fr,
+                "description_en": risque.nature_du_risque_en,
+                "recommandation_fr": recommandation_html(risque, "fr"),
+                "recommandation_en": recommandation_html(risque, "en"),
+            }
+
+        if modulation is not None and modulation.pk not in modulations:
             saison = None
-            if conduite.saison_mois_debut is not None and conduite.saison_mois_fin is not None:
-                saison = {"debut": conduite.saison_mois_debut, "fin": conduite.saison_mois_fin}
-            conduites[conduite.pk] = {
-                "risque": {
-                    "code": risque.code,
-                    "libelle_fr": risque.libelle_fr,
-                    "libelle_en": risque.libelle_en,
-                    "couleur": risque.couleur_legende,
-                },
+            if modulation.saison_mois_debut is not None and modulation.saison_mois_fin is not None:
+                saison = {"debut": modulation.saison_mois_debut, "fin": modulation.saison_mois_fin}
+            modulations[modulation.pk] = {
+                "fr": modulation.modulation_fr,
+                "en": modulation.modulation_en,
                 "saison": saison,
-                # Jamais de texte vide transmis : repli sur la description du
-                # risque tant que l'équipe médicale n'a pas rédigé la conduite.
-                "recommandation_fr": recommandation_html(conduite, "fr"),
-                "recommandation_en": recommandation_html(conduite, "en"),
             }
 
         entrees.append({
             "id": endemie.pk,
             "zone_id": zone.pk,
             "zone_nom": zone.nom,
-            "conduite": conduite.pk,
+            "risque": risque.pk,
+            "modulation": modulation.pk if modulation is not None else None,
             "geometrie": cle_geometrie,
             "valide_du": _iso(endemie.date_debut),
             "valide_au": _iso(endemie.date_fin),
         })
 
     contenu = {
+        "format": 2,
         "rayon_km": rayon_km,
-        "conduites": conduites,
+        "risques": risques,
+        "modulations": modulations,
         "geometries": geometries,
         "endemies": entrees,
     }
@@ -261,7 +311,7 @@ def cache_mondial_courant():
 
 
 def _en_saison(saison, moment):
-    """Même règle que ConduiteATenir.is_in_season (mois seulement, périodes
+    """Même règle que Modulation.is_in_season (mois seulement, périodes
     à cheval sur le nouvel an comprises). Le mois est celui de l'instant
     EXPRIMÉ EN UTC : un `moment` avec un décalage horaire est d'abord ramené à
     UTC (règle à reproduire dans les modules natifs, cf. tests_partages)."""
@@ -291,7 +341,9 @@ def endemies_actives_dans_cache(cache, lon, lat, moment=None):
             continue
         if entree["valide_au"] and moment > datetime.fromisoformat(entree["valide_au"]):
             continue
-        if not _en_saison(cache["conduites"][entree["conduite"]]["saison"], moment):
+        modulation = entree["modulation"]
+        saison = cache["modulations"][modulation]["saison"] if modulation is not None else None
+        if not _en_saison(saison, moment):
             continue
         cle = entree["geometrie"]
         if cle not in geometries:

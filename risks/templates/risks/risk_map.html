@@ -21,9 +21,9 @@
     {% if zone %}
       🗺️ Carte de la zone — {{ zone.nom }} — couleur = risques des endémies de cette zone, transparent = zone saine
       <a href="{% url 'admin:risks_zone_change' zone.pk %}">← retour à la fiche</a>
-    {% elif conduite_a_tenir %}
-      🗺️ Carte des risques — {{ conduite_a_tenir.code }} ({{ conduite_a_tenir.risque.libelle_fr }}) — couleur = zones où cette conduite s'applique, transparent = zone saine
-      <a href="{% url 'admin:risks_conduiteatenir_change' conduite_a_tenir.pk %}">← retour à la fiche</a>
+    {% elif risque %}
+      🗺️ Carte des risques — {{ risque.libelle_fr }} ({{ risque.code }}) — couleur = zones où ce risque s'applique, transparent = zone saine
+      <a href="{% url 'admin:risks_risque_change' risque.pk %}">← retour à la fiche</a>
     {% else %}
       🗺️ Carte des risques — couleur = moyenne des risques actifs par zone, transparent = zone saine
       <a href="/admin/risks/endemie/">← retour à l'admin</a>
@@ -38,7 +38,7 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const geojsonUrl = "{% url 'risk_map_geojson' %}{% if zone %}?zone={{ zone.pk }}{% elif conduite_a_tenir %}?conduite_a_tenir={{ conduite_a_tenir.pk }}{% endif %}";
+    const geojsonUrl = "{% url 'risk_map_geojson' %}{% if zone %}?zone={{ zone.pk }}{% elif risque %}?risque={{ risque.pk }}{% endif %}";
 
     // Échappe le texte injecté dans les popups/légende (noms issus de la base).
     const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
@@ -69,7 +69,7 @@
           }
         }).addTo(map);
 
-        {% if zone or conduite_a_tenir %}
+        {% if zone or risque %}
         // Vue filtrée : recadrer automatiquement sur les zones concernées
         // plutôt que de garder le cadrage "monde entier" par défaut.
         if (layer.getBounds().isValid()) {

@@ -1,11 +1,13 @@
 """
 Modèles du domaine "risques infectieux" pour Saintex.
 
-Reprend le modèle métier existant côté médical (base MariaDB historique) :
-un Risque de base (ex. Paludisme), décliné en plusieurs ConduiteATenir
-("risque modulé" — variantes contextuelles avec leur propre recommandation),
-elles-mêmes activées sur des Zone géographiques via des lignes Endemie
-(chaque ligne = une zone + une conduite à tenir + une période de validité).
+Reprend le modèle métier existant côté médical (base MariaDB historique),
+refondu en octobre 2026 (cf. saintex-spec-technique.md §7 et §8) :
+un Risque (ex. Paludisme) porte sa description et UNE SEULE recommandation ;
+une Modulation est une phrase courte et facultative qui précise le contexte
+(milieu rural, altitude...) et la période de l'année concernée ; une ligne
+Endemie active un Risque, avec sa Modulation éventuelle, sur une Zone
+géographique (une ligne = une zone + un risque + une période de validité).
 """
 
 from django.contrib.gis.db import models as gis_models
@@ -76,6 +78,15 @@ class Risque(models.Model):
         help_text="Description du mécanisme du risque (ex. mode de transmission)"
     )
     nature_du_risque_en = models.TextField()
+    recommandation_fr = models.TextField(
+        blank=True,
+        help_text=(
+            "Recommandation unique du risque (texte enrichi validé par l'équipe "
+            "médicale), identique pour tous les voyageurs et toutes les zones "
+            "(cf. spec §8)."
+        ),
+    )
+    recommandation_en = models.TextField(blank=True)
 
     # Métadonnées d'affichage héritées du back-office existant
     ordre = models.IntegerField(null=True, blank=True, help_text="Ordre d'affichage suggéré")
@@ -108,40 +119,38 @@ class Risque(models.Model):
     def __str__(self):
         return self.libelle_fr
 
+    def save(self, *args, **kwargs):
+        # Les recommandations sont du texte enrichi (HTML limité, cf.
+        # risks.richtext) : assaini à chaque écriture, quelle qu'en soit la
+        # source (admin, import legacy, shell), pour que ce qui est en base
+        # soit toujours sûr à afficher et à envoyer. Un texte brut encore
+        # reçu (import legacy) est converti en HTML au passage.
+        self.recommandation_fr = sanitize_html(self.recommandation_fr)
+        self.recommandation_en = sanitize_html(self.recommandation_en)
+        super().save(*args, **kwargs)
 
-class ConduiteATenir(models.Model):
-    """Recommandation associée à un Risque, avec une variante contextuelle
-    ("risque modulé" — ex. saison, zone rurale, durée du séjour...).
+
+class Modulation(models.Model):
+    """Phrase de modulation d'un risque et période de l'année concernée
+    (ex. « Le risque est majoré si vous séjournez en milieu rural. »).
+
+    Ex-ConduiteATenir (octobre 2026) : ne porte plus ni le risque, ni la
+    description, ni la recommandation, ni la légende, ni la couleur — tout
+    cela vit désormais sur `Risque`. Catalogue indépendant du risque : une
+    même modulation (« en milieu rural », « Pas de données »...) peut être
+    partagée par les endémies de risques différents.
     """
 
     code = models.CharField(max_length=30, primary_key=True)  # ex. "P_T3_A"
-    risque = models.ForeignKey(Risque, on_delete=models.PROTECT, related_name="conduites")
-    nature_du_risque_fr = models.TextField(
-        help_text="Description du niveau/contexte de risque pour cette variante"
-    )
-    nature_du_risque_en = models.TextField()
-    recommandation_fr = models.TextField(
+    modulation_fr = models.TextField(
         blank=True,
         help_text=(
-            "Conduite à tenir transmise au voyageur à l'entrée dans la zone "
-            "(texte validé par l'équipe médicale). Texte unique pour tous les "
-            "voyageurs : la distinction protégé / non protégé a été abandonnée "
-            "en octobre 2026 (cf. spec §8)."
+            "Phrase qui précise le contexte du risque (ex. « Le risque est majoré "
+            "si vous séjournez en milieu rural. », « Le risque est réduit "
+            "au-dessus de 1500 mètres d'altitude »)."
         ),
     )
-    recommandation_en = models.TextField(blank=True)
-    facteurs_de_risque_fr = models.TextField(
-        blank=True,
-        help_text=(
-            "Circonstances qui augmentent l'exposition pour cette variante "
-            "(ex. 'Soirées ou nuitées en milieu rural', 'Séjour en zone rurale "
-            "ou boisée, en dessous de 1500 m d'altitude')"
-        ),
-    )
-    facteurs_de_risque_en = models.TextField(blank=True)
-    legende_fr = models.TextField(blank=True)
-    legende_en = models.TextField(blank=True)
-    couleur = models.CharField(max_length=30, null=True, blank=True)
+    modulation_en = models.TextField(blank=True)
 
     saison_mois_debut = models.PositiveSmallIntegerField(
         null=True,
@@ -174,19 +183,9 @@ class ConduiteATenir(models.Model):
                 "ensemble, ou tous les deux laissés vides (risque non saisonnier)."
             )
 
-    def save(self, *args, **kwargs):
-        # Les recommandations sont du texte enrichi (HTML limité, cf.
-        # risks.richtext) : assaini à chaque écriture, quelle qu'en soit la
-        # source (admin, import legacy, shell), pour que ce qui est en base
-        # soit toujours sûr à afficher et à envoyer. Un texte brut encore
-        # reçu (import legacy) est converti en HTML au passage.
-        self.recommandation_fr = sanitize_html(self.recommandation_fr)
-        self.recommandation_en = sanitize_html(self.recommandation_en)
-        super().save(*args, **kwargs)
-
     def is_in_season(self, when):
         """True si la date/datetime `when` tombe dans la période à risque
-        saisonnière de cette conduite à tenir.
+        saisonnière de cette modulation.
 
         Toujours True si aucune saisonnalité n'est définie (risque actif
         toute l'année). Gère les périodes à cheval sur le nouvel an (ex.
@@ -207,7 +206,7 @@ class ConduiteATenir(models.Model):
                     models.Q(saison_mois_debut__isnull=True, saison_mois_fin__isnull=True)
                     | models.Q(saison_mois_debut__isnull=False, saison_mois_fin__isnull=False)
                 ),
-                name="conduiteatenir_saison_mois_ensemble",
+                name="modulation_saison_mois_ensemble",
             ),
         ]
 
@@ -216,21 +215,31 @@ class ConduiteATenir(models.Model):
 
 
 class Endemie(models.Model):
-    """Active une ConduiteATenir sur une Zone, pendant une période donnée.
+    """Active un Risque sur une Zone, avec une Modulation éventuelle.
 
     Une ligne = une zone. Le "N zones" d'une même endémie s'obtient par
-    plusieurs lignes partageant la même conduite à tenir (et généralement
-    la même période) — pas par une relation many-to-many.
+    plusieurs lignes partageant le même risque et la même modulation (et
+    généralement la même période) — pas par une relation many-to-many.
 
     Note : date_debut/date_fin portent la période de VALIDITÉ de cet
     enregistrement (audit/historisation), pas la saisonnalité intra-annuelle
-    du risque — celle-ci est actuellement uniquement textuelle, dans la
-    ConduiteATenir liée (ex. "risque d'août à novembre").
+    du risque — celle-ci est portée par la Modulation liée (mois de début /
+    de fin) ; sans modulation, l'endémie est active toute l'année.
     """
 
     zone = models.ForeignKey(Zone, on_delete=models.CASCADE, related_name="endemies")
-    conduite_a_tenir = models.ForeignKey(
-        ConduiteATenir, on_delete=models.PROTECT, related_name="endemies"
+    risque = models.ForeignKey(Risque, on_delete=models.PROTECT, related_name="endemies")
+    modulation = models.ForeignKey(
+        Modulation,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="endemies",
+        help_text=(
+            "Précision facultative du risque (milieu rural, altitude...) et "
+            "période de l'année concernée ; vide = risque actif toute l'année, "
+            "sans précision."
+        ),
     )
     date_debut = models.DateTimeField(null=True, blank=True)
     date_fin = models.DateTimeField(
@@ -253,11 +262,12 @@ class Endemie(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=["zone", "date_fin"]),
-            models.Index(fields=["conduite_a_tenir"]),
+            models.Index(fields=["risque"], name="risks_endem_risque_idx"),
+            models.Index(fields=["modulation"], name="risks_endem_modul_idx"),
         ]
 
     def __str__(self):
-        return f"{self.zone.nom} — {self.conduite_a_tenir_id}"
+        return f"{self.zone.nom} — {self.risque_id}"
 
 
 class Pays(models.Model):

@@ -123,6 +123,13 @@ class ApplyZoneExclusionsTests(SimpleTestCase):
         item.update(overrides)
         return item
 
+    def _commande(self):
+        # Les codes de conduites historiques sont rattachés à leur risque par
+        # import_conduites ; ici on simule ce rattachement.
+        commande = Command()
+        commande._risque_par_conduite = {"P_T3_A": "PAL"}
+        return commande
+
     def test_application_sur_la_bonne_endemie(self):
         path = self._write_zonesaine([self._ok_item()])
         with mock.patch(
@@ -130,12 +137,13 @@ class ApplyZoneExclusionsTests(SimpleTestCase):
         ) as objects:
             objects.filter.return_value.exists.return_value = True
             objects.filter.return_value.update.return_value = 1
-            applied, skipped = Command().apply_zone_exclusions(path)
+            applied, skipped = self._commande().apply_zone_exclusions(path)
 
         self.assertEqual((applied, skipped), (1, 0))
-        # Le filtre cible bien le couple (zone, conduite), pas la zone entière.
+        # Le filtre cible les endémies de la zone portant le risque de la conduite,
+        # pas la zone entière.
         objects.filter.assert_called_once_with(
-            zone__source_id=42, conduite_a_tenir__code="P_T3_A"
+            zone__source_id=42, risque_id="PAL"
         )
         _, kwargs = objects.filter.return_value.update.call_args
         exclusion = kwargs["zone_exclue"]
@@ -155,7 +163,7 @@ class ApplyZoneExclusionsTests(SimpleTestCase):
         with mock.patch(
             "risks.management.commands.migrate_legacy_data.Endemie.objects"
         ) as objects:
-            applied, skipped = Command().apply_zone_exclusions(path)
+            applied, skipped = self._commande().apply_zone_exclusions(path)
 
         self.assertEqual((applied, skipped), (0, 4))
         objects.filter.assert_not_called()
@@ -166,14 +174,25 @@ class ApplyZoneExclusionsTests(SimpleTestCase):
             "risks.management.commands.migrate_legacy_data.Endemie.objects"
         ) as objects:
             objects.filter.return_value.exists.return_value = False
-            applied, skipped = Command().apply_zone_exclusions(path)
+            applied, skipped = self._commande().apply_zone_exclusions(path)
 
         self.assertEqual((applied, skipped), (0, 1))
         objects.filter.return_value.update.assert_not_called()
 
+    def test_conduite_inconnue_ignoree(self):
+        # Code de conduite absent de l'export des conduites : pas de risque connu.
+        path = self._write_zonesaine([self._ok_item(endemie_cat_code="INCONNUE")])
+        with mock.patch(
+            "risks.management.commands.migrate_legacy_data.Endemie.objects"
+        ) as objects:
+            applied, skipped = self._commande().apply_zone_exclusions(path)
+
+        self.assertEqual((applied, skipped), (0, 1))
+        objects.filter.assert_not_called()
+
     @unittest.expectedFailure
     def test_deux_points_de_la_meme_endemie_devraient_etre_fusionnes(self):
-        """Bug connu : deux points `zonesaine` du même couple (zone, conduite)
+        """Bug connu : deux points `zonesaine` du même couple (zone, risque)
         font chacun `Endemie.objects.filter(...).update(zone_exclue=...)` —
         la seconde exclusion écrase la première au lieu de fusionner les
         polygones (union). Aucun cas de ce type n'existe dans les données
@@ -197,7 +216,7 @@ class ApplyZoneExclusionsTests(SimpleTestCase):
         ) as objects:
             objects.filter.return_value.exists.return_value = True
             objects.filter.return_value.update.side_effect = fake_update
-            Command().apply_zone_exclusions(path)
+            self._commande().apply_zone_exclusions(path)
 
         # Attendu : une seule exclusion fusionnée (union des deux buffers).
         self.assertEqual(len(exclusions_appliquees), 1)
