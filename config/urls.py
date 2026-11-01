@@ -3,6 +3,11 @@ from django.urls import include, path
 
 from risks.views import risk_map_geojson, risk_map_view
 
+# Titres du back-office : onglet du navigateur (« <page> | <site_title> ») et
+# bandeau en haut de page.
+admin.site.site_title = "Site d'administration de Saintex"
+admin.site.site_header = "Administration de Saintex"
+
 urlpatterns = [
     # Déclarées avant admin.site.urls : ce dernier capture tout le reste
     # de "admin/*", ces routes ne seraient jamais atteintes sinon.

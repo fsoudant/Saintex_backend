@@ -34,6 +34,7 @@ les textes et géométries partagés entre endémies) :
       "risques": {                      # une entrée par risque (texte commun)
         "PAL": {
           "libelle_fr", "libelle_en", "couleur",
+          "alerte_fr", "alerte_en",               # phrase d'alerte toute faite (élision incluse)
           "description_fr", "description_en",     # nature du risque (HTML assaini)
           "recommandation_fr": "<p>…</p>",      # HTML assaini (cf. risks.richtext),
           "recommandation_en": "<p>…</p>"       # recommandation UNIQUE du risque
@@ -176,10 +177,32 @@ def description_html(risque, langue="fr"):
     return texte
 
 
-PHRASE_ALERTE = {
-    "fr": "Vous vous trouvez actuellement dans une zone où existe un risque de {risque}.",
-    "en": "You are currently in an area where there is a risk of {risque}.",
-}
+PHRASE_ALERTE_EN = "You are currently in an area where there is a risk of {risque}."
+
+_VOYELLES = "aeiouàâäæéèêëîïôöœùûüÿ"
+# Libellés à h aspiré (pas d'élision : « risque de Hantavirus »).
+_H_ASPIRE = ("hanta",)
+
+
+def _de_libelle(libelle):
+    """« de » ou « d’ » devant le libellé : élision devant une voyelle ou un h muet
+    (« risque d’Encéphalite à tiques », « risque de Paludisme »). La casse du
+    libellé est conservée telle qu'elle est saisie dans le back-office."""
+    libelle = libelle.strip()
+    debut = libelle.lower()
+    if debut and (debut[0] in _VOYELLES or (debut[0] == "h" and not debut.startswith(_H_ASPIRE))):
+        return f"d’{libelle}"
+    return f"de {libelle}"
+
+
+def phrase_alerte(risque, langue="fr"):
+    """Phrase d'alerte en tête du message (cf. spec §8), composée à partir du
+    libellé du risque. Calculée par le SERVEUR et transmise dans le cache
+    (`alerte_fr/en`) : les modules natifs n'ont ainsi aucune règle d'élision à
+    reproduire."""
+    if langue == "en":
+        return PHRASE_ALERTE_EN.format(risque=risque.libelle_en.strip())
+    return f"Vous vous trouvez actuellement dans une zone où existe un risque {_de_libelle(risque.libelle_fr)}."
 
 
 def message_detail_html(risque, modulation=None, langue="fr"):
@@ -195,8 +218,7 @@ def message_detail_html(risque, modulation=None, langue="fr"):
     `risque` et `modulation` sont les objets du modèle (`modulation` peut être
     None)."""
     en = langue == "en"
-    libelle = risque.libelle_en if en else risque.libelle_fr
-    blocs = [f"<p>{escape(PHRASE_ALERTE[langue].format(risque=libelle))}</p>"]
+    blocs = [f"<p>{escape(phrase_alerte(risque, langue))}</p>"]
     if modulation is not None:
         phrase = (modulation.modulation_en if en else modulation.modulation_fr).strip()
         if phrase:
@@ -259,6 +281,8 @@ def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE
             risques[risque.pk] = {
                 "libelle_fr": risque.libelle_fr,
                 "libelle_en": risque.libelle_en,
+                "alerte_fr": phrase_alerte(risque, "fr"),
+                "alerte_en": phrase_alerte(risque, "en"),
                 "couleur": risque.couleur_legende,
                 "description_fr": description_html(risque, "fr"),
                 "description_en": description_html(risque, "en"),

@@ -53,6 +53,8 @@ _RISQUE = {
     "libelle_fr": "Paludisme",
     "libelle_en": "Malaria",
     "couleur": "rgb(255,0,0)",
+    "alerte_fr": "Vous vous trouvez actuellement dans une zone où existe un risque de Paludisme.",
+    "alerte_en": "You are currently in an area where there is a risk of Malaria.",
     "description_fr": "<p>Maladie parasitaire transmise par la piqûre de moustiques.</p>",
     "description_en": "<p>Parasitic disease transmitted by mosquito bites.</p>",
     "recommandation_fr": "<p>Protégez-vous des piqûres de moustiques.</p>",

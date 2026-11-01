@@ -16,7 +16,12 @@ import json
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import SimpleTestCase, TestCase
 
-from risks.cache import construire_cache, endemies_actives_dans_cache, message_detail_html
+from risks.cache import (
+    construire_cache,
+    endemies_actives_dans_cache,
+    message_detail_html,
+    phrase_alerte,
+)
 from risks.detection import zones_actives_pour_point
 from risks.models import Endemie, Modulation, Risque, Zone
 
@@ -213,6 +218,45 @@ class ConstruireCacheTests(_Fixtures, TestCase):
 
     def test_cache_serialisable_en_json(self):
         json.dumps(construire_cache(self.point))
+
+
+class PhraseAlerteTests(SimpleTestCase):
+    """Élision de la phrase d'alerte (calculée par le serveur, transmise dans le cache)."""
+
+    def _alerte(self, libelle_fr, libelle_en="X", langue="fr"):
+        return phrase_alerte(Risque(code="X", libelle_fr=libelle_fr, libelle_en=libelle_en), langue)
+
+    def test_pas_d_elision_devant_une_consonne(self):
+        self.assertEqual(
+            self._alerte("Paludisme"),
+            "Vous vous trouvez actuellement dans une zone où existe un risque de Paludisme.",
+        )
+        self.assertTrue(self._alerte("Fièvre jaune").endswith("risque de Fièvre jaune."))
+        # Le y initial est une consonne dans la plupart des noms de maladies.
+        self.assertTrue(self._alerte("Yersiniose").endswith("risque de Yersiniose."))
+
+    def test_elision_devant_une_voyelle(self):
+        for libelle in ("Encéphalite à tiques", "Ebola", "Épidémie", "Orthopoxvirose", "Infection X"):
+            with self.subTest(libelle=libelle):
+                self.assertTrue(self._alerte(libelle).endswith(f"risque d’{libelle}."))
+
+    def test_elision_devant_un_h_muet(self):
+        self.assertTrue(self._alerte("Hépatite A").endswith("risque d’Hépatite A."))
+
+    def test_pas_d_elision_devant_un_h_aspire(self):
+        self.assertTrue(self._alerte("Hantavirus").endswith("risque de Hantavirus."))
+
+    def test_la_casse_du_libelle_est_conservee(self):
+        self.assertTrue(self._alerte("encéphalite japonaise").endswith("risque d’encéphalite japonaise."))
+
+    def test_espaces_superflus_ignores(self):
+        self.assertTrue(self._alerte("  Dengue ").endswith("risque de Dengue."))
+
+    def test_anglais_sans_elision(self):
+        self.assertEqual(
+            self._alerte("Encéphalite", "Tick-borne encephalitis", "en"),
+            "You are currently in an area where there is a risk of Tick-borne encephalitis.",
+        )
 
 
 class MessageDetailTests(SimpleTestCase):
