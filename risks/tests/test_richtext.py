@@ -1,12 +1,12 @@
 """Tests du texte enrichi des recommandations (risks.richtext, widget et
-ConduiteATenir.save) — cf. saintex-spec-technique.md §8."""
+Risque.save) — cf. saintex-spec-technique.md §8."""
 
 from unittest import mock
 
 from django.db import models
 from django.test import SimpleTestCase
 
-from risks.models import ConduiteATenir
+from risks.models import Risque
 from risks.richtext import html_to_text, looks_like_html, sanitize_html, text_to_html
 from risks.widgets import RichTextWidget
 
@@ -120,17 +120,17 @@ class HtmlToTextTests(SimpleTestCase):
         self.assertEqual(html_to_text(None), "")
 
 
-class ConduiteATenirSaveTests(SimpleTestCase):
+class RisqueSaveTests(SimpleTestCase):
     def test_save_assainit_les_recommandations(self):
-        conduite = ConduiteATenir(
+        risque = Risque(
             code="X",
             recommandation_fr="<p>ok</p><script>alert(1)</script>",
             recommandation_en="Plain text <1500 m",
         )
         with mock.patch.object(models.Model, "save"):
-            conduite.save()
-        self.assertEqual(conduite.recommandation_fr, "<p>ok</p>")
-        self.assertEqual(conduite.recommandation_en, "<p>Plain text &lt;1500 m</p>")
+            risque.save()
+        self.assertEqual(risque.recommandation_fr, "<p>ok</p>")
+        self.assertEqual(risque.recommandation_en, "<p>Plain text &lt;1500 m</p>")
 
 
 class RichTextWidgetTests(SimpleTestCase):

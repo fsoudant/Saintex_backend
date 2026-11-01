@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase
 
 from clients.management.commands.apercu_notification import estimer_segments_sms
 from clients.models import AlertReport, NotificationLog, Utilisateur
-from risks.models import ConduiteATenir, Endemie, Risque, Zone
+from risks.models import Endemie, Risque, Zone
 
 
 def _rect(lon_min, lat_min, lon_max, lat_max):
@@ -35,11 +35,8 @@ class _ContactFixtures(APITestCase):
             code="PAL", libelle_fr="Paludisme", libelle_en="Malaria",
             nature_du_risque_fr="...", nature_du_risque_en="...",
         )
-        conduite = ConduiteATenir.objects.create(
-            code="PAL_T1", risque=risque, nature_du_risque_fr="...", nature_du_risque_en="...",
-        )
         self.zone = Zone.objects.create(source_id=1, nom="Zone A", geom=_rect(9, 9, 11, 11))
-        self.endemie = Endemie.objects.create(zone=self.zone, conduite_a_tenir=conduite)
+        self.endemie = Endemie.objects.create(zone=self.zone, risque=risque)
         self.url = reverse("cache")
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.utilisateur.api_token}")
 

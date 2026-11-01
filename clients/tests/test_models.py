@@ -12,7 +12,7 @@ from clients.models import (
     Utilisateur,
     valider_date_debut_contrat,
 )
-from risks.models import ConduiteATenir, Endemie, Risque, Zone
+from risks.models import Endemie, Risque, Zone
 
 
 class UtilisateurTests(TestCase):
@@ -164,7 +164,7 @@ class PreferenceChangeLogTests(TestCase):
 
 
 class _EndemieFixtureMixin:
-    """Fabrique une Endemie minimale (Zone + Risque + ConduiteATenir) pour
+    """Fabrique une Endemie minimale (Zone + Risque) pour
     les tests de NotificationLog, qui n'ont besoin que d'une référence
     valide, pas d'un scénario médical réaliste.
     """
@@ -178,10 +178,7 @@ class _EndemieFixtureMixin:
             nature_du_risque_fr="...",
             nature_du_risque_en="...",
         )
-        conduite = ConduiteATenir.objects.create(
-            code="PAL_T1", risque=risque, nature_du_risque_fr="...", nature_du_risque_en="..."
-        )
-        return Endemie.objects.create(zone=zone, conduite_a_tenir=conduite)
+        return Endemie.objects.create(zone=zone, risque=risque)
 
 
 class NotificationLogTests(_EndemieFixtureMixin, TestCase):

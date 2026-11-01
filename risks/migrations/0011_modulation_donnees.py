@@ -71,13 +71,14 @@ def convertir(apps, schema_editor):
         Endemie.objects.filter(modulation_id__in=vides).update(modulation=None)
         Modulation.objects.filter(pk__in=vides).delete()
 
-    print(
-        f"\n  [0011] {Endemie.objects.count()} endémies rattachées à un risque, "
-        f"{Modulation.objects.count()} modulations conservées, {len(vides)} supprimées "
-        f"(sans phrase ni période), "
-        f"{Risque.objects.exclude(recommandation_fr='').count()}/{Risque.objects.count()} "
-        f"risques avec une recommandation."
-    )
+    if Endemie.objects.exists():
+        print(
+            f"\n  [0011] {Endemie.objects.count()} endémies rattachées à un risque, "
+            f"{Modulation.objects.count()} modulations conservées, {len(vides)} supprimées "
+            f"(sans phrase ni période), "
+            f"{Risque.objects.exclude(recommandation_fr='').count()}/{Risque.objects.count()} "
+            f"risques avec une recommandation."
+        )
 
 
 class Migration(migrations.Migration):

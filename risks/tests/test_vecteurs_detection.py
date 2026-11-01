@@ -13,7 +13,7 @@ from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.test import SimpleTestCase, TestCase
 
 from risks.cache import construire_cache, endemies_actives_dans_cache
-from risks.models import ConduiteATenir, Endemie, Risque, Zone
+from risks.models import Endemie, Modulation, Risque, Zone
 from risks.vecteurs_detection import CACHE_TEST, CAS, chemin_fichier, generer, serialiser
 
 
@@ -35,13 +35,15 @@ class FichierPartageTests(SimpleTestCase):
     def test_le_fichier_est_du_json_valide_avec_les_sections_attendues(self):
         contenu = json.loads(chemin_fichier().read_text(encoding="utf-8"))
         self.assertEqual(set(contenu), {"format", "description", "regles", "cache", "cas"})
-        self.assertEqual(contenu["format"], 1)
+        self.assertEqual(contenu["format"], 2)
 
 
 class CoherenceInterneTests(SimpleTestCase):
     def test_references_du_cache_de_test_valides(self):
         for endemie in CACHE_TEST["endemies"]:
-            self.assertIn(endemie["conduite"], CACHE_TEST["conduites"])
+            self.assertIn(endemie["risque"], CACHE_TEST["risques"])
+            if endemie["modulation"] is not None:
+                self.assertIn(endemie["modulation"], CACHE_TEST["modulations"])
             self.assertIn(endemie["geometrie"], CACHE_TEST["geometries"])
 
     def test_identifiants_d_endemies_uniques_et_ordonnes(self):
@@ -116,25 +118,26 @@ class FormatIdentiqueAuCacheReelTests(TestCase):
         risque = Risque.objects.create(
             code="PAL", libelle_fr="Paludisme", libelle_en="Malaria",
             nature_du_risque_fr="...", nature_du_risque_en="...",
+            recommandation_fr="<p>Texte.</p>",
         )
-        conduite = ConduiteATenir.objects.create(
-            code="PAL_T1", risque=risque, nature_du_risque_fr="...", nature_du_risque_en="...",
-            recommandation_fr="<p>Texte.</p>", saison_mois_debut=6, saison_mois_fin=9,
+        modulation = Modulation.objects.create(
+            code="PAL_T1", modulation_fr="Phrase", saison_mois_debut=6, saison_mois_fin=9,
         )
         zone = Zone.objects.create(
             source_id=1, nom="Zone A",
             geom=MultiPolygon(Polygon(((10, 10), (12, 10), (12, 12), (10, 12), (10, 10)))),
         )
-        Endemie.objects.create(zone=zone, conduite_a_tenir=conduite)
+        Endemie.objects.create(zone=zone, risque=risque, modulation=modulation)
 
         reel = construire_cache(Point(11, 11, srid=4326))
 
         self.assertEqual(set(CACHE_TEST), set(reel))
-        modele_conduite = CACHE_TEST["conduites"]["SAISON_ETE"]
-        reelle_conduite = next(iter(reel["conduites"].values()))
-        self.assertEqual(set(modele_conduite), set(reelle_conduite))
-        self.assertEqual(set(modele_conduite["risque"]), set(reelle_conduite["risque"]))
-        self.assertEqual(set(modele_conduite["saison"]), set(reelle_conduite["saison"]))
+        self.assertEqual(CACHE_TEST["format"], reel["format"])
+        self.assertEqual(set(CACHE_TEST["risques"]["PAL"]), set(reel["risques"]["PAL"]))
+        modele_modulation = CACHE_TEST["modulations"]["SAISON_ETE"]
+        reelle_modulation = next(iter(reel["modulations"].values()))
+        self.assertEqual(set(modele_modulation), set(reelle_modulation))
+        self.assertEqual(set(modele_modulation["saison"]), set(reelle_modulation["saison"]))
         self.assertEqual(set(CACHE_TEST["endemies"][0]), set(reel["endemies"][0]))
         geometrie_modele = next(iter(CACHE_TEST["geometries"].values()))
         geometrie_reelle = next(iter(reel["geometries"].values()))
@@ -148,14 +151,11 @@ class FormatIdentiqueAuCacheReelTests(TestCase):
             code="PAL", libelle_fr="Paludisme", libelle_en="Malaria",
             nature_du_risque_fr="...", nature_du_risque_en="...",
         )
-        conduite = ConduiteATenir.objects.create(
-            code="PAL_T1", risque=risque, nature_du_risque_fr="...", nature_du_risque_en="...",
-        )
         zone = Zone.objects.create(
             source_id=1, nom="Zone A",
             geom=MultiPolygon(Polygon(((10, 10), (12, 10), (12, 12), (10, 12), (10, 10)))),
         )
-        endemie = Endemie.objects.create(zone=zone, conduite_a_tenir=conduite)
+        endemie = Endemie.objects.create(zone=zone, risque=risque)
 
         cache = json.loads(json.dumps(construire_cache(tolerance=0)))
         instant = datetime.fromisoformat("2026-07-15T12:00:00+00:00")

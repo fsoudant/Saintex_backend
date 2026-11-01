@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 
 from clients.models import NotificationLog, Utilisateur
-from risks.models import ConduiteATenir, Endemie, Risque, Zone
+from risks.models import Endemie, Risque, Zone
 
 
 def _rect(lon_min, lat_min, lon_max, lat_max):
@@ -31,14 +31,11 @@ class CacheViewTests(APITestCase):
         risque = Risque.objects.create(
             code="PAL", libelle_fr="Paludisme", libelle_en="Malaria",
             nature_du_risque_fr="...", nature_du_risque_en="...",
-        )
-        conduite = ConduiteATenir.objects.create(
-            code="PAL_T1", risque=risque, nature_du_risque_fr="...", nature_du_risque_en="...",
             recommandation_fr="<p>Protégez-vous.</p>",
         )
         self.zone = Zone.objects.create(source_id=1, nom="Zone A", geom=_rect(9, 9, 11, 11))
-        self.endemie = Endemie.objects.create(zone=self.zone, conduite_a_tenir=conduite)
-        self.conduite = conduite
+        self.endemie = Endemie.objects.create(zone=self.zone, risque=risque)
+        self.risque = risque
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.utilisateur.api_token}")
 
     def _post(self, **donnees):
@@ -56,7 +53,7 @@ class CacheViewTests(APITestCase):
         self.assertEqual(corps["contrat"], {"debut": "2026-11-01", "expiration": "2027-02-01"})
         self.assertEqual([e["id"] for e in corps["cache"]["endemies"]], [self.endemie.pk])
         self.assertEqual(
-            corps["cache"]["conduites"]["PAL_T1"]["recommandation_fr"], "<p>Protégez-vous.</p>"
+            corps["cache"]["risques"]["PAL"]["recommandation_fr"], "<p>Protégez-vous.</p>"
         )
 
     def test_contrat_sans_dates(self):
@@ -70,7 +67,7 @@ class CacheViewTests(APITestCase):
         # Zones aux antipodes l'une de l'autre : toutes deux dans le cache, sans
         # qu'aucune position ait été transmise.
         loin = Zone.objects.create(source_id=2, nom="Zone lointaine", geom=_rect(170, -40, 172, -38))
-        e_loin = Endemie.objects.create(zone=loin, conduite_a_tenir=self.conduite)
+        e_loin = Endemie.objects.create(zone=loin, risque=self.risque)
 
         corps = self._post().json()
 
@@ -116,8 +113,8 @@ class CacheViewTests(APITestCase):
         premier = self._post().json()["cache"]["version"]
 
         # Modification en base : la version mémorisée est encore servie...
-        self.conduite.recommandation_fr = "<p>Nouveau texte.</p>"
-        self.conduite.save()
+        self.risque.recommandation_fr = "<p>Nouveau texte.</p>"
+        self.risque.save()
         self.assertEqual(self._post().json()["cache"]["version"], premier)
 
         # ... jusqu'à expiration de la mémoire (simulée ici en la vidant).

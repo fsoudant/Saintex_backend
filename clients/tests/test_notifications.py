@@ -82,7 +82,7 @@ class ComposerSmsAlerteTests(SimpleTestCase):
 
     def _rapport(self, retard, libelle="Paludisme"):
         endemie = (
-            SimpleNamespace(conduite_a_tenir=SimpleNamespace(risque=SimpleNamespace(libelle_fr=libelle)))
+            SimpleNamespace(risque=SimpleNamespace(libelle_fr=libelle))
             if libelle
             else None
         )
