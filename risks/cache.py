@@ -34,7 +34,7 @@ les textes et géométries partagés entre endémies) :
       "risques": {                      # une entrée par risque (texte commun)
         "PAL": {
           "libelle_fr", "libelle_en", "couleur",
-          "description_fr", "description_en",     # nature du risque (texte brut)
+          "description_fr", "description_en",     # nature du risque (HTML assaini)
           "recommandation_fr": "<p>…</p>",      # HTML assaini (cf. risks.richtext),
           "recommandation_en": "<p>…</p>"       # recommandation UNIQUE du risque
         }
@@ -165,6 +165,17 @@ def recommandation_html(risque, langue="fr"):
     return sanitize_html(risque.recommandation_fr)
 
 
+def description_html(risque, langue="fr"):
+    """Description du risque (`nature_du_risque`) en HTML assaini, toujours
+    sous forme de bloc. Ce champ peut contenir une mise en forme légère (ex.
+    `<i>Anopheles</i>`) : il est donc traité comme du HTML et non comme du texte
+    brut, qui ferait afficher les balises."""
+    texte = sanitize_html(risque.nature_du_risque_en if langue == "en" else risque.nature_du_risque_fr)
+    if texte and not texte.lstrip().lower().startswith(("<p", "<ul", "<ol", "<h3")):
+        texte = f"<p>{texte}</p>"
+    return texte
+
+
 PHRASE_ALERTE = {
     "fr": "Vous vous trouvez actuellement dans une zone où existe un risque de {risque}.",
     "en": "You are currently in an area where there is a risk of {risque}.",
@@ -178,7 +189,7 @@ def message_detail_html(risque, modulation=None, langue="fr"):
 
     1. phrase d'alerte, composée à partir du libellé du risque (non stockée) ;
     2. phrase de modulation de l'endémie, si elle en a une ;
-    3. description du risque (`nature_du_risque`, texte brut) ;
+    3. description du risque (`nature_du_risque`, HTML assaini) ;
     4. recommandation unique du risque (HTML assaini), si rédigée.
 
     `risque` et `modulation` sont les objets du modèle (`modulation` peut être
@@ -190,9 +201,9 @@ def message_detail_html(risque, modulation=None, langue="fr"):
         phrase = (modulation.modulation_en if en else modulation.modulation_fr).strip()
         if phrase:
             blocs.append(f"<p>{escape(phrase)}</p>")
-    description = (risque.nature_du_risque_en if en else risque.nature_du_risque_fr).strip()
+    description = description_html(risque, langue)
     if description:
-        blocs.append(f"<p>{escape(description)}</p>")
+        blocs.append(description)
     recommandation = recommandation_html(risque, langue)
     if recommandation:
         blocs.append(recommandation)
@@ -249,8 +260,8 @@ def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE
                 "libelle_fr": risque.libelle_fr,
                 "libelle_en": risque.libelle_en,
                 "couleur": risque.couleur_legende,
-                "description_fr": risque.nature_du_risque_fr,
-                "description_en": risque.nature_du_risque_en,
+                "description_fr": description_html(risque, "fr"),
+                "description_en": description_html(risque, "en"),
                 "recommandation_fr": recommandation_html(risque, "fr"),
                 "recommandation_en": recommandation_html(risque, "en"),
             }

@@ -174,8 +174,8 @@ class ConstruireCacheTests(_Fixtures, TestCase):
 
         self.assertEqual(risque["recommandation_fr"], "")
         self.assertEqual(risque["recommandation_en"], "")
-        self.assertEqual(risque["description_fr"], "Transmission par moustique.")
-        self.assertEqual(risque["description_en"], "Mosquito-borne.")
+        self.assertEqual(risque["description_fr"], "<p>Transmission par moustique.</p>")
+        self.assertEqual(risque["description_en"], "<p>Mosquito-borne.</p>")
 
     def test_expose_risque_modulation_et_saison(self):
         modulation = self._modulation(
@@ -273,6 +273,20 @@ class MessageDetailTests(SimpleTestCase):
         html = message_detail_html(self._risque(nature_du_risque_fr="a < b & c"), None, "fr")
 
         self.assertIn("<p>a &lt; b &amp; c</p>", html)
+
+    def test_description_avec_mise_en_forme_n_est_pas_echappee(self):
+        # `nature_du_risque` peut contenir de l'HTML léger (ex. nom latin en italique).
+        risque = self._risque(nature_du_risque_fr="Moustiques <i>Anopheles</i> infectés.")
+
+        html = message_detail_html(risque, None, "fr")
+
+        self.assertIn("<p>Moustiques <i>Anopheles</i> infectés.</p>", html)
+        self.assertNotIn("&lt;i&gt;", html)
+
+    def test_description_dangereuse_assainie(self):
+        risque = self._risque(nature_du_risque_fr="<p>Ok</p><script>alert(1)</script>")
+
+        self.assertNotIn("<script", message_detail_html(risque, None, "fr"))
 
 
 class DetectionDansLeCacheTests(_Fixtures, TestCase):

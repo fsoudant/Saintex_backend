@@ -53,8 +53,8 @@ _RISQUE = {
     "libelle_fr": "Paludisme",
     "libelle_en": "Malaria",
     "couleur": "rgb(255,0,0)",
-    "description_fr": "Maladie parasitaire transmise par la piqûre de moustiques.",
-    "description_en": "Parasitic disease transmitted by mosquito bites.",
+    "description_fr": "<p>Maladie parasitaire transmise par la piqûre de moustiques.</p>",
+    "description_en": "<p>Parasitic disease transmitted by mosquito bites.</p>",
     "recommandation_fr": "<p>Protégez-vous des piqûres de moustiques.</p>",
     "recommandation_en": "<p>Protect yourself from mosquito bites.</p>",
 }

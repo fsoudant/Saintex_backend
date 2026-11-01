@@ -3,7 +3,7 @@ décision d'octobre 2026) : mise en forme limitée (gras, italique, taille,
 listes) et liens hypertexte vers un site de référence (OMS...) ou le nôtre.
 
 Principes :
-- `ConduiteATenir.recommandation_fr/en` stocke du HTML **assaini** (cf.
+- `Risque.recommandation_fr/en` stocke du HTML **assaini** (cf.
   `sanitize_html`, appelé à chaque `save()`) : seules les balises de la liste
   blanche ci-dessous survivent, les liens sont limités à http/https/mailto et
   reçoivent `rel="noopener noreferrer"`. L'éditeur de l'admin est confortable,
