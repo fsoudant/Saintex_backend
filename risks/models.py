@@ -305,5 +305,8 @@ class Pays(models.Model):
         help_text="Champs hérités tels quels de la base historique (CHIK, PALU, FJ_*, ZIKA...)",
     )
 
+    class Meta:
+        verbose_name_plural = "Pays"
+
     def __str__(self):
         return self.libelle_fr

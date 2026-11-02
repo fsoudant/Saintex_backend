@@ -1,0 +1,7 @@
+{% extends "admin/index.html" %}
+
+{# Page d'accueil de l'administration : l'onglet du navigateur n'affiche que le
+   nom du site (« Site d'administration de Saintex »), sans le préfixe
+   « Site d'administration | » que Django ajoute devant. Les autres pages
+   gardent leur titre (« Risques | Site d'administration de Saintex »). #}
+{% block title %}{{ site_title }}{% endblock %}

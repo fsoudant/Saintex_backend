@@ -25,8 +25,18 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 # ----------------------------------------------------------------------
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-CSRF_TRUSTED_ORIGINS = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    if h.strip()
+]
+# Les valeurs vides sont ignorées : "".split(",") donnerait [""], que Django refuse
+# (contrôle 4_0.E001) quand la variable est absente, comme en développement.
+CSRF_TRUSTED_ORIGINS = [
+    o.strip()
+    for o in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+    if o.strip()
+]
 
 # -------------------  paramètres de sécurité HTTP/HTTPS  -------------------
 # Render termine le TLS au niveau de son proxy et transmet la requête en HTTP
@@ -53,7 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",  # GeoDjango — nécessaire pour PostGIS
     "rest_framework",
-    "risks",  # Zone, Risque, ConduiteATenir, Endemie
+    "risks",  # Zone, Risque, Modulation, Endemie
     "clients",  # Utilisateur, Position, PushToken, PreferenceChangeLog (cf. Saintex.rtf §5)
 ]
 
@@ -73,7 +83,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
