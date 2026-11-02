@@ -1,6 +1,11 @@
+import datetime
+
 from django import forms
 from django.contrib import admin
+from django.contrib.admin.widgets import AdminDateWidget
 from django.contrib.gis.admin import GISModelAdmin
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
@@ -13,6 +18,51 @@ from .richtext import html_to_text
 from .widgets import RGBColorField, RichTextWidget
 
 _MOIS_LABELS = dict(MOIS_CHOICES)
+
+
+def _jour(valeur):
+    """Date (jj/mm/aaaa) d'un instant, à l'heure locale ; "" si vide."""
+    if valeur is None:
+        return ""
+    if timezone.is_aware(valeur):
+        valeur = timezone.localtime(valeur)
+    return valeur.strftime("%d/%m/%Y")
+
+
+class _DateSeuleField(forms.DateField):
+    """Champ de formulaire « date seule » pour un DateTimeField : l'heure n'a
+    pas de sens métier pour une période de validité d'endémie. La date de
+    début vaut 00:00:00 ce jour-là, la date de fin 23:59:59 (fin incluse)."""
+
+    def __init__(self, *, fin_de_journee=False, **kwargs):
+        self.fin_de_journee = fin_de_journee
+        kwargs.setdefault("widget", AdminDateWidget)
+        super().__init__(**kwargs)
+
+    def prepare_value(self, value):
+        if isinstance(value, datetime.datetime):
+            if timezone.is_aware(value):
+                value = timezone.localtime(value)
+            return value.date()
+        return value
+
+    def to_python(self, value):
+        jour = super().to_python(value)
+        if jour is None:
+            return None
+        heure = datetime.time(23, 59, 59) if self.fin_de_journee else datetime.time.min
+        return timezone.make_aware(datetime.datetime.combine(jour, heure))
+
+    def has_changed(self, initial, data):
+        # Compare des jours, pas des instants : l'heure n'est pas éditable.
+        if self.disabled:
+            return False
+        avant = self.prepare_value(initial)
+        try:
+            apres = forms.DateField.to_python(self, data)
+        except ValidationError:
+            return True
+        return avant != apres
 
 
 class _RisqueAlphaFilter(admin.RelatedFieldListFilter):
@@ -203,12 +253,31 @@ class ModulationAdmin(admin.ModelAdmin):
 
 @admin.register(Endemie)
 class EndemieAdmin(GISModelAdmin):
-    list_display = ("zone_display", "risque", "modulation", "date_debut", "date_fin", "has_exclusion")
+    list_display = ("zone_display", "risque", "modulation", "debut_display", "fin_display", "has_exclusion")
     list_filter = (("risque", _RisqueAlphaFilter),)
     list_select_related = ("zone", "risque", "modulation")
     search_fields = ("zone__nom", "risque__libelle_fr", "modulation__code")
     autocomplete_fields = ("zone", "risque", "modulation")
     gis_widget_kwargs = {"attrs": {"default_zoom": 5}}
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        # Période de validité : dates seules, sans heures.
+        if db_field.name in ("date_debut", "date_fin"):
+            return _DateSeuleField(
+                fin_de_journee=db_field.name == "date_fin",
+                required=False,
+                label=db_field.verbose_name.capitalize(),
+                help_text=db_field.help_text,
+            )
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+    @admin.display(description="Date debut", ordering="date_debut")
+    def debut_display(self, obj):
+        return _jour(obj.date_debut)
+
+    @admin.display(description="Date fin", ordering="date_fin")
+    def fin_display(self, obj):
+        return _jour(obj.date_fin)
 
     @admin.display(description="Zone", ordering="zone__nom")
     def zone_display(self, obj):

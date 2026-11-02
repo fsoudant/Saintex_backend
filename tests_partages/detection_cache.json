@@ -1,0 +1,597 @@
+{
+  "format": 2,
+  "description": "Jeu de test partagé de la détection locale (Saintex, spec §5). Fichier généré par `python manage.py generer_vecteurs_detection` : ne pas modifier à la main.",
+  "regles": [
+    "Coordonnées : [longitude, latitude] en degrés, longitude dans [-180, 180] (ordre GeoJSON).",
+    "Les géométries du cache sont des MultiPolygon GeoJSON, avec trous éventuels (anneaux intérieurs) ; une zone à cheval sur l'antiméridien est fournie en deux parties collées à +180 et -180, à tester telles quelles (test planaire, sans recomposition).",
+    "Une position est DANS une géométrie si elle est à l'intérieur OU sur son bord (« covers ») ; un point dans un trou est hors de la géométrie. Les cas marqués \"bord\": true testent ce comportement et peuvent être sensibles à l'arithmétique flottante : un module natif doit les réussir, ou documenter explicitement l'écart.",
+    "Période de validité : valide_du et valide_au sont des instants ISO 8601, bornes INCLUSES ; une borne nulle signifie « sans limite ».",
+    "Saison : saison.debut et saison.fin sont des mois 1-12, bornes incluses ; si debut > fin, la saison est à cheval sur le nouvel an (ex. 11 à 2 = novembre à février).",
+    "Le mois évalué est celui de l'instant EXPRIMÉ EN UTC : un instant avec décalage horaire est d'abord converti en UTC.",
+    "Une endémie est active si et seulement si : instant dans la période de validité ET mois dans la saison de sa modulation (une endémie sans modulation, \"modulation\": null, ou dont la modulation n'a pas de saison, est active toute l'année) ET position dans sa géométrie.",
+    "Le résultat attendu est la liste des identifiants d'endémies actives, dans l'ordre croissant des identifiants."
+  ],
+  "cache": {
+    "version": "vecteurs-test-1",
+    "genere_le": "2026-01-01T00:00:00+00:00",
+    "format": 2,
+    "rayon_km": null,
+    "risques": {
+      "PAL": {
+        "libelle_fr": "Paludisme",
+        "libelle_en": "Malaria",
+        "couleur": "rgb(255,0,0)",
+        "alerte_fr": "Vous vous trouvez actuellement dans une zone où existe un risque de Paludisme.",
+        "alerte_en": "You are currently in an area where there is a risk of Malaria.",
+        "description_fr": "<p>Maladie parasitaire transmise par la piqûre de moustiques.</p>",
+        "description_en": "<p>Parasitic disease transmitted by mosquito bites.</p>",
+        "recommandation_fr": "<p>Protégez-vous des piqûres de moustiques.</p>",
+        "recommandation_en": "<p>Protect yourself from mosquito bites.</p>"
+      }
+    },
+    "modulations": {
+      "SANS_SAISON": {
+        "fr": "Le risque est majoré si vous séjournez en milieu rural.",
+        "en": "Le risque est majoré si vous séjournez en milieu rural. (en)",
+        "saison": null
+      },
+      "SAISON_ETE": {
+        "fr": "Juin à septembre",
+        "en": "Juin à septembre (en)",
+        "saison": {
+          "debut": 6,
+          "fin": 9
+        }
+      },
+      "SAISON_HIVER": {
+        "fr": "Novembre à février",
+        "en": "Novembre à février (en)",
+        "saison": {
+          "debut": 11,
+          "fin": 2
+        }
+      }
+    },
+    "geometries": {
+      "z1": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                10,
+                10
+              ],
+              [
+                12,
+                10
+              ],
+              [
+                12,
+                12
+              ],
+              [
+                10,
+                12
+              ],
+              [
+                10,
+                10
+              ]
+            ]
+          ]
+        ]
+      },
+      "e2": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                20,
+                10
+              ],
+              [
+                24,
+                10
+              ],
+              [
+                24,
+                14
+              ],
+              [
+                20,
+                14
+              ],
+              [
+                20,
+                10
+              ]
+            ],
+            [
+              [
+                21,
+                11
+              ],
+              [
+                21,
+                13
+              ],
+              [
+                23,
+                13
+              ],
+              [
+                23,
+                11
+              ],
+              [
+                21,
+                11
+              ]
+            ]
+          ]
+        ]
+      },
+      "z3": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                179,
+                -19
+              ],
+              [
+                180,
+                -19
+              ],
+              [
+                180,
+                -17
+              ],
+              [
+                179,
+                -17
+              ],
+              [
+                179,
+                -19
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -180,
+                -19
+              ],
+              [
+                -179,
+                -19
+              ],
+              [
+                -179,
+                -17
+              ],
+              [
+                -180,
+                -17
+              ],
+              [
+                -180,
+                -19
+              ]
+            ]
+          ]
+        ]
+      },
+      "z4": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                30,
+                10
+              ],
+              [
+                34,
+                10
+              ],
+              [
+                34,
+                12
+              ],
+              [
+                32,
+                12
+              ],
+              [
+                32,
+                14
+              ],
+              [
+                30,
+                14
+              ],
+              [
+                30,
+                10
+              ]
+            ]
+          ]
+        ]
+      },
+      "z5": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                40,
+                0
+              ],
+              [
+                41,
+                0
+              ],
+              [
+                41,
+                1
+              ],
+              [
+                40,
+                1
+              ],
+              [
+                40,
+                0
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                45,
+                0
+              ],
+              [
+                46,
+                0
+              ],
+              [
+                46,
+                1
+              ],
+              [
+                45,
+                1
+              ],
+              [
+                45,
+                0
+              ]
+            ]
+          ]
+        ]
+      }
+    },
+    "endemies": [
+      {
+        "id": 1,
+        "zone_id": 1,
+        "zone_nom": "Zone 1",
+        "risque": "PAL",
+        "modulation": null,
+        "geometrie": "z1",
+        "valide_du": null,
+        "valide_au": null
+      },
+      {
+        "id": 2,
+        "zone_id": 2,
+        "zone_nom": "Zone 2",
+        "risque": "PAL",
+        "modulation": "SAISON_ETE",
+        "geometrie": "e2",
+        "valide_du": null,
+        "valide_au": null
+      },
+      {
+        "id": 3,
+        "zone_id": 3,
+        "zone_nom": "Zone 3",
+        "risque": "PAL",
+        "modulation": "SANS_SAISON",
+        "geometrie": "z3",
+        "valide_du": null,
+        "valide_au": null
+      },
+      {
+        "id": 4,
+        "zone_id": 4,
+        "zone_nom": "Zone 4",
+        "risque": "PAL",
+        "modulation": "SAISON_HIVER",
+        "geometrie": "z4",
+        "valide_du": null,
+        "valide_au": null
+      },
+      {
+        "id": 5,
+        "zone_id": 5,
+        "zone_nom": "Zone 5",
+        "risque": "PAL",
+        "modulation": null,
+        "geometrie": "z5",
+        "valide_du": "2026-08-01T00:00:00+00:00",
+        "valide_au": "2026-12-31T23:59:59+00:00"
+      },
+      {
+        "id": 6,
+        "zone_id": 1,
+        "zone_nom": "Zone 1",
+        "risque": "PAL",
+        "modulation": "SAISON_ETE",
+        "geometrie": "z1",
+        "valide_du": null,
+        "valide_au": null
+      }
+    ]
+  },
+  "cas": [
+    {
+      "nom": "z1 : centre, en janvier (une seule endémie, toute l'année)",
+      "lon": 11,
+      "lat": 11,
+      "instant": "2026-01-15T12:00:00+00:00",
+      "attendu": [
+        1
+      ]
+    },
+    {
+      "nom": "z1 : centre, en juillet (deux endémies sur la même zone)",
+      "lon": 11,
+      "lat": 11,
+      "instant": "2026-07-15T12:00:00+00:00",
+      "attendu": [
+        1,
+        6
+      ]
+    },
+    {
+      "nom": "hors de toute zone",
+      "lon": 0,
+      "lat": 0,
+      "instant": "2026-07-15T12:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z1 : sur le bord ouest",
+      "lon": 10,
+      "lat": 11,
+      "instant": "2026-01-15T12:00:00+00:00",
+      "attendu": [
+        1
+      ],
+      "bord": true
+    },
+    {
+      "nom": "z1 : sur un coin",
+      "lon": 12,
+      "lat": 12,
+      "instant": "2026-01-15T12:00:00+00:00",
+      "attendu": [
+        1
+      ],
+      "bord": true
+    },
+    {
+      "nom": "z1 : juste à l'extérieur du bord ouest",
+      "lon": 9.9999,
+      "lat": 11,
+      "instant": "2026-01-15T12:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z2 : dans la couronne, en saison",
+      "lon": 20.5,
+      "lat": 12,
+      "instant": "2026-07-15T12:00:00+00:00",
+      "attendu": [
+        2
+      ]
+    },
+    {
+      "nom": "z2 : dans le trou, en saison",
+      "lon": 22,
+      "lat": 12,
+      "instant": "2026-07-15T12:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z2 : dans la couronne, hors saison",
+      "lon": 20.5,
+      "lat": 12,
+      "instant": "2026-01-15T12:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z3 : antiméridien, partie est",
+      "lon": 179.5,
+      "lat": -18,
+      "instant": "2026-01-15T12:00:00+00:00",
+      "attendu": [
+        3
+      ]
+    },
+    {
+      "nom": "z3 : antiméridien, partie ouest",
+      "lon": -179.5,
+      "lat": -18,
+      "instant": "2026-01-15T12:00:00+00:00",
+      "attendu": [
+        3
+      ]
+    },
+    {
+      "nom": "z3 : juste en dehors de la partie est",
+      "lon": 178,
+      "lat": -18,
+      "instant": "2026-01-15T12:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z4 : branche basse du L, en saison (décembre)",
+      "lon": 33,
+      "lat": 11,
+      "instant": "2026-12-10T12:00:00+00:00",
+      "attendu": [
+        4
+      ]
+    },
+    {
+      "nom": "z4 : encoche du L, en saison",
+      "lon": 33,
+      "lat": 13,
+      "instant": "2026-12-10T12:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z4 : branche haute du L, en saison",
+      "lon": 31,
+      "lat": 13,
+      "instant": "2026-12-10T12:00:00+00:00",
+      "attendu": [
+        4
+      ]
+    },
+    {
+      "nom": "z4 : branche haute du L, hors saison (juillet)",
+      "lon": 31,
+      "lat": 13,
+      "instant": "2026-07-15T12:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z4 : saison à cheval sur le nouvel an (janvier)",
+      "lon": 31,
+      "lat": 13,
+      "instant": "2027-01-20T12:00:00+00:00",
+      "attendu": [
+        4
+      ]
+    },
+    {
+      "nom": "z4 : premier jour de la saison (1er novembre)",
+      "lon": 33,
+      "lat": 11,
+      "instant": "2026-11-01T00:00:00+00:00",
+      "attendu": [
+        4
+      ]
+    },
+    {
+      "nom": "z4 : dernier jour de la saison (fin février)",
+      "lon": 33,
+      "lat": 11,
+      "instant": "2027-02-28T23:59:59+00:00",
+      "attendu": [
+        4
+      ]
+    },
+    {
+      "nom": "z4 : premier jour hors saison (1er mars)",
+      "lon": 33,
+      "lat": 11,
+      "instant": "2027-03-01T00:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z5 : avant le début de validité",
+      "lon": 40.5,
+      "lat": 0.5,
+      "instant": "2026-07-31T23:59:59+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z5 : borne de début incluse",
+      "lon": 40.5,
+      "lat": 0.5,
+      "instant": "2026-08-01T00:00:00+00:00",
+      "attendu": [
+        5
+      ]
+    },
+    {
+      "nom": "z5 : pendant la validité, premier morceau",
+      "lon": 40.5,
+      "lat": 0.5,
+      "instant": "2026-09-01T12:00:00+00:00",
+      "attendu": [
+        5
+      ]
+    },
+    {
+      "nom": "z5 : pendant la validité, second morceau",
+      "lon": 45.5,
+      "lat": 0.5,
+      "instant": "2026-09-01T12:00:00+00:00",
+      "attendu": [
+        5
+      ]
+    },
+    {
+      "nom": "z5 : entre les deux morceaux",
+      "lon": 43,
+      "lat": 0.5,
+      "instant": "2026-09-01T12:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "z5 : borne de fin incluse",
+      "lon": 40.5,
+      "lat": 0.5,
+      "instant": "2026-12-31T23:59:59+00:00",
+      "attendu": [
+        5
+      ]
+    },
+    {
+      "nom": "z5 : après la fin de validité",
+      "lon": 40.5,
+      "lat": 0.5,
+      "instant": "2027-01-01T00:00:00+00:00",
+      "attendu": []
+    },
+    {
+      "nom": "mois évalué en UTC : 31 mai 23h30 à UTC-5 est le 1er juin en UTC (saison d'été active)",
+      "lon": 11,
+      "lat": 11,
+      "instant": "2026-05-31T23:30:00-05:00",
+      "attendu": [
+        1,
+        6
+      ]
+    },
+    {
+      "nom": "mois évalué en UTC : 30 septembre 20h à UTC-5 est le 1er octobre en UTC (saison d'été terminée)",
+      "lon": 11,
+      "lat": 11,
+      "instant": "2026-09-30T20:00:00-05:00",
+      "attendu": [
+        1
+      ]
+    },
+    {
+      "nom": "mois évalué en UTC : 31 octobre 20h à UTC-5 est le 1er novembre en UTC (saison d'hiver commencée)",
+      "lon": 33,
+      "lat": 11,
+      "instant": "2026-10-31T20:00:00-05:00",
+      "attendu": [
+        4
+      ]
+    }
+  ]
+}
