@@ -1,0 +1,83 @@
+﻿code,risque,nb_endemies,periode_debut,periode_fin,mois_cites_dans_texte,plage_detectee_dans_texte,modulation_fr,modulation_en,anomalies
+CHI_1,CHI,77,,,,,,,MODULATION fr VIDE
+CHO_1,CHO,37,,,,,,,MODULATION fr VIDE
+COV-19,CVD,0,,,,,,,MODULATION fr VIDE
+DEN_1,DEN,94,,,,,,,MODULATION fr VIDE
+EAT_0,EAT,0,,,,,,,MODULATION fr VIDE | recommandation en vide
+EAT_1A,EAT,10,,,,,,Zone à faible risque d encéphalite à tiques. Cas sporadiques.,MODULATION fr VIDE | recommandation en vide
+EAT_1B,EAT,4,,,,,,,MODULATION fr VIDE | recommandation en vide
+EAT_2,EAT,5,3,11,,,en dessous de 1500m d altitude,en dessous de 1500m d altitude,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | recommandation en vide
+EAT_OC,EAT,3,3,11,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EAT_OR,EAT,6,3,11,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EAT_RC,EAT,1,3,11,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EBO,EBO,2,,,,,,,MODULATION fr VIDE
+EJ_0,EJ,0,,,,,,,MODULATION fr VIDE
+EJ_1,EJ,17,,,,,,,MODULATION fr VIDE
+EJ_10,EJ,0,4,8,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EJ_100,EJ,43,,,,,,,MODULATION fr VIDE
+EJ_11,EJ,1,7,9,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EJ_2,EJ,2,,,,,,,MODULATION fr VIDE
+EJ_3,EJ,1,2,4,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EJ_4,EJ,8,5,11,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EJ_5,EJ,10,6,10,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EJ_6,EJ,1,7,10,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EJ_7,EJ,0,6,9,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+EJ_8,EJ,0,,,,,,,MODULATION fr VIDE
+EJ_9,EJ,0,10,3,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+FJ_1,FJ,3,,,,,,,MODULATION fr VIDE
+FJ_2,FJ,4,,,,,,,MODULATION fr VIDE
+FJ_3,FJ,3,,,,,en dessous de 2300m d'altitude,under 2300m,
+FJ_4,FJ,1,,,,,,,MODULATION fr VIDE
+FJ_BR,FJ,0,,,,,,,MODULATION fr VIDE
+FJ_CO,FJ,1,,,,,en dessous de 2300m d'altitude,under 2300m,
+FJ_EC,FJ,1,,,,,,,MODULATION fr VIDE
+FJ_EPI,FJ,3,,,,,,,MODULATION fr VIDE
+FJ_NO,FJ,0,,,,,,,MODULATION fr VIDE
+GA_1,GA,18,,,,,,,MODULATION fr VIDE
+HA_1,HA,31,,,,,,,MODULATION fr VIDE
+HB_1,HB,151,,,,,,,MODULATION fr VIDE
+IIM_1,IIM,3,,,,,,,MODULATION fr VIDE
+MRC,MRC,13,,,,,,,MODULATION fr VIDE
+P_NAPUPALU,PAL,1,,,,,,,MODULATION fr VIDE | RECOMMANDATION fr vide
+P_NOPALU,PAL,2,,,,,,,MODULATION fr VIDE | RECOMMANDATION fr vide
+P_NOPALU_2,PAL,1,,,,,,,MODULATION fr VIDE | RECOMMANDATION fr vide
+P_T1_A,PAL,46,,,,,,,MODULATION fr VIDE
+P_T1_AM,PAL,2,,,,,,,MODULATION fr VIDE
+P_T1_AOU,PAL,0,8,11,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+P_T1_MAI,PAL,5,5,10,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+P_T2_A,PAL,1,,,,,,,MODULATION fr VIDE
+P_T2_A_NR,PAL,2,,,,,si vous passez une ou plusieurs soirées ou nuitées en milieu rural,if you spend one or more evenings or nights in a rural environment,
+P_T2_A_R_C,PAL,0,6,10,,,si vous passez une ou plusieurs soirées ou nuitées en milieu rural,if you spend one or more evenings or nights in a rural environment,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?)
+P_T2_A_SR,PAL,15,,,,,uniquement pour les séjours en milieu rural,only for stays in rural environnements,
+P_T3,PAL,2,,,,,,,MODULATION fr VIDE
+P_T3_A,PAL,42,,,,,,,MODULATION fr VIDE
+P_T3_A_7,PAL,0,,,,,pour les séjours de plus de 7 jours,for stays lasting more than 7 days,
+P_T3_A_NR,PAL,9,,,,,si vous passez une ou plusieurs soirées ou nuitées en milieu rural.,if you spend one or more evenings or nights in a rural environment,
+P_T3_A_SR,PAL,25,,,,,en milieu rural,for stays in rural environments,
+P_T3_JUI,PAL,1,7,10,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+P_T3_MAI_2,PAL,2,5,11,,,en dessous de 2000m d'altitude,below 2000 m in altitude,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?)
+P_T3_NOV,PAL,1,11,6,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+P_T3_P,PAL,4,7,8,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+P_T3_P_R,PAL,1,7,8,,,Le risque est majoré si vous passez une ou plusieurs soirées ou nuitées en milieu rural.,if you spend one or more evenings or nights in a rural environment.,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?)
+P_T3_P_RE,PAL,0,,,,,Le risque est majoré si vous séjournez en milieu rural.,if you staying in a rural environment,
+P_T3_SEP,PAL,1,9,1,,,,,période renseignée mais aucun mois cité dans la recommandation (saisie manuelle ?) | MODULATION fr VIDE
+PES_1,PES,1,,,,,,,MODULATION fr VIDE
+PES_POT,PES,1,,,,,,,MODULATION fr VIDE
+POL_1,POL,20,,,,,,,MODULATION fr VIDE | recommandation en vide
+RAG,RAG,119,,,,,,,MODULATION fr VIDE
+TB_PLUS,TB,178,,,,,,,MODULATION fr VIDE
+TYP_1,TYP,1,,,,,,,MODULATION fr VIDE
+TYP_2,TYP,29,,,,,,,MODULATION fr VIDE
+ZIK_1,ZIK,28,,,,,,,MODULATION fr VIDE
+ZIK_2,ZIK,1,,,,,,,MODULATION fr VIDE
+ZIK_CAT_C,ZIK,155,,,,,,,MODULATION fr VIDE | RECOMMANDATION fr vide
+ZIK_CAT_D,ZIK,23,,,,,,,MODULATION fr VIDE | RECOMMANDATION fr vide
+ZIK_CAT_E,ZIK,27,,,,,,,MODULATION fr VIDE
+ZIK_CAT_F,ZIK,43,,,,,,,MODULATION fr VIDE
+ZIK_CAT_G,ZIK,0,,,,,,,MODULATION fr VIDE
+ZIK_CAT1,ZIK,18,,,,,,,MODULATION fr VIDE
+ZIK_CAT2,ZIK,44,,,,,,,MODULATION fr VIDE
+ZIK_CAT3,ZIK,25,,,,,,,MODULATION fr VIDE | RECOMMANDATION fr vide
+ZIK_CAT4,ZIK,5,,,,,,,MODULATION fr VIDE
+ZIK_CAT5,ZIK,17,,,,,,,MODULATION fr VIDE
+ZIK_SPO,ZIK,5,,,,,,,MODULATION fr VIDE
