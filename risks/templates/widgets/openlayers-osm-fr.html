@@ -1,0 +1,13 @@
+{% extends "gis/openlayers-osm.html" %}
+
+{# Même carte que le widget OpenStreetMap de GeoDjango, avec le fond de carte de risks/basemap.py (noms de lieux en français). #}
+{% block base_layer %}
+var base_layer = new ol.layer.Tile({
+    source: new ol.source.OSM({
+        url: "{{ tuiles_url|escapejs }}",
+        attributions: "{{ tuiles_attribution|escapejs }}",
+        maxZoom: {{ tuiles_max_zoom|default:19 }},
+        crossOrigin: null
+    })
+});
+{% endblock %}

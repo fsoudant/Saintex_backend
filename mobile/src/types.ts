@@ -59,18 +59,32 @@ export interface GeometrieCache {
   coordinates: number[][][][];
 }
 
-export interface ConduiteCache {
-  risque: { code: string; libelle_fr: string; libelle_en: string; couleur: string | null };
-  saison: { debut: number; fin: number } | null; // mois 1-12, peut chevaucher le nouvel an
-  recommandation_fr: string; // HTML assaini
+// Format 2 du cache (risks/cache.py, octobre 2026) : une recommandation UNIQUE
+// par risque, et une phrase de modulation facultative par endémie.
+export interface RisqueCache {
+  libelle_fr: string;
+  libelle_en: string;
+  couleur: string | null;
+  alerte_fr: string; // phrase d'alerte toute faite (élision incluse)
+  alerte_en: string;
+  description_fr: string; // HTML assaini
+  description_en: string;
+  recommandation_fr: string; // HTML assaini, peut être vide
   recommandation_en: string;
+}
+
+export interface ModulationCache {
+  fr: string;
+  en: string;
+  saison: { debut: number; fin: number } | null; // mois 1-12, peut chevaucher le nouvel an
 }
 
 export interface EndemieCache {
   id: number;
   zone_id: number;
   zone_nom: string;
-  conduite: string; // clé de `conduites`
+  risque: string; // clé de `risques`
+  modulation: string | null; // clé de `modulations` ; null = sans précision, toute l'année
   geometrie: string; // clé de `geometries` (géométrie effective : zone moins zone exclue)
   valide_du: string | null;
   valide_au: string | null;
@@ -79,8 +93,10 @@ export interface EndemieCache {
 export interface CacheMondial {
   version: string;
   genere_le: string;
+  format: 2;
   rayon_km: number | null; // null = monde entier
-  conduites: Record<string, ConduiteCache>;
+  risques: Record<string, RisqueCache>;
+  modulations: Record<string, ModulationCache>;
   geometries: Record<string, GeometrieCache>;
   endemies: EndemieCache[];
 }

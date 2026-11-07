@@ -144,6 +144,18 @@
 
   </div>
 
+  <!-- PROTOTYPE d'essai du module natif : saisie manuelle du jeton API (copié depuis
+       l'admin, fiche Utilisateur). À RETIRER quand l'inscription existera. -->
+  <details id="debug-tools" class="note">
+    <summary>Outils d'essai</summary>
+    <div class="field">
+      <label for="debug-token">Jeton API</label>
+      <input type="text" id="debug-token" autocapitalize="off" autocorrect="off" spellcheck="false" />
+    </div>
+    <button id="btn-debug-token">Enregistrer le jeton</button>
+    <p id="debug-token-status"></p>
+  </details>
+
   <script type="module" src="dist/main.js"></script>
 </body>
 </html>

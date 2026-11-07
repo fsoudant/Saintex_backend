@@ -1,0 +1,67 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Accueil</a>
+  &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  &rsaquo; <a href="{% url 'admin:risks_zone_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+  &rsaquo; <a href="{% url 'admin:risks_zone_change' original.pk %}">{{ original.nom }}</a>
+  &rsaquo; Importer un GeoJSON
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <p>
+    Remplace la géométrie de la zone <strong>{{ original.nom }}</strong> par celle d'un GeoJSON
+    (<code>FeatureCollection</code>, <code>Feature</code>, <code>Polygon</code> ou <code>MultiPolygon</code> ;
+    plusieurs polygones sont réunis en un seul <code>MultiPolygon</code>).
+    Coordonnées attendues au format <code>[longitude, latitude]</code>, comme dans geojson.io.
+    Les coordonnées sont arrondies à 4 décimales (≈ 11 m) et une géométrie invalide
+    (auto-intersection) est corrigée automatiquement.
+  </p>
+  {% if a_une_geometrie %}
+  <p>
+    <strong>Attention :</strong> la géométrie actuelle sera remplacée.
+    <a href="{% url 'admin:risks_zone_export_geojson' original.pk %}">Exportez-la d'abord</a>
+    si vous voulez pouvoir y revenir.
+  </p>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <p class="errornote">{{ form.non_field_errors|join:" " }}</p>
+    {% endif %}
+    <fieldset class="module aligned">
+      <div class="form-row">
+        {{ form.fichier.errors }}
+        <div>
+          <label for="{{ form.fichier.id_for_label }}">{{ form.fichier.label }} :</label>
+          {{ form.fichier }}
+        </div>
+      </div>
+      <div class="form-row">
+        {{ form.texte.errors }}
+        <div>
+          <label for="{{ form.texte.id_for_label }}">{{ form.texte.label }} :</label>
+          {{ form.texte }}
+        </div>
+      </div>
+      <div class="form-row">
+        {{ form.tolerance.errors }}
+        <div>
+          <label for="{{ form.tolerance.id_for_label }}">{{ form.tolerance.label }} :</label>
+          {{ form.tolerance }}
+          <div class="help">{{ form.tolerance.help_text }}</div>
+        </div>
+      </div>
+    </fieldset>
+    <div class="submit-row">
+      <input type="submit" class="default" value="Importer">
+      <a href="{% url 'admin:risks_zone_change' original.pk %}" class="closelink">Annuler</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

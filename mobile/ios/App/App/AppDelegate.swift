@@ -7,7 +7,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Module natif Saintex (cf. Native/SaintexService.swift) : doit démarrer ici,
+        // y compris quand le système relance l'appli en arrière-plan à la suite
+        // d'un changement de position significatif (launchOptions[.location]).
+        SaintexService.shared.demarrer()
         return true
     }
 

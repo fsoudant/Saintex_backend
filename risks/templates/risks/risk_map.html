@@ -34,8 +34,9 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const map = L.map('map').setView([15, 20], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
+    L.tileLayer('{{ tuiles_url|escapejs }}', {
+      attribution: '{{ tuiles_attribution|escapejs }}',
+      maxZoom: {{ tuiles_max_zoom|default:19 }}
     }).addTo(map);
 
     const geojsonUrl = "{% url 'risk_map_geojson' %}{% if zone %}?zone={{ zone.pk }}{% elif risque %}?risque={{ risque.pk }}{% endif %}";

@@ -4,6 +4,7 @@ import { initOnboardingScreen } from './screens/onboarding';
 import { initTunnelScreen } from './screens/tunnel';
 import { initHomeScreen, renderBalanceCard } from './screens/home';
 import { initPreferencesScreen, loadPreferencesIntoForm } from './screens/preferences';
+import { initDebugTools } from './debug';
 
 // Point d'entrée de la coque Capacitor. Ne fait QUE de l'UI : le vrai
 // travail (polling GPS 6h, démarrage au boot, notification locale hors
@@ -14,6 +15,7 @@ async function bootstrap(): Promise<void> {
   initTunnelScreen();
   initHomeScreen();
   initPreferencesScreen();
+  initDebugTools();
 
   const alreadyOnboarded = await isOnboardingDone();
   if (alreadyOnboarded) {

@@ -1,21 +1,28 @@
 import datetime
+import json
 
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.contrib.admin.utils import unquote
 from django.contrib.admin.widgets import AdminDateWidget
 from django.contrib.gis.admin import GISModelAdmin
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.http import Http404, HttpResponse
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.text import Truncator
+from django.utils.text import Truncator, slugify
 
 import shapely.wkt
 
+from . import geojson_io
 from .geo_utils import _shift_west_parts, touches_antimeridian, zone_center_lonlat
 from .models import MOIS_CHOICES, Endemie, Modulation, Pays, Risque, Zone
 from .richtext import html_to_text
-from .widgets import RGBColorField, RichTextWidget
+from .widgets import OSMFrWidget, RGBColorField, RichTextWidget
 
 _MOIS_LABELS = dict(MOIS_CHOICES)
 
@@ -150,9 +157,44 @@ def _antimeridian_preview_svg(geom, width=360, height=220, pad_ratio=0.12):
 
 @admin.register(Pays)
 class PaysAdmin(GISModelAdmin):
+    gis_widget = OSMFrWidget
     list_display = ("libelle_fr", "code", "source_id")
     search_fields = ("libelle_fr", "libelle_en", "code")
     gis_widget_kwargs = {"attrs": {"default_zoom": 3}}
+
+
+class ImportGeoJSONForm(forms.Form):
+    """Formulaire de l'import GeoJSON d'une Zone : un fichier OU du texte
+    collé, plus une simplification facultative."""
+
+    fichier = forms.FileField(required=False, label="Fichier GeoJSON")
+    texte = forms.CharField(
+        required=False,
+        label="ou JSON collé ici",
+        widget=forms.Textarea(attrs={"rows": 12, "style": "width: 95%; font-family: monospace;"}),
+    )
+    tolerance = forms.FloatField(
+        required=False,
+        min_value=0,
+        initial=0,
+        label="Simplification (degrés)",
+        help_text="0 = aucune. Saisir avec un point : 0.001 ≈ 100 m ; 0.01 ≈ 1 km. Allège les contours trop détaillés.",
+    )
+
+    def clean(self):
+        donnees = super().clean()
+        fichier = donnees.get("fichier")
+        texte = (donnees.get("texte") or "").strip()
+        if fichier:
+            try:
+                texte = fichier.read().decode("utf-8-sig")
+            except UnicodeDecodeError:
+                raise ValidationError("Le fichier n'est pas encodé en UTF-8.")
+        if not texte.strip():
+            raise ValidationError("Choisis un fichier ou colle du JSON.")
+        donnees["contenu"] = texte
+        donnees["tolerance"] = donnees.get("tolerance") or 0.0
+        return donnees
 
 
 @admin.register(Zone)
@@ -183,6 +225,81 @@ class ZoneAdmin(admin.ModelAdmin):
     @admin.display(boolean=True, description="Géométrie", ordering="geom")
     def has_geometry(self, obj):
         return obj.geom is not None
+
+    # --- Import / export GeoJSON (boutons de la fiche, cf. change_form.html) ---
+
+    def get_urls(self):
+        # Avant les URL par défaut : "<id>/<n'importe quoi>/" y est capté.
+        propres = [
+            path(
+                "<path:object_id>/export-geojson/",
+                self.admin_site.admin_view(self.export_geojson_view),
+                name="risks_zone_export_geojson",
+            ),
+            path(
+                "<path:object_id>/import-geojson/",
+                self.admin_site.admin_view(self.import_geojson_view),
+                name="risks_zone_import_geojson",
+            ),
+        ]
+        return propres + super().get_urls()
+
+    def export_geojson_view(self, request, object_id):
+        zone = self.get_object(request, unquote(object_id))
+        if zone is None:
+            raise Http404
+        if not self.has_view_permission(request, zone):
+            raise PermissionDenied
+        if zone.geom is None:
+            messages.warning(request, "Cette zone n'a pas de géométrie à exporter.")
+            return redirect(reverse("admin:risks_zone_change", args=[zone.pk]))
+        contenu = json.dumps(geojson_io.zone_vers_geojson(zone), ensure_ascii=False, separators=(",", ":"))
+        reponse = HttpResponse(contenu, content_type="application/geo+json; charset=utf-8")
+        nom_fichier = f"zone-{zone.source_id}-{slugify(zone.nom) or 'zone'}.geojson"
+        reponse["Content-Disposition"] = f'attachment; filename="{nom_fichier}"'
+        return reponse
+
+    def import_geojson_view(self, request, object_id):
+        zone = self.get_object(request, unquote(object_id))
+        if zone is None:
+            raise Http404
+        if not self.has_change_permission(request, zone):
+            raise PermissionDenied
+
+        if request.method == "POST":
+            formulaire = ImportGeoJSONForm(request.POST, request.FILES)
+            if formulaire.is_valid():
+                try:
+                    geometrie, resume = geojson_io.geojson_vers_multipolygon(
+                        formulaire.cleaned_data["contenu"],
+                        tolerance=formulaire.cleaned_data["tolerance"],
+                    )
+                except geojson_io.GeoJSONInvalide as erreur:
+                    formulaire.add_error(None, str(erreur))
+                else:
+                    zone.geom = geometrie
+                    zone.save(update_fields=["geom"])
+                    detail = (
+                        f"{resume['polygones']} polygone(s), {resume['points']} points, "
+                        f"{geojson_io.DECIMALES} décimales"
+                    )
+                    self.log_change(request, zone, f"Géométrie remplacée par import GeoJSON ({detail}).")
+                    messages.success(request, f"Géométrie importée : {detail}.")
+                    for avertissement in resume["avertissements"]:
+                        messages.warning(request, avertissement)
+                    return redirect(reverse("admin:risks_zone_change", args=[zone.pk]))
+        else:
+            formulaire = ImportGeoJSONForm()
+
+        contexte = {
+            **self.admin_site.each_context(request),
+            "opts": self.opts,
+            "original": zone,
+            "form": formulaire,
+            "title": f"Importer un GeoJSON — {zone.nom}",
+            "a_une_geometrie": zone.geom is not None,
+        }
+        return TemplateResponse(request, "admin/risks/zone/import_geojson.html", contexte)
 
     @admin.display(description="Pays", ordering="pays__libelle_fr")
     def pays_display(self, obj):
@@ -253,6 +370,7 @@ class ModulationAdmin(admin.ModelAdmin):
 
 @admin.register(Endemie)
 class EndemieAdmin(GISModelAdmin):
+    gis_widget = OSMFrWidget
     list_display = ("zone_display", "risque", "modulation", "debut_display", "fin_display", "has_exclusion")
     list_filter = (("risque", _RisqueAlphaFilter),)
     list_select_related = ("zone", "risque", "modulation")

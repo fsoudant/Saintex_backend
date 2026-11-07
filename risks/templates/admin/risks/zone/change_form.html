@@ -5,6 +5,14 @@
   <li>
     <a href="{% url 'risk_map' %}?zone={{ original.pk }}" class="button">🗺️ Voir la carte de la zone</a>
   </li>
+  {% if original.geom %}
+  <li>
+    <a href="{% url 'admin:risks_zone_export_geojson' original.pk %}" class="button">⬇️ Exporter en GeoJSON</a>
+  </li>
+  {% endif %}
+  <li>
+    <a href="{% url 'admin:risks_zone_import_geojson' original.pk %}" class="button">⬆️ Importer un GeoJSON</a>
+  </li>
   {% endif %}
   {{ block.super }}
 {% endblock %}

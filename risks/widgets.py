@@ -9,7 +9,9 @@ saisir dans l'admin change.
 """
 
 from django import forms
+from django.contrib.gis.forms import OSMWidget
 
+from . import basemap
 from .colors import parse_rgb
 from .richtext import sanitize_html
 
@@ -95,4 +97,17 @@ class RichTextWidget(forms.Textarea):
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
         context["widget"]["value_html"] = sanitize_html(value if isinstance(value, str) else "")
+        return context
+
+
+class OSMFrWidget(OSMWidget):
+    """Widget carte de l'admin GeoDjango (OpenLayers) avec le fond de carte
+    choisi dans risks.basemap (noms de lieux en français), à la place du fond
+    OpenStreetMap standard (noms dans la langue locale)."""
+
+    template_name = "widgets/openlayers-osm-fr.html"
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context.update(basemap.contexte_openlayers())
         return context

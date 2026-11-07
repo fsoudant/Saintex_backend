@@ -43,6 +43,24 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Saintex utilise votre position pour vous avertir lorsque vous entrez dans une zone présentant un risque infectieux.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Pour vous alerter automatiquement, même lorsque l'application est fermée, Saintex a besoin d'accéder à votre position en permanence. Votre position est analysée sur votre téléphone et n'est pas envoyée au serveur.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>fetch</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.saintex.app.refresh</string>
+	</array>
+	<!-- PROTOTYPE : journal d'essai lisible depuis l'app Fichiers. À RETIRER avant publication. -->
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 </dict>

@@ -4,6 +4,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 
+from . import basemap
 from .colors import average_rgb, parse_rgb, to_css
 from .geo_utils import recompose_antimeridian
 from .models import Risque, Zone
@@ -147,5 +148,5 @@ def risk_map_view(request):
     return render(
         request,
         "risks/risk_map.html",
-        {"risque": risque, "zone": zone},
+        {"risque": risque, "zone": zone, **basemap.contexte_leaflet()},
     )
