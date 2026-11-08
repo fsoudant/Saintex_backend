@@ -134,6 +134,47 @@ une procédure automatique pour l'instant. Voir aussi `restore_list.txt` /
 `saintex_neon_export.dump` : à garder hors du dépôt Git (déjà dans
 `.gitignore`).
 
+## Cas D — Planifier le watchdog « appli silencieuse » (une seule fois)
+
+La relance « appli silencieuse » (spec §8 : 7 h sans contact, puis toutes les 6 h)
+est la commande `watchdog_relance_silence`. Sur Render, c'est un Cron Job ; sur ce
+Mac, rien ne la lance tant qu'on n'a pas installé le LaunchDaemon ci-dessous
+(sans lui, aucune relance ne part, quelle que soit la durée du silence).
+
+Le fichier de référence est `deploy/com.saintex.watchdog.plist` (toutes les
+15 minutes). **Avant de l'installer**, compare ses chemins et son `UserName` avec
+`/Library/LaunchDaemons/com.saintex.gunicorn.plist` et ajuste-les si besoin.
+
+1. Tester la commande à la main (venv actif, dans le dépôt) :
+
+```bash
+python manage.py watchdog_relance_silence
+```
+
+   « Aucun utilisateur en silence à relancer. » ou « N utilisateur(s) relancé(s) »
+   : dans les deux cas elle fonctionne. Les envois étant simulés tant que les
+   prestataires SMS/email ne sont pas choisis, les relances apparaissent
+   uniquement dans le journal des notifications de l'admin.
+
+2. Installer et démarrer le LaunchDaemon :
+
+```bash
+sudo cp deploy/com.saintex.watchdog.plist /Library/LaunchDaemons/
+sudo chown root:wheel /Library/LaunchDaemons/com.saintex.watchdog.plist
+sudo chmod 644 /Library/LaunchDaemons/com.saintex.watchdog.plist
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.saintex.watchdog.plist
+```
+
+3. Vérifier :
+
+```bash
+sudo launchctl print system/com.saintex.watchdog | grep -E "state|last exit|runs"
+tail -20 logs/watchdog.log logs/watchdog-error.log
+```
+
+   Après modification du `.plist` : `sudo launchctl bootout system/com.saintex.watchdog`
+   puis de nouveau la commande `bootstrap`.
+
 ## Aide-mémoire — commandes de vérification
 
 ```bash
@@ -141,6 +182,7 @@ une procédure automatique pour l'instant. Voir aussi `restore_list.txt` /
 sudo launchctl print system/com.saintex.apache | grep state
 sudo launchctl print system/com.saintex.gunicorn | grep state
 sudo launchctl print system/com.saintex.certbot-renew | grep state
+sudo launchctl print system/com.saintex.watchdog | grep state
 
 # Ports en écoute
 sudo lsof -iTCP -sTCP:LISTEN -P | grep httpd

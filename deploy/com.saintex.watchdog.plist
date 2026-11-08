@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Watchdog « appli silencieuse » (spec §8) sur le Mac de démo : lance
+  `manage.py watchdog_relance_silence` toutes les 15 minutes.
+
+  Sur Render, la même commande est un Cron Job ; ici, launchd joue ce rôle.
+  La commande est idempotente (cf. clients/watchdog.py) : un lancement de
+  trop ne duplique aucun envoi.
+
+  À installer : voir DEPLOY.md, « Cas D ». Les chemins ci-dessous supposent
+  que le dépôt est dans /Users/francois/Documents/GitHub/Saintex_backend sur
+  le Mac de démo (utilisateur « francois », comme Gunicorn) : à comparer avec
+  /Library/LaunchDaemons/com.saintex.gunicorn.plist et à ajuster au besoin.
+  La configuration (base, clés) est lue dans le .env du dépôt par
+  config/settings.py : pas de variable d'environnement à dupliquer ici.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.saintex.watchdog</string>
+
+    <key>UserName</key>
+    <string>francois</string>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/francois/Documents/GitHub/Saintex_backend</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/francois/Documents/GitHub/Saintex_backend/.venv/bin/python</string>
+        <string>manage.py</string>
+        <string>watchdog_relance_silence</string>
+    </array>
+
+    <!-- Toutes les 15 minutes (900 s). Pas de RunAtLoad : inutile au démarrage. -->
+    <key>StartInterval</key>
+    <integer>900</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/francois/Documents/GitHub/Saintex_backend/logs/watchdog.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/francois/Documents/GitHub/Saintex_backend/logs/watchdog-error.log</string>
+</dict>
+</plist>

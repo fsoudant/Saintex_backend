@@ -1,0 +1,35 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+{# La carte « Zone exclue » (widget OpenLayers) est facultative : on ne l'affiche que si l'endémie a déjà une zone exclue (ou une erreur sur ce champ) ; sinon un bouton la révèle. #}
+document.addEventListener("DOMContentLoaded", function () {
+  var ligne = document.querySelector(".form-row.field-zone_exclue");
+  var champ = document.getElementById("id_zone_exclue");
+  if (!ligne || !champ) return;
+
+  var aUneExclusion = champ.value.trim() !== "";
+  var enErreur = ligne.classList.contains("errors") || ligne.querySelector(".errorlist") !== null;
+  if (aUneExclusion || enErreur) return;
+
+  var barre = document.createElement("div");
+  barre.className = "form-row";
+  var bouton = document.createElement("button");
+  bouton.type = "button";
+  bouton.className = "button";
+  bouton.textContent = "➕ Ajouter une zone exclue (facultatif)";
+  barre.appendChild(bouton);
+
+  ligne.style.display = "none";
+  ligne.parentNode.insertBefore(barre, ligne);
+
+  bouton.addEventListener("click", function () {
+    barre.style.display = "none";
+    ligne.style.display = "";
+    // La carte a été créée pendant qu'elle était visible, mais on force un recalcul de sa taille.
+    window.dispatchEvent(new Event("resize"));
+  });
+});
+</script>
+{% endblock %}
