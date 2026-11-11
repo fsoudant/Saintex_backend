@@ -1,29 +1,106 @@
 """
 Vues API voyageurs (cf. saintex-spec-technique.md §4 et §5).
 
-Couvre le contact du téléphone avec le serveur (cache, rapports d'alerte,
-état de santé de l'appli) et la lecture/mise à jour des préférences et du
-contrat. L'inscription (création du compte Utilisateur et remise du jeton API
-lors de l'onboarding) n'est volontairement pas traitée ici : elle est liée au
-consentement RGPD explicite (§7), dont le parcours exact reste à définir avant
-de coder l'endpoint correspondant.
+Couvre l'inscription (création du compte et remise du jeton API, ou code de
+vérification par email pour un compte existant), le contact du téléphone avec
+le serveur (cache, rapports d'alerte, état de santé de l'appli) et la
+lecture/mise à jour des préférences et du contrat.
 """
 
+import logging
+
 from django.utils import timezone
-from rest_framework import permissions
+from rest_framework import permissions, status
+from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from risks.cache import cache_mondial_courant
 
+from .inscription import EnvoiCodeEchoue, inscrire_ou_recuperer, masquer_email, verifier_code
 from .models import PreferenceChangeLog
 from .notifications import verifier_protection_appli
 from .rapports import enregistrer_rapports
 from .serializers import (
     CacheRequestSerializer,
+    InscriptionSerializer,
     UtilisateurContratSerializer,
     UtilisateurPreferencesSerializer,
+    VerificationCodeSerializer,
 )
+from .throttles import InscriptionThrottle, VerificationThrottle
+
+logger = logging.getLogger(__name__)
+
+
+class EnvoiCodeImpossible(APIException):
+    status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    default_detail = "Impossible d'envoyer le code de vérification pour le moment. Réessayez dans quelques minutes."
+    default_code = "envoi_code_impossible"
+
+
+class InscriptionView(APIView):
+    """POST /api/inscription/ — premier lancement : crée le compte du voyageur et
+    lui remet son jeton API (cf. clients.inscription).
+
+    - Aucun compte ne correspond à l'email ni au téléphone : 201 avec
+      `{"api_token": ...}`. Le consentement RGPD est obligatoire (`consent: true`)
+      et horodaté côté serveur.
+    - Un compte existe déjà : 202 avec `{"verification_requise": true,
+      "reference": ..., "email_masque": ...}`. Un code à six chiffres est envoyé à
+      l'email du compte ; il s'échange contre un nouveau jeton via
+      POST /api/inscription/verifier/. Les préférences saisies ne modifient pas le
+      compte existant.
+
+    Sans authentification (il n'y a pas encore de jeton) ; limité par adresse IP.
+    """
+
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
+    throttle_classes = [InscriptionThrottle]
+
+    def post(self, request):
+        serializer = InscriptionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        maintenant = timezone.now()
+        try:
+            utilisateur, code = inscrire_ou_recuperer(serializer.validated_data, maintenant)
+        except EnvoiCodeEchoue:
+            raise EnvoiCodeImpossible()
+
+        if code is None:
+            return Response({"api_token": utilisateur.api_token}, status=status.HTTP_201_CREATED)
+        return Response(
+            {
+                "verification_requise": True,
+                "reference": str(code.reference),
+                "email_masque": masquer_email(utilisateur.email),
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
+
+class InscriptionVerifierView(APIView):
+    """POST /api/inscription/verifier/ — échange le code reçu par email (avec la
+    `reference` de l'inscription) contre un NOUVEAU jeton API ; l'ancien est
+    révoqué. Tout échec (code faux, périmé, épuisé) renvoie la même erreur 400.
+    """
+
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
+    throttle_classes = [VerificationThrottle]
+
+    def post(self, request):
+        serializer = VerificationCodeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        utilisateur = verifier_code(
+            serializer.validated_data["reference"], serializer.validated_data["code"], timezone.now()
+        )
+        if utilisateur is None:
+            raise ValidationError({"code": ["Code incorrect ou expiré."]})
+        return Response({"api_token": utilisateur.api_token})
 
 
 class CacheView(APIView):

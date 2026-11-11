@@ -159,4 +159,30 @@ REST_FRAMEWORK = {
     # comptes staff Django (cf. clients.authentication) ; ceux-ci continuent
     # de passer par la session admin classique, hors DRF.
     "DEFAULT_AUTHENTICATION_CLASSES": ["clients.authentication.UtilisateurTokenAuthentication"],
+    # Endpoints publics (inscription, vérification du code) : limités par adresse IP
+    # (cf. clients.throttles). NUM_PROXIES = nombre de proxys inversés devant
+    # Django (1 : Apache sur le Mac de démo, ou le routeur de Render) ; sans lui,
+    # DRF ferait confiance à un X-Forwarded-For fourni par le client, et la limite
+    # serait contournable en le changeant à chaque requête.
+    "DEFAULT_THROTTLE_RATES": {
+        "inscription": os.environ.get("DJANGO_THROTTLE_INSCRIPTION", "20/hour"),
+        "verification": os.environ.get("DJANGO_THROTTLE_VERIFICATION", "20/hour"),
+    },
+    "NUM_PROXIES": int(os.environ.get("DJANGO_NUM_PROXIES", "1")),
 }
+
+# --- Email (code de vérification de l'inscription, cf. clients.inscription) -------
+# Par défaut : le message est écrit dans la console du serveur (donc dans
+# logs/gunicorn.log), sans rien envoyer — pratique en développement et pour un
+# pilote fermé. Pour de vrais envois, définir DJANGO_EMAIL_BACKEND
+# (django.core.mail.backends.smtp.EmailBackend) et les variables DJANGO_EMAIL_*
+# (cf. .env.example). Sous `manage.py test`, Django remplace de toute façon le
+# backend par un stockage en mémoire.
+EMAIL_BACKEND = os.environ.get("DJANGO_EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = os.environ.get("DJANGO_EMAIL_HOST", "localhost")
+EMAIL_PORT = int(os.environ.get("DJANGO_EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.environ.get("DJANGO_EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("DJANGO_EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.environ.get("DJANGO_EMAIL_USE_TLS", "true").lower() == "true"
+EMAIL_USE_SSL = os.environ.get("DJANGO_EMAIL_USE_SSL", "false").lower() == "true"
+DEFAULT_FROM_EMAIL = os.environ.get("DJANGO_DEFAULT_FROM_EMAIL", "Saintex <noreply@saintex.myddns.me>")

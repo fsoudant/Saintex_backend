@@ -64,6 +64,14 @@ Point d'attention pour la **performance** : le cache réel est mondial (environ
 rectangle englobant de chaque géométrie (calculé une fois au chargement du
 cache) pour ne pas tester toutes les zones à chaque mise à jour de position.
 
+## Module Swift (iOS)
+
+`DetectionSelfTest.swift` (build Debug uniquement) rejoue tous les cas au
+démarrage de l'app et écrit le verdict dans le journal « Auto-test détection :
+N/N cas OK ». Il lit le fichier embarqué par `npm run sync:dev` (dans `mobile/`),
+qui le copie dans `www/dev/` ; le `npm run sync` normal l'écarte du build de
+production.
+
 ## Régénérer / vérifier
 
 ```

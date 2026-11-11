@@ -1,13 +1,14 @@
-export type ScreenId = 'onboarding' | 'tunnel' | 'home' | 'preferences';
+export type ScreenId = 'onboarding' | 'tunnel' | 'verification' | 'home' | 'preferences';
 
 const SCREEN_ELEMENT_IDS: Record<ScreenId, string> = {
   onboarding: 'screen-onboarding',
   tunnel: 'screen-tunnel',
+  verification: 'screen-verification',
   home: 'screen-home',
   preferences: 'screen-preferences',
 };
 
-// Volontairement minimaliste : quatre écrans fixes, pas d'historique de
+// Volontairement minimaliste : cinq écrans fixes, pas d'historique de
 // navigation ni de paramètres d'URL. La coque UI reste fine (spec §2/§3),
 // pas besoin d'un routeur complet pour ça.
 export function showScreen(screen: ScreenId): void {

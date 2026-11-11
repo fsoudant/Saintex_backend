@@ -11,6 +11,7 @@ opaque), sans mot de passe ni notion de session web.
 
 import calendar
 import secrets
+import uuid
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
@@ -495,3 +496,40 @@ class AlertReport(models.Model):
         """Délai entre l'affichage (horloge du téléphone) et la réception par le
         serveur ; jamais négatif (horloge du téléphone en avance)."""
         return max(self.recue_le - self.affichee_le, timedelta(0))
+
+
+class CodeVerification(models.Model):
+    """Code à six chiffres, à usage unique, envoyé par email pour redonner l'accès
+    à un compte EXISTANT (réinscription depuis un nouveau téléphone, après une
+    réinstallation) : sans lui, quiconque connaît l'email ou le téléphone d'un
+    voyageur pourrait s'emparer de son compte. Le code n'est jamais stocké en
+    clair (cf. clients.inscription) ; le téléphone qui l'a demandé ne connaît que
+    la `reference`, un identifiant opaque.
+    """
+
+    reference = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+        help_text="Identifiant opaque remis au téléphone qui a demandé le code.",
+    )
+    utilisateur = models.ForeignKey(
+        Utilisateur, on_delete=models.CASCADE, related_name="codes_verification"
+    )
+    code_hash = models.CharField(max_length=64, help_text="Empreinte du code (HMAC), jamais le code lui-même.")
+    cree_le = models.DateTimeField(auto_now_add=True)
+    expire_le = models.DateTimeField()
+    tentatives = models.PositiveSmallIntegerField(default=0)
+    utilise_le = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Renseigné dès que le code a servi, ou qu'un code plus récent l'a remplacé.",
+    )
+
+    class Meta:
+        ordering = ["-cree_le"]
+        verbose_name = "Code de vérification"
+        verbose_name_plural = "Codes de vérification"
+
+    def __str__(self):
+        return f"{self.utilisateur.email} — code du {self.cree_le:%Y-%m-%d %H:%M}"

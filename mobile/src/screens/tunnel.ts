@@ -1,81 +1,90 @@
-import { markOnboardingDone } from '../storage';
+import { inscrire } from '../api';
+import { aujourdhuiISO } from '../dates';
+import { messageErreurInscription, terminerInscription } from '../parcours';
+import { consentementEstDonne } from '../session';
 import { showScreen } from '../router';
-import type { Country, OnboardingPayload, ReminderDelay } from '../types';
+import { ouvrirVerification } from './verification';
+import type { InscriptionPayload, ReminderDelay } from '../types';
 
-// TODO: remplacer par un appel à /api/pays/ dès que cet endpoint existe
-// côté backend (cf. api.ts, fetchAvailableCountries). Liste volontairement
-// courte et arbitraire pour permettre de tester l'écran en attendant.
-const PLACEHOLDER_COUNTRIES: Country[] = [
-  { code: 'TH', name: 'Thaïlande' },
-  { code: 'KE', name: 'Kenya' },
-  { code: 'BR', name: 'Brésil' },
-  { code: 'IN', name: 'Inde' },
-  { code: 'ID', name: 'Indonésie' },
-  { code: 'PE', name: 'Pérou' },
-];
+// Paiement (spec §6, « Stratégie de paiement » : lien externe plutôt qu'IAP natif pour
+// limiter les commissions). Pas encore de page de paiement : pendant la phase pilote,
+// l'inscription suffit. À brancher ici (ouvrir le lien avant de terminer le parcours)
+// quand la page Stripe existera.
+const URL_PAIEMENT: string | null = null;
 
-// URL de paiement externe (spec §6, "Stratégie de paiement" : lien externe
-// plutôt qu'IAP natif pour limiter les commissions). Placeholder — à
-// remplacer par la vraie page de paiement Stripe une fois créée.
-const PLACEHOLDER_PAYMENT_URL = 'https://pay.saintex.example/checkout';
+const CHAMPS_EN_ERREUR = ['email', 'phone', 'contract_start_date', 'contract_duration', 'consent'];
 
 export function initTunnelScreen(): void {
-  const countryList = document.getElementById('country-list');
   const continueBtn = document.getElementById('btn-tunnel-continue') as HTMLButtonElement | null;
   const emailInput = document.getElementById('user-email') as HTMLInputElement | null;
   const phoneInput = document.getElementById('user-phone') as HTMLInputElement | null;
   const durationSelect = document.getElementById('contract-duration') as HTMLSelectElement | null;
+  const startInput = document.getElementById('contract-start') as HTMLInputElement | null;
   const reminderSelect = document.getElementById('reminder-delay') as HTMLSelectElement | null;
   const emailToggle = document.getElementById('pref-email') as HTMLInputElement | null;
   const pushToggle = document.getElementById('pref-push') as HTMLInputElement | null;
+  const status = document.getElementById('tunnel-status');
 
-  if (!countryList || !continueBtn || !emailInput || !phoneInput || !durationSelect || !reminderSelect) {
+  if (!continueBtn || !emailInput || !phoneInput || !durationSelect || !startInput || !reminderSelect) {
     return;
   }
 
-  for (const country of PLACEHOLDER_COUNTRIES) {
-    const label = document.createElement('label');
-    label.className = 'consent-row';
-    label.innerHTML = `<input type="checkbox" value="${country.code}" /><span>${country.name}</span>`;
-    countryList.appendChild(label);
-  }
+  // Un voyage se prépare à l'avance : la date de départ est choisie ici (par
+  // défaut aujourd'hui) et le contrat démarre ce jour-là (spec §6). Le serveur fait
+  // foi sur les bornes (pas dans le passé, horizon maximal) : on ne duplique pas
+  // l'horizon ici, on affiche son message s'il refuse la date.
+  startInput.min = aujourdhuiISO();
+  startInput.value = aujourdhuiISO();
 
   const validate = () => {
-    const anyCountryChecked = countryList.querySelectorAll('input:checked').length > 0;
     const emailValid = emailInput.value.includes('@');
     const phoneValid = phoneInput.value.trim().length >= 6;
-    continueBtn.disabled = !(anyCountryChecked && emailValid && phoneValid);
+    const startValid = startInput.value !== '' && startInput.value >= aujourdhuiISO();
+    continueBtn.disabled = !(emailValid && phoneValid && startValid);
   };
 
-  countryList.addEventListener('change', validate);
   emailInput.addEventListener('input', validate);
   phoneInput.addEventListener('input', validate);
+  startInput.addEventListener('input', validate);
+  validate();
 
   continueBtn.addEventListener('click', async () => {
-    const selectedCountryCodes = Array.from(
-      countryList.querySelectorAll('input:checked')
-    ).map((el) => (el as HTMLInputElement).value);
+    if (status) status.textContent = '';
 
-    const payload: OnboardingPayload = {
-      contract_duration_months: Number(durationSelect.value),
-      selected_country_codes: selectedCountryCodes,
-      email: emailInput.value,
-      phone: phoneInput.value,
+    // Garde-fou : le tunnel n'est atteignable qu'après l'écran de consentement ;
+    // sans lui, le serveur refuserait de toute façon l'inscription.
+    if (!consentementEstDonne()) {
+      showScreen('onboarding');
+      return;
+    }
+
+    const payload: InscriptionPayload = {
+      email: emailInput.value.trim(),
+      phone: phoneInput.value.trim(),
       email_active: emailToggle?.checked ?? true,
       push_active: pushToggle?.checked ?? true,
       reminder_delay: reminderSelect.value as ReminderDelay,
+      contract_start_date: startInput.value,
+      contract_duration: Number(durationSelect.value),
+      consent: true,
     };
 
-    // TODO: pas d'endpoint d'inscription réel côté backend pour l'instant
-    // (cf. api.ts, submitOnboarding) : on ne peut donc pas encore obtenir de
-    // jeton API ici. On simule le passage pour pouvoir tester la suite du
-    // parcours ; le déclenchement natif GPS (spec §6 étape 6) n'est PAS
-    // câblé tant que ce point n'est pas résolu.
-    console.warn('Onboarding non persisté côté serveur (endpoint manquant) :', payload);
-
-    window.open(PLACEHOLDER_PAYMENT_URL, '_blank');
-
-    await markOnboardingDone();
-    showScreen('home');
+    continueBtn.disabled = true;
+    try {
+      const resultat = await inscrire(payload);
+      if (resultat.type === 'verification') {
+        // Un compte existe déjà avec cet email ou ce téléphone : un code a été envoyé
+        // à l'email du compte, à saisir sur l'écran suivant.
+        ouvrirVerification(resultat.reference, resultat.emailMasque, payload);
+        return;
+      }
+      if (URL_PAIEMENT) window.open(URL_PAIEMENT, '_blank');
+      await terminerInscription(resultat.apiToken);
+    } catch (error) {
+      console.error("Inscription impossible :", error);
+      if (status) status.textContent = messageErreurInscription(error, CHAMPS_EN_ERREUR);
+    } finally {
+      validate();
+    }
   });
 }

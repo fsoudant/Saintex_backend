@@ -18,10 +18,10 @@
       </p>
       <p>
         Pour cela, l'application a besoin d'accéder à votre position en arrière-plan,
-        y compris lorsqu'elle est fermée. Cette donnée de localisation est traitée
-        uniquement côté serveur, de façon minimale : aucune position brute n'est
-        conservée, sauf au moment précis d'une alerte envoyée (voir notre politique
-        de confidentialité).
+        y compris lorsqu'elle est fermée. Votre position est analysée uniquement sur
+        votre téléphone, à partir de la liste des zones à risque que le serveur lui
+        transmet : elle n'est jamais envoyée au serveur (voir notre politique de
+        confidentialité).
       </p>
       <label class="consent-row">
         <input type="checkbox" id="consent-checkbox" />
@@ -30,7 +30,7 @@
       <button id="btn-onboarding-continue" disabled>Continuer</button>
     </section>
 
-    <!-- Écran 2 : tunnel premier lancement (spec §6, étapes 1 à 4) -->
+    <!-- Écran 2 : tunnel premier lancement (spec §6, étapes 1 à 4 : durée, date de départ, préférences, email) -->
     <section id="screen-tunnel" class="screen hidden">
       <h2>Votre voyage</h2>
 
@@ -45,10 +45,12 @@
       </div>
 
       <div class="field">
-        <label>Pays visités</label>
-        <div id="country-list" class="checkbox-list">
-          <!-- rempli dynamiquement par tunnel.ts depuis l'API des pays -->
-        </div>
+        <label for="contract-start">Date de départ</label>
+        <input type="date" id="contract-start" />
+        <p class="note">
+          Saintex reste silencieux jusqu'à cette date : la durée du contrat démarre le jour du départ.
+          Vous pourrez la modifier tant que le voyage n'a pas commencé.
+        </p>
       </div>
 
       <fieldset class="field">
@@ -87,18 +89,48 @@
         <input type="tel" id="user-phone" placeholder="+33 6 12 34 56 78" autocomplete="tel" />
       </div>
 
-      <button id="btn-tunnel-continue" disabled>Continuer vers le paiement</button>
+      <button id="btn-tunnel-continue" disabled>Continuer</button>
+      <p id="tunnel-status" class="note error"></p>
       <p class="note">
-        Le paiement se fait via un lien externe sécurisé (Stripe), hors de l'application,
-        pour limiter les commissions de plateforme (cf. spec §6).
+        Aucun paiement n'est demandé pendant la phase pilote.
       </p>
     </section>
 
-    <!-- Écran 3 : accueil / solde (spec §7 subscription_status, contract_started_at) -->
+    <!-- Écran 2 bis : vérification par email, quand l'email ou le téléphone saisis
+         correspondent déjà à un compte (réinstallation, nouveau téléphone) -->
+    <section id="screen-verification" class="screen hidden">
+      <h2>Vérification</h2>
+      <p>
+        Un compte existe déjà avec ces coordonnées. Pour le retrouver, saisissez le code à
+        6 chiffres que nous venons d'envoyer à <strong id="verification-email"></strong>.
+        Le code est valable 10 minutes.
+      </p>
+      <p class="note">
+        Votre ancien téléphone ne recevra plus d'alertes une fois le compte retrouvé ici.
+      </p>
+      <div class="field">
+        <label for="verification-code">Code de vérification</label>
+        <input type="text" id="verification-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
+      </div>
+      <button id="btn-verification-valider" disabled>Valider</button>
+      <p id="verification-status" class="note error"></p>
+      <button id="btn-verification-renvoyer" class="secondary">Renvoyer le code</button>
+      <button id="btn-verification-retour" class="secondary">Modifier mes informations</button>
+    </section>
+
+    <!-- Écran 3 : accueil / contrat (spec §6 et §7 : subscription_status, contract_start_date) -->
     <section id="screen-home" class="screen hidden">
       <h2>Mon voyage</h2>
       <div id="balance-card" class="card">
         <p class="loading">Chargement…</p>
+      </div>
+      <div id="departure-edit" class="hidden">
+        <div class="field">
+          <label for="home-start">Modifier la date de départ</label>
+          <input type="date" id="home-start" />
+        </div>
+        <button id="btn-home-start-save">Enregistrer la date</button>
+        <p id="home-start-status" class="note error"></p>
       </div>
       <nav class="tabbar">
         <button id="nav-home" class="active">Accueil</button>
@@ -143,18 +175,6 @@
     </section>
 
   </div>
-
-  <!-- PROTOTYPE d'essai du module natif : saisie manuelle du jeton API (copié depuis
-       l'admin, fiche Utilisateur). À RETIRER quand l'inscription existera. -->
-  <details id="debug-tools" class="note">
-    <summary>Outils d'essai</summary>
-    <div class="field">
-      <label for="debug-token">Jeton API</label>
-      <input type="text" id="debug-token" autocapitalize="off" autocorrect="off" spellcheck="false" />
-    </div>
-    <button id="btn-debug-token">Enregistrer le jeton</button>
-    <p id="debug-token-status"></p>
-  </details>
 
   <script type="module" src="dist/main.js"></script>
 </body>

@@ -6,7 +6,8 @@
   "scripts": {
     "build": "esbuild src/main.ts --bundle --format=esm --target=es2020 --outfile=www/dist/main.js",
     "typecheck": "tsc --noEmit",
-    "sync": "npm run build && npx cap sync ios",
+    "sync": "rm -rf www/dev && npm run build && npx cap sync ios",
+    "sync:dev": "npm run build && mkdir -p www/dev && cp ../tests_partages/detection_cache.json www/dev/ && npx cap sync ios",
     "open:ios": "npx cap open ios"
   },
   "dependencies": {

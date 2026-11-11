@@ -55,6 +55,10 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         store.journal("— Démarrage du module natif (état appli : \(etatApplication()))")
         dernierJetonConnu = store.apiToken
 
+        #if DEBUG
+        DetectionSelfTest.executer()
+        #endif
+
         gestionnaire.delegate = self
         gestionnaire.desiredAccuracy = kCLLocationAccuracyKilometer
         gestionnaire.pausesLocationUpdatesAutomatically = false

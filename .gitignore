@@ -8,6 +8,9 @@ restore_list.txt
 saintex_neon_export.dump
 restore_list_filtered.txt
 logs/gunicorn.log
+logs/watchdog.log
+logs/watchdog-error.log
+mobile/www/dev/
 saintex-spec-technique.md
 
 restore_list_business.txt

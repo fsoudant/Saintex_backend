@@ -64,7 +64,9 @@ p {
 
 select,
 input[type="email"],
-input[type="tel"] {
+input[type="tel"],
+input[type="text"],
+input[type="date"] {
   width: 100%;
   padding: 12px 14px;
   border-radius: var(--radius);
@@ -136,6 +138,23 @@ button:disabled {
   text-align: center;
 }
 
+.note.error {
+  color: var(--color-danger);
+}
+
+button.secondary {
+  background: transparent;
+  color: inherit;
+  border: 1px solid currentColor;
+  margin-top: 8px;
+}
+
+#verification-code {
+  font-size: 24px;
+  letter-spacing: 6px;
+  text-align: center;
+}
+
 .card {
   background: var(--color-surface);
   border-radius: var(--radius);
@@ -154,6 +173,12 @@ button:disabled {
   font-size: 22px;
   font-weight: 600;
   margin: 6px 0 0;
+}
+
+.card .status-detail {
+  font-size: 16px;
+  margin: 2px 0 12px;
+  color: var(--color-text);
 }
 
 .card.pending .status-value {

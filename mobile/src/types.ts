@@ -113,21 +113,35 @@ export interface ContactResponse {
   rapports_recus: string[]; // identifiants acquittés : à retirer de la file d'attente
 }
 
-export interface Country {
-  code: string;
-  name: string;
-}
-
-// Données saisies pendant le tunnel de premier lancement (spec §6).
-// NB: il n'existe pas encore d'endpoint d'inscription côté backend
-// (cf. clients/views.py, docstring du module) — cette forme est une
-// anticipation à confirmer une fois l'endpoint défini.
-export interface OnboardingPayload {
-  contract_duration_months: number;
-  selected_country_codes: string[];
+// Inscription (POST /api/inscription/, clients/views.py InscriptionView) : données
+// saisies pendant le tunnel de premier lancement (spec §6). Pas de choix de
+// pays : le contrat démarre à la date de départ choisie par le voyageur.
+// `consent` doit être vrai (consentement RGPD de l'écran d'accueil).
+export interface InscriptionPayload {
   email: string;
-  phone: string;
+  phone: string; // format international, ex. +33612345678
   email_active: boolean;
   push_active: boolean;
   reminder_delay: ReminderDelay;
+  contract_start_date: string; // AAAA-MM-JJ
+  contract_duration: number; // en mois
+  consent: true;
+}
+
+// Compte créé (201) : le jeton est remis aussitôt. Compte existant (202) : un code a
+// été envoyé par email, à échanger contre le jeton avec la `reference`.
+export type ResultatInscription =
+  | { type: 'creee'; apiToken: string }
+  | { type: 'verification'; reference: string; emailMasque: string };
+
+// GET/PATCH /api/me/contrat/ — reflète UtilisateurContratSerializer
+// (clients/serializers.py). Seule `contract_start_date` est modifiable, et
+// seulement tant que le contrat n'a pas démarré.
+export interface Contrat {
+  contract_duration: number | null; // en mois
+  purchased_at: string | null;
+  contract_start_date: string | null; // AAAA-MM-JJ
+  contract_expiry_date: string | null;
+  horizon_max_mois: number;
+  subscription_status: string; // trial | active | expired | cancelled
 }

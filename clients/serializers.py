@@ -1,7 +1,63 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
+from .inscription import normaliser_email, normaliser_telephone
 from .models import AlertReport, ParametreContrat, Utilisateur, valider_date_debut_contrat
+
+
+class InscriptionSerializer(serializers.Serializer):
+    """Inscription d'un voyageur depuis le tunnel du premier lancement (cf.
+    saintex-spec-technique.md §6, §7 et clients.inscription). `consent` doit
+    être vrai : le consentement RGPD explicite est préalable à tout traitement.
+    `contract_duration` est le choix du voyageur dans le tunnel ; il sera
+    confirmé par l'achat quand celui-ci existera.
+    """
+
+    email = serializers.EmailField(max_length=254)
+    phone = serializers.CharField(max_length=32)
+    email_active = serializers.BooleanField(required=False, default=True)
+    push_active = serializers.BooleanField(required=False, default=True)
+    reminder_delay = serializers.ChoiceField(
+        choices=Utilisateur.DelaiRappel.choices,
+        required=False,
+        default=Utilisateur.DelaiRappel.QUOTIDIEN,
+    )
+    contract_start_date = serializers.DateField(required=False, allow_null=True)
+    contract_duration = serializers.IntegerField(required=False, allow_null=True, min_value=1, max_value=24)
+    consent = serializers.BooleanField()
+
+    def validate_email(self, value):
+        return normaliser_email(value)
+
+    def validate_phone(self, value):
+        numero = normaliser_telephone(value)
+        if numero is None:
+            raise serializers.ValidationError(
+                "Numéro de téléphone invalide : utilisez le format international (ex. +33612345678)."
+            )
+        return numero
+
+    def validate_contract_start_date(self, value):
+        if value is not None:
+            try:
+                valider_date_debut_contrat(None, value)
+            except DjangoValidationError as exc:
+                raise serializers.ValidationError(exc.messages[0] if exc.messages else str(exc))
+        return value
+
+    def validate_consent(self, value):
+        if not value:
+            raise serializers.ValidationError(
+                "Le consentement au traitement de votre position est obligatoire."
+            )
+        return value
+
+
+class VerificationCodeSerializer(serializers.Serializer):
+    """Code de vérification reçu par email, avec la référence remise par l'inscription."""
+
+    reference = serializers.UUIDField()
+    code = serializers.RegexField(r"^\d{6}$", max_length=6, error_messages={"invalid": "Le code comporte 6 chiffres."})
 
 
 class RapportAlerteSerializer(serializers.Serializer):
