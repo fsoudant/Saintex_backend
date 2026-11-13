@@ -57,6 +57,7 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
 
         #if DEBUG
         DetectionSelfTest.executer()
+        SejoursSelfTest.executer()
         #endif
 
         gestionnaire.delegate = self
@@ -268,27 +269,40 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
             lat: position.coordinate.latitude,
             instant: maintenant
         ))
-        let nouvelles = actives.subtracting(store.zonesActives)
-        store.zonesActives = actives
-        store.journal("Détection (\(origine)) : \(actives.count) endémie(s) active(s), \(nouvelles.count) nouvelle(s)")
-        if !nouvelles.isEmpty {
-            alerter(nouvelles, cache: cache, instant: maintenant)
+        // Anti-répétition et rappels : cf. Sejours.swift (une oscillation de position autour
+        // d'un bord de zone ne réalerte pas ; un séjour prolongé est rappelé selon le
+        // délai choisi par le voyageur).
+        let resultat = Sejours.evaluer(
+            actives: actives,
+            etats: store.etatsZones,
+            maintenant: maintenant,
+            delaiRappel: store.delaiRappel
+        )
+        store.etatsZones = resultat.etats
+        let entrees = resultat.decisions.filter { $0.type == .entree }.count
+        let rappels = resultat.decisions.count - entrees
+        store.journal("Détection (\(origine)) : \(actives.count) endémie(s) active(s), \(entrees) entrée(s), \(rappels) rappel(s)")
+        if !resultat.decisions.isEmpty {
+            alerter(resultat.decisions, cache: cache, instant: maintenant)
             // Remonter les rapports sans attendre le cycle de 6 h.
             contacterSiNecessaire(motif: "alerte affichée")
         }
     }
 
-    /// Une notification par RISQUE nouvellement détecté (plusieurs endémies du
-    /// même risque sur la même position ne font qu'une alerte), et un rapport
-    /// par notification affichée.
-    private func alerter(_ ids: Set<Int>, cache: CacheMondial, instant: Date) {
-        let nouvelles = cache.endemies.filter { ids.contains($0.id) }
-        let parRisque = Dictionary(grouping: nouvelles, by: { $0.risque })
+    /// Une notification par RISQUE concerné (plusieurs endémies du même risque sur la
+    /// même position ne font qu'une alerte), et un rapport par notification affichée. Si une
+    /// des endémies du risque est une nouvelle entrée, c'est une alerte d'entrée ; sinon
+    /// un rappel.
+    private func alerter(_ decisions: [DecisionAlerte], cache: CacheMondial, instant: Date) {
+        let types = Dictionary(uniqueKeysWithValues: decisions.map { ($0.endemie, $0.type) })
+        let concernees = cache.endemies.filter { types[$0.id] != nil }
+        let parRisque = Dictionary(grouping: concernees, by: { $0.risque })
 
         for (code, endemies) in parRisque.sorted(by: { $0.key < $1.key }) {
             guard let risque = cache.risques[code] else { continue }
             let endemies = endemies.sorted { $0.id < $1.id }
             let premiere = endemies[0]
+            let type: TypeAlerte = endemies.contains(where: { types[$0.id] == .entree }) ? .entree : .rappel
 
             let libelle = enFrancais ? risque.libelleFr : risque.libelleEn
             var corps = enFrancais ? risque.alerteFr : risque.alerteEn
@@ -297,18 +311,23 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
                 if !phrase.isEmpty { corps += " " + phrase }
             }
 
+            let prefixe: String
+            switch type {
+            case .entree: prefixe = enFrancais ? "Zone à risque : " : "Risk area: "
+            case .rappel: prefixe = enFrancais ? "Rappel — zone à risque : " : "Reminder — risk area: "
+            }
             poster(
-                titre: (enFrancais ? "Zone à risque : " : "Risk area: ") + libelle,
+                titre: prefixe + libelle,
                 corps: corps,
-                identifiant: "saintex.alerte.\(code).\(Int(instant.timeIntervalSince1970))",
+                identifiant: "saintex.\(type.rawValue).\(code).\(Int(instant.timeIntervalSince1970))",
                 infos: ["endemies": endemies.map { $0.id }]
             )
-            store.journal("Alerte affichée : \(code), endémie \(premiere.id) (\(premiere.zoneNom))")
+            store.journal("\(type == .entree ? "Alerte" : "Rappel") affiché(e) : \(code), endémie \(premiere.id) (\(premiere.zoneNom))")
 
             store.ajouterRapport(RapportAlerte(
                 id: UUID().uuidString.lowercased(),
                 endemie: premiere.id,
-                type: "entree",
+                type: type.rawValue,
                 afficheeLe: DatesISO.texte(instant),
                 cacheVersion: cache.version
             ))
@@ -425,6 +444,9 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         store.dernierContact = Date()
         store.contrat = reponse.contrat
         store.retirerRapports(ids: reponse.rapportsRecus)
+        if let preferences = reponse.preferences, let delai = DelaiRappel(rawValue: preferences.reminderDelay) {
+            store.delaiRappel = delai
+        }
 
         var resume = "Contact réussi"
         switch reponse.cache {

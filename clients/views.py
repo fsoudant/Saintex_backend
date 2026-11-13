@@ -127,7 +127,10 @@ class CacheView(APIView):
       déjà et qu'elle est identique, `cache` se réduit à
       `{"version": ..., "inchange": true}` — cas le plus fréquent ;
     - `rapports_recus` : identifiants des rapports enregistrés (ou déjà connus),
-      que le téléphone peut retirer de sa file d'attente.
+      que le téléphone peut retirer de sa file d'attente ;
+    - `preferences` : les préférences que le téléphone applique lui-même, puisque
+      c'est lui qui affiche les alertes — pour l'instant le délai de rappel d'un
+      séjour prolongé en zone à risque (`reminder_delay`).
 
     Le serveur ne reçoit donc plus la position du voyageur (§7, §9).
     """
@@ -168,6 +171,7 @@ class CacheView(APIView):
             },
             "cache": cache,
             "rapports_recus": rapports_recus,
+            "preferences": {"reminder_delay": utilisateur.reminder_delay},
         })
 
 

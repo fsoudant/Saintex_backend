@@ -163,14 +163,26 @@ enum CacheReponse: Decodable {
     }
 }
 
+/// Préférences que le téléphone applique lui-même (c'est lui qui affiche les alertes),
+/// renvoyées à chaque contact. `reminderDelay` : once, daily, every_2_days, weekly.
+struct PreferencesTelephone: Codable {
+    let reminderDelay: String
+
+    enum CodingKeys: String, CodingKey {
+        case reminderDelay = "reminder_delay"
+    }
+}
+
 struct ContactResponse: Decodable {
     let contrat: ContratInfo
     let cache: CacheReponse
     let rapportsRecus: [String]
+    let preferences: PreferencesTelephone?
 
     enum CodingKeys: String, CodingKey {
         case contrat
         case cache
         case rapportsRecus = "rapports_recus"
+        case preferences
     }
 }

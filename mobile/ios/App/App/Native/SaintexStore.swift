@@ -23,7 +23,9 @@ final class SaintexStore {
         static let dernierContact = "saintex.native.dernierContact"
         static let contratDebut = "saintex.native.contratDebut"
         static let contratExpiration = "saintex.native.contratExpiration"
-        static let zonesActives = "saintex.native.zonesActives"
+        static let zonesActives = "saintex.native.zonesActives"  // ancien format (ensemble d'identifiants)
+        static let etatsZones = "saintex.native.etatsZones"
+        static let delaiRappel = "saintex.native.delaiRappel"
         static let rapports = "saintex.native.rapportsEnAttente"
     }
 
@@ -41,6 +43,17 @@ final class SaintexStore {
 
         if let data = try? Data(contentsOf: fichierCache) {
             cache = try? JSONDecoder().decode(CacheMondial.self, from: data)
+        }
+
+        // Migration : l'ancien format ne gardait que l'ensemble des endémies actives. On en
+        // fait des séjours en cours, pour ne pas réalerter d'une zone où l'on se trouvait déjà.
+        if defaults.data(forKey: Cle.etatsZones) == nil,
+           let anciens = defaults.array(forKey: Cle.zonesActives) as? [Int] {
+            let maintenant = Date()
+            etatsZones = Dictionary(uniqueKeysWithValues: anciens.map {
+                ($0, EtatZone(entreeLe: maintenant, derniereAlerteLe: maintenant, sortieVueLe: nil))
+            })
+            defaults.removeObject(forKey: Cle.zonesActives)
         }
     }
 
@@ -81,13 +94,25 @@ final class SaintexStore {
         }
     }
 
-    // MARK: - État de détection
+    // MARK: - Séjours en zone à risque
 
-    /// Identifiants des endémies actives au dernier calcul (pour ne signaler
-    /// que les NOUVELLES entrées en zone).
-    var zonesActives: Set<Int> {
-        get { Set((defaults.array(forKey: Cle.zonesActives) as? [Int]) ?? []) }
-        set { defaults.set(Array(newValue).sorted(), forKey: Cle.zonesActives) }
+    /// Séjours en cours par endémie (cf. Sejours.swift) : permet de ne signaler que les
+    /// NOUVELLES entrées, de rappeler un séjour prolongé et d'ignorer les oscillations
+    /// de position autour d'un bord de zone.
+    var etatsZones: [Int: EtatZone] {
+        get {
+            guard let data = defaults.data(forKey: Cle.etatsZones) else { return [:] }
+            return (try? JSONDecoder().decode([Int: EtatZone].self, from: data)) ?? [:]
+        }
+        set {
+            defaults.set(try? JSONEncoder().encode(newValue), forKey: Cle.etatsZones)
+        }
+    }
+
+    /// Délai de rappel choisi par le voyageur, mis à jour à chaque contact avec le serveur.
+    var delaiRappel: DelaiRappel {
+        get { DelaiRappel(rawValue: defaults.string(forKey: Cle.delaiRappel) ?? "") ?? .defaut }
+        set { defaults.set(newValue.rawValue, forKey: Cle.delaiRappel) }
     }
 
     // MARK: - Rapports d'alerte en attente de remontée

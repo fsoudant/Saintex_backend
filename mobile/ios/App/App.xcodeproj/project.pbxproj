@@ -21,6 +21,8 @@
 		D372FEE63099D79C002BCD0C /* Detection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D372FEDE3099D79C002BCD0C /* Detection.swift */; };
 		D372FEE73099D79C002BCD0C /* SaintexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D372FEE03099D79C002BCD0C /* SaintexService.swift */; };
 		D397DAF730A1323100CCB75F /* DetectionSelfTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D397DAF630A1323100CCB75F /* DetectionSelfTest.swift */; };
+		D3EFC20930A732AA0050D6F6 /* SejoursSelfTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EFC20830A732AA0050D6F6 /* SejoursSelfTest.swift */; };
+		D3EFC20A30A732AA0050D6F6 /* Sejours.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EFC20730A732AA0050D6F6 /* Sejours.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 		D372FEE03099D79C002BCD0C /* SaintexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaintexService.swift; sourceTree = "<group>"; };
 		D372FEE13099D79C002BCD0C /* SaintexStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaintexStore.swift; sourceTree = "<group>"; };
 		D397DAF630A1323100CCB75F /* DetectionSelfTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionSelfTest.swift; sourceTree = "<group>"; };
+		D3EFC20730A732AA0050D6F6 /* Sejours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sejours.swift; sourceTree = "<group>"; };
+		D3EFC20830A732AA0050D6F6 /* SejoursSelfTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SejoursSelfTest.swift; sourceTree = "<group>"; };
 		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +115,8 @@
 		D372FEE23099D79C002BCD0C /* Native */ = {
 			isa = PBXGroup;
 			children = (
+				D3EFC20730A732AA0050D6F6 /* Sejours.swift */,
+				D3EFC20830A732AA0050D6F6 /* SejoursSelfTest.swift */,
 				D372FEDD3099D79C002BCD0C /* CacheModels.swift */,
 				D372FEDE3099D79C002BCD0C /* Detection.swift */,
 				D372FEDF3099D79C002BCD0C /* SaintexServer.swift */,
@@ -236,6 +242,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3EFC20930A732AA0050D6F6 /* SejoursSelfTest.swift in Sources */,
+				D3EFC20A30A732AA0050D6F6 /* Sejours.swift in Sources */,
 				D372FEE33099D79C002BCD0C /* SaintexServer.swift in Sources */,
 				D397DAF730A1323100CCB75F /* DetectionSelfTest.swift in Sources */,
 				D372FEE43099D79C002BCD0C /* CacheModels.swift in Sources */,
