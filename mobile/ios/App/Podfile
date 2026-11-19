@@ -28,6 +28,11 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+      # Le vérificateur de modules d'Xcode recompile les en-têtes de chaque pod dans un
+      # framework d'essai, sans les chemins des autres pods : il échoue sur Capacitor
+      # (« module 'Cordova' not found », « could not build module 'Capacitor' ») alors que
+      # la compilation réelle est correcte. Inutile pour des pods tiers : on le coupe.
+      config.build_settings['ENABLE_MODULE_VERIFIER'] = 'NO'
     end
   end
 end

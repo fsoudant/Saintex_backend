@@ -150,6 +150,20 @@ class ConstruireCacheTests(_Fixtures, TestCase):
 
         self.assertEqual(cache["endemies"], [])
 
+    def test_petite_zone_non_deformee_par_la_simplification(self):
+        # Zone d'environ 900 m x 700 m (plateau du phare de Cordouan) : avec une tolérance
+        # fixe d'1 km, elle devenait un triangle qui excluait le point test.
+        petite = self._zone(2, "Cordouan", multi(Polygon((
+            (-1.1487, 45.6009), (-1.1432, 45.6006), (-1.1494, 45.5972), (-1.151, 45.5957),
+            (-1.1551, 45.5983), (-1.1547, 45.6008), (-1.1524, 45.6022), (-1.1487, 45.6009),
+        ))))
+        endemie = Endemie.objects.create(zone=petite, risque=self.risque)
+
+        cache = construire_cache(self.point)  # tolérance par défaut
+
+        self.assertEqual(endemies_actives_dans_cache(cache, -1.15085, 45.59858, moment(2026, 7, 1)), [endemie.pk])
+        self.assertEqual(endemies_actives_dans_cache(cache, -1.15062, 45.59202, moment(2026, 7, 1)), [])
+
     def test_endemie_terminee_non_transmise(self):
         passee = Endemie.objects.create(
             zone=self.zone, risque=self.risque, date_fin=moment(2025, 1, 1)

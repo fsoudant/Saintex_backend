@@ -76,9 +76,15 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         // Détection immédiate avec le cache déjà détenu (fonctionne hors ligne),
         // puis contact si le cycle est échu.
         if let derniere = gestionnaire.location {
-            evaluer(derniere, origine: "démarrage")
+            evaluerSiRecente(derniere, origine: "démarrage")
         }
+        #if DEBUG
+        // PROTOTYPE : en développement, contact forcé à chaque lancement pour récupérer le
+        // cache à jour (sinon le cycle de 6 h retarde une zone de test fraîchement créée).
+        contacterSiNecessaire(motif: "démarrage", force: true)
+        #else
         contacterSiNecessaire(motif: "démarrage")
+        #endif
     }
 
     private func etatApplication() -> String {
@@ -140,7 +146,7 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         let age = Int(Date().timeIntervalSince(position.timestamp))
         // Aucune coordonnée dans le journal.
         store.journal("Position reçue (précision ± \(Int(position.horizontalAccuracy)) m, âgée de \(age) s, appli : \(etatApplication()))")
-        evaluer(position, origine: "changement de position")
+        evaluerSiRecente(position, origine: "changement de position")
         contacterSiNecessaire(motif: "changement de position")
     }
 
@@ -212,7 +218,7 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         // Dernière position connue (mise à jour par le service de changement
         // significatif) ; on en demande aussi une fraîche, sans l'attendre.
         if let derniere = gestionnaire.location {
-            evaluer(derniere, origine: "BGAppRefresh")
+            evaluerSiRecente(derniere, origine: "BGAppRefresh")
         } else {
             store.journal("Aucune position connue")
         }
@@ -249,6 +255,28 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         return f.date(from: texte)
     }
 
+    /// Au-delà, une position n'est plus considérée comme « où je suis » : iOS livre au
+    /// démarrage la dernière position CONNUE, parfois vieille de plusieurs jours, et alerter
+    /// pour un lieu quitté depuis serait une fausse alerte.
+    private let ageMaxPosition: TimeInterval = 30 * 60
+    private var derniereDemandeDePosition: Date?
+
+    /// N'évalue que les positions récentes ; pour une position trop vieille, en demande une
+    /// fraîche (le résultat arrive par `didUpdateLocations`, qui réévalue). Au plus une
+    /// demande par minute, pour ne pas boucler si le système renvoie encore une vieille position.
+    private func evaluerSiRecente(_ position: CLLocation, origine: String) {
+        let age = Date().timeIntervalSince(position.timestamp)
+        if age <= ageMaxPosition {
+            evaluer(position, origine: origine)
+            return
+        }
+        store.journal("Position ignorée (\(origine)) : âgée de \(Int(age / 60)) min, nouvelle position demandée")
+        let maintenant = Date()
+        if let derniere = derniereDemandeDePosition, maintenant.timeIntervalSince(derniere) < 60 { return }
+        derniereDemandeDePosition = maintenant
+        gestionnaire.requestLocation()
+    }
+
     private func evaluer(_ position: CLLocation, origine: String) {
         guard let cache = store.cache else {
             store.journal("Détection impossible (\(origine)) : pas encore de cache")
@@ -257,6 +285,7 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         let maintenant = Date()
         guard contratActif(maintenant) else {
             store.journal("Contrat non actif : silence")
+            retirerRappelsProgrammes()
             return
         }
         if detecteur?.version != cache.version {
@@ -269,68 +298,138 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
             lat: position.coordinate.latitude,
             instant: maintenant
         ))
-        // Anti-répétition et rappels : cf. Sejours.swift (une oscillation de position autour
-        // d'un bord de zone ne réalerte pas ; un séjour prolongé est rappelé selon le
-        // délai choisi par le voyageur).
+        // Anti-répétition : cf. Sejours.swift (une oscillation de position autour d'un bord
+        // de zone ne réalerte pas).
         let resultat = Sejours.evaluer(
             actives: actives,
             etats: store.etatsZones,
-            maintenant: maintenant,
-            delaiRappel: store.delaiRappel
+            maintenant: maintenant
         )
         store.etatsZones = resultat.etats
-        let entrees = resultat.decisions.filter { $0.type == .entree }.count
-        let rappels = resultat.decisions.count - entrees
-        store.journal("Détection (\(origine)) : \(actives.count) endémie(s) active(s), \(entrees) entrée(s), \(rappels) rappel(s)")
-        if !resultat.decisions.isEmpty {
-            alerter(resultat.decisions, cache: cache, instant: maintenant)
+        store.journal("Détection (\(origine)) : \(actives.count) endémie(s) active(s), \(resultat.entrees.count) entrée(s)")
+        if !resultat.entrees.isEmpty {
+            alerter(entrees: resultat.entrees, cache: cache, instant: maintenant)
             // Remonter les rapports sans attendre le cycle de 6 h.
             contacterSiNecessaire(motif: "alerte affichée")
         }
+        planifierRappels(cache: cache, etats: resultat.etats, maintenant: maintenant)
     }
 
-    /// Une notification par RISQUE concerné (plusieurs endémies du même risque sur la
-    /// même position ne font qu'une alerte), et un rapport par notification affichée. Si une
-    /// des endémies du risque est une nouvelle entrée, c'est une alerte d'entrée ; sinon
-    /// un rappel.
-    private func alerter(_ decisions: [DecisionAlerte], cache: CacheMondial, instant: Date) {
-        let types = Dictionary(uniqueKeysWithValues: decisions.map { ($0.endemie, $0.type) })
-        let concernees = cache.endemies.filter { types[$0.id] != nil }
+    /// Titre et texte d'une alerte pour un risque (la phrase d'alerte du risque, suivie de la
+    /// modulation de la première endémie concernée quand elle en a une).
+    private func contenuAlerte(risque: CacheRisque, endemie: CacheEndemie, cache: CacheMondial) -> (libelle: String, corps: String) {
+        let libelle = enFrancais ? risque.libelleFr : risque.libelleEn
+        var corps = enFrancais ? risque.alerteFr : risque.alerteEn
+        if let cleModulation = endemie.modulation, let modulation = cache.modulations[cleModulation] {
+            let phrase = (enFrancais ? modulation.fr : modulation.en).trimmingCharacters(in: .whitespacesAndNewlines)
+            if !phrase.isEmpty { corps += " " + phrase }
+        }
+        return (libelle, corps)
+    }
+
+    /// Une notification d'ENTRÉE par RISQUE concerné (plusieurs endémies du même risque sur la
+    /// même position ne font qu'une alerte), et un rapport par notification affichée.
+    private func alerter(entrees: [Int], cache: CacheMondial, instant: Date) {
+        let ids = Set(entrees)
+        let concernees = cache.endemies.filter { ids.contains($0.id) }
         let parRisque = Dictionary(grouping: concernees, by: { $0.risque })
 
         for (code, endemies) in parRisque.sorted(by: { $0.key < $1.key }) {
             guard let risque = cache.risques[code] else { continue }
             let endemies = endemies.sorted { $0.id < $1.id }
             let premiere = endemies[0]
-            let type: TypeAlerte = endemies.contains(where: { types[$0.id] == .entree }) ? .entree : .rappel
+            let contenu = contenuAlerte(risque: risque, endemie: premiere, cache: cache)
 
-            let libelle = enFrancais ? risque.libelleFr : risque.libelleEn
-            var corps = enFrancais ? risque.alerteFr : risque.alerteEn
-            if let cleModulation = premiere.modulation, let modulation = cache.modulations[cleModulation] {
-                let phrase = (enFrancais ? modulation.fr : modulation.en).trimmingCharacters(in: .whitespacesAndNewlines)
-                if !phrase.isEmpty { corps += " " + phrase }
-            }
-
-            let prefixe: String
-            switch type {
-            case .entree: prefixe = enFrancais ? "Zone à risque : " : "Risk area: "
-            case .rappel: prefixe = enFrancais ? "Rappel — zone à risque : " : "Reminder — risk area: "
-            }
             poster(
-                titre: prefixe + libelle,
-                corps: corps,
-                identifiant: "saintex.\(type.rawValue).\(code).\(Int(instant.timeIntervalSince1970))",
+                titre: (enFrancais ? "Zone à risque : " : "Risk area: ") + contenu.libelle,
+                corps: contenu.corps,
+                identifiant: "saintex.entree.\(code).\(Int(instant.timeIntervalSince1970))",
                 infos: ["endemies": endemies.map { $0.id }]
             )
-            store.journal("\(type == .entree ? "Alerte" : "Rappel") affiché(e) : \(code), endémie \(premiere.id) (\(premiere.zoneNom))")
+            store.journal("Alerte affichée : \(code), endémie \(premiere.id) (\(premiere.zoneNom))")
 
             store.ajouterRapport(RapportAlerte(
                 id: UUID().uuidString.lowercased(),
                 endemie: premiere.id,
-                type: type.rawValue,
+                type: "entree",
                 afficheeLe: DatesISO.texte(instant),
                 cacheVersion: cache.version
             ))
+        }
+    }
+
+    // MARK: - Rappels programmés
+
+    private static let prefixeRappel = "saintex.rappel."
+    private let maxRappelsParRisque = 20
+    /// iOS ne garde que 64 notifications locales en attente par appli : on reste en dessous.
+    private let maxRappelsEnAttente = 60
+
+    /// Programme les rappels d'un séjour prolongé comme notifications LOCALES à date fixe : un
+    /// voyageur immobile ne réveille jamais l'appli, qui ne pourrait pas les afficher au fil
+    /// de l'eau. Appelée à chaque évaluation ; remplace tous les rappels en attente :
+    /// - un séjour dont on a vu la sortie n'a plus de rappel (il reprendra si l'on revient
+    ///   avant la fin de `Sejours.delaiSortie`) ;
+    /// - un changement de délai de rappel ou de cache se répercute ici.
+    /// Ces rappels ne sont pas rapportés au serveur : iOS ne dit pas si, ni quand, ils ont
+    /// été affichés.
+    private func planifierRappels(cache: CacheMondial, etats: [Int: EtatZone], maintenant: Date) {
+        let delai = store.delaiRappel
+        let calendrier = Calendar.current
+        let dedans = cache.endemies.filter { etats[$0.id].map { $0.sortieVueLe == nil } ?? false }
+        let parRisque = Dictionary(grouping: dedans, by: { $0.risque })
+
+        var demandes: [(date: Date, requete: UNNotificationRequest)] = []
+        for (code, endemies) in parRisque {
+            guard let risque = cache.risques[code] else { continue }
+            let endemies = endemies.sorted { $0.id < $1.id }
+            guard let entree = endemies.compactMap({ etats[$0.id]?.entreeLe }).min() else { continue }
+            let dates = Sejours.datesDeRappel(
+                entreeLe: entree, maintenant: maintenant, delai: delai,
+                calendrier: calendrier, nombre: maxRappelsParRisque
+            )
+            let texte = contenuAlerte(risque: risque, endemie: endemies[0], cache: cache)
+            for date in dates {
+                let contenu = UNMutableNotificationContent()
+                contenu.title = (enFrancais ? "Rappel — zone à risque : " : "Reminder — risk area: ") + texte.libelle
+                contenu.body = texte.corps
+                contenu.sound = .default
+                contenu.userInfo = ["endemies": endemies.map { $0.id }]
+                let composants = calendrier.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+                let declencheur = UNCalendarNotificationTrigger(dateMatching: composants, repeats: false)
+                let identifiant = "\(SaintexService.prefixeRappel)\(code).\(Int(date.timeIntervalSince1970))"
+                demandes.append((date, UNNotificationRequest(identifier: identifiant, content: contenu, trigger: declencheur)))
+            }
+        }
+        let retenues = demandes.sorted { $0.date < $1.date }.prefix(maxRappelsEnAttente)
+        remplacerRappelsProgrammes(par: Array(retenues))
+    }
+
+    /// Supprime tous les rappels en attente (contrat devenu inactif, par exemple).
+    private func retirerRappelsProgrammes() {
+        remplacerRappelsProgrammes(par: [])
+    }
+
+    private func remplacerRappelsProgrammes(par demandes: [(date: Date, requete: UNNotificationRequest)]) {
+        let centre = UNUserNotificationCenter.current()
+        centre.getPendingNotificationRequests { enAttente in
+            let anciens = enAttente.map { $0.identifier }.filter { $0.hasPrefix(SaintexService.prefixeRappel) }
+            centre.removePendingNotificationRequests(withIdentifiers: anciens)
+            for demande in demandes {
+                centre.add(demande.requete) { erreur in
+                    if let erreur = erreur {
+                        DispatchQueue.main.async {
+                            self.store.journal("Rappel non programmé : \(erreur.localizedDescription)")
+                        }
+                    }
+                }
+            }
+            if !anciens.isEmpty || !demandes.isEmpty {
+                DispatchQueue.main.async {
+                    let prochain = demandes.first.map { DatesISO.texte($0.date) } ?? "aucun"
+                    self.store.journal("Rappels programmés : \(demandes.count) (prochain : \(prochain))")
+                }
+            }
         }
     }
 
@@ -461,7 +560,7 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
 
         // Le cache a pu changer : réévaluer avec la dernière position connue.
         if let derniere = gestionnaire.location {
-            evaluer(derniere, origine: "après contact")
+            evaluerSiRecente(derniere, origine: "après contact")
         }
     }
 }

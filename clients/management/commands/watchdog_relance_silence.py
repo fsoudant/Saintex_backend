@@ -13,10 +13,11 @@ from clients.watchdog import traiter_relances_silence
 class Command(BaseCommand):
     help = (
         "Détecte les utilisateurs en silence (last_contact_at) au-delà du "
-        "seuil de relance (§8 : 7h puis toutes les 6h) et leur envoie une "
-        "relance. Idempotent : sûr à appeler fréquemment (cron toutes les "
-        "15 min par exemple), ne duplique pas les envois déjà faits pour "
-        "le cycle en cours."
+        "seuil de relance (§8 : 7h puis toutes les 6h par défaut ; seuils et "
+        "plafond réglables, cf. SAINTEX_SILENCE_* dans le .env) pendant leur "
+        "contrat, et leur envoie une relance. Idempotent : sûr à appeler "
+        "fréquemment (cron toutes les 15 min par exemple), ne duplique pas "
+        "les envois déjà faits pour le cycle en cours."
     )
 
     def handle(self, *args, **options):

@@ -171,6 +171,15 @@ REST_FRAMEWORK = {
     "NUM_PROXIES": int(os.environ.get("DJANGO_NUM_PROXIES", "1")),
 }
 
+# --- Watchdog « appli silencieuse » (clients.watchdog, spec §8) -----------------
+# Spec : relance après 7 h sans contact, puis toutes les 6 h, sans limite. Ces valeurs
+# supposent un signal de vie régulier du téléphone, que iOS ne donne pas sans
+# notification silencieuse (compte Apple Developer) : un voyageur immobile, appli saine,
+# serait relancé à tort. Voir clients/watchdog.py et .env.example pour les valeurs de pilote.
+SAINTEX_SILENCE_PREMIERE_RELANCE_H = float(os.environ.get("SAINTEX_SILENCE_PREMIERE_RELANCE_H", "7"))
+SAINTEX_SILENCE_RELANCES_SUIVANTES_H = float(os.environ.get("SAINTEX_SILENCE_RELANCES_SUIVANTES_H", "6"))
+SAINTEX_SILENCE_MAX_RELANCES = int(os.environ.get("SAINTEX_SILENCE_MAX_RELANCES", "0"))  # 0 = illimité
+
 # --- Email (code de vérification de l'inscription, cf. clients.inscription) -------
 # Par défaut : le message est écrit dans la console du serveur (donc dans
 # logs/gunicorn.log), sans rien envoyer — pratique en développement et pour un

@@ -51,7 +51,7 @@ final class SaintexStore {
            let anciens = defaults.array(forKey: Cle.zonesActives) as? [Int] {
             let maintenant = Date()
             etatsZones = Dictionary(uniqueKeysWithValues: anciens.map {
-                ($0, EtatZone(entreeLe: maintenant, derniereAlerteLe: maintenant, sortieVueLe: nil))
+                ($0, EtatZone(entreeLe: maintenant, sortieVueLe: nil))
             })
             defaults.removeObject(forKey: Cle.zonesActives)
         }

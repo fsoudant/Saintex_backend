@@ -125,6 +125,27 @@ def _surfaces(geom):
     return None
 
 
+# La tolérance de simplification (~1 km) convient aux zones réelles, qui font des dizaines ou
+# des centaines de km. Appliquée telle quelle à une zone de quelques centaines de mètres
+# (site isolé, phare, île, zone de test), elle la réduit à un triangle qui ne couvre plus
+# les mêmes points. La tolérance d'un polygone ne dépasse donc jamais cette fraction de
+# son plus petit côté (emprise).
+DIVISEUR_TOLERANCE_PAR_COTE = 10
+
+
+def _simplifier(geom, tolerance):
+    """MultiPolygon simplifié polygone par polygone, chacun avec une tolérance adaptée
+    à sa taille (cf. DIVISEUR_TOLERANCE_PAR_COTE) : un petit îlot d'une zone par ailleurs
+    grande n'est pas déformé, sans alourdir la simplification du reste."""
+    parties = []
+    for polygone in geom.geoms:
+        minx, miny, maxx, maxy = polygone.bounds
+        tolerance_locale = min(tolerance, min(maxx - minx, maxy - miny) / DIVISEUR_TOLERANCE_PAR_COTE)
+        simple = _surfaces(polygone.simplify(tolerance_locale, preserve_topology=True))
+        parties.extend(simple.geoms if simple is not None else [polygone])
+    return shapely.geometry.MultiPolygon(parties)
+
+
 def _geometrie_effective(zone_geom, zone_exclue, tolerance):
     """Géométrie Shapely (MultiPolygon) « zone moins zone exclue », simplifiée,
     ou None si plus rien ne reste."""
@@ -135,7 +156,7 @@ def _geometrie_effective(zone_geom, zone_exclue, tolerance):
     if geom is None:
         return None
     if tolerance:
-        geom = _surfaces(geom.simplify(tolerance, preserve_topology=True)) or geom
+        geom = _simplifier(geom, tolerance)
     return geom
 
 
