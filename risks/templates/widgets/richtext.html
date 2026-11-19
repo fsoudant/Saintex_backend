@@ -26,6 +26,15 @@
   /* Retrait des listes : le défaut du navigateur (40px par niveau) est large. */
   .saintex-rte-area ul, .saintex-rte-area ol { margin: 0 0 .5em; padding-left: 1.3em; }
   .saintex-rte-area li ul, .saintex-rte-area li ol { margin: 0; padding-left: 1.1em; }
+  /* Le CSS de l'admin Django (forms.css : ".aligned ul" / ".aligned ul li") supprime les puces et
+     ajoute une marge de 160px à gauche. On le neutralise avec une spécificité plus forte. */
+  .saintex-rte .saintex-rte-area ul, .saintex-rte .saintex-rte-area ol { margin: 0 0 .5em; padding: 0 0 0 1.3em; }
+  .saintex-rte .saintex-rte-area li ul, .saintex-rte .saintex-rte-area li ol { margin: 0; padding-left: 1.1em; }
+  .saintex-rte .saintex-rte-area li { display: list-item; list-style-position: outside; }
+  .saintex-rte .saintex-rte-area ul > li { list-style-type: disc; }
+  .saintex-rte .saintex-rte-area ul ul > li { list-style-type: circle; }
+  .saintex-rte .saintex-rte-area ul ul ul > li { list-style-type: square; }
+  .saintex-rte .saintex-rte-area ol > li { list-style-type: decimal; }
 </style>
 <script>
 (function () {
