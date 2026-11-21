@@ -149,6 +149,23 @@ button.secondary {
   margin-top: 8px;
 }
 
+/* Bouton « Retour » de la fiche conseil : discret, à gauche, pas pleine largeur */
+button.back {
+  width: auto;
+  padding: 0 0 16px;
+  background: none;
+  color: var(--color-accent);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+/* Lien d'une recommandation vers une fiche conseil (et non vers un site) */
+.risk-html a.conseil-link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 #verification-code {
   font-size: 24px;
   letter-spacing: 6px;
@@ -219,4 +236,127 @@ button.secondary {
 .loading {
   color: var(--color-muted);
   font-size: 14px;
+}
+
+/* Accueil : un bloc par risque présent à la position actuelle */
+.risk-card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  border-left: 5px solid var(--color-danger);
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+
+.risk-card > h3 {
+  font-size: 20px;
+  margin: 0 0 6px;
+}
+
+.risk-card h4 {
+  font-size: 13px;
+  margin: 16px 0 6px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.risk-card .risk-zones {
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.risk-card .risk-alert {
+  color: var(--color-text);
+  margin: 0 0 4px;
+}
+
+/* Textes des risques : HTML venu du cache (listes, paragraphes…) */
+.risk-html {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.risk-html p {
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.risk-html ul,
+.risk-html ol {
+  margin: 0 0 8px;
+  padding-left: 1.3em;
+}
+
+.risk-html ul {
+  list-style: disc;
+}
+
+.risk-html ul ul {
+  list-style: circle;
+}
+
+.risk-html ul ul ul {
+  list-style: square;
+}
+
+.risk-html ol {
+  list-style: decimal;
+}
+
+.risk-html li ul,
+.risk-html li ol {
+  margin: 0;
+  padding-left: 1.1em;
+}
+
+/* Mise en forme de l'éditeur de l'admin (risks/richtext.py : gras, italique, petit, grand,
+   titre, liens) : rendue ici comme dans l'éditeur, sans que le titre du bloc n'interfère. */
+.risk-html strong,
+.risk-html b {
+  font-weight: 700;
+}
+
+.risk-html em,
+.risk-html i {
+  font-style: italic;
+}
+
+.risk-html small {
+  font-size: 0.85em;
+}
+
+.risk-html big {
+  font-size: 1.2em;
+}
+
+.risk-html h3 {
+  font-size: 1.15em;
+  font-weight: 700;
+  margin: 0.9em 0 0.4em;
+  color: var(--color-text);
+}
+
+.risk-html a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.risk-html > :first-child {
+  margin-top: 0;
+}
+
+.risk-html > :last-child {
+  margin-bottom: 0;
+}
+
+.risk-card details {
+  margin-top: 14px;
+}
+
+.risk-card summary {
+  cursor: pointer;
+  color: var(--color-accent);
+  font-size: 14px;
+  margin-bottom: 8px;
 }

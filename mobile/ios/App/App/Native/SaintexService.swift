@@ -28,6 +28,10 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
     private var contactEnCours = false
     private var contactSupplementaireDemande = false
     private var dernierJetonConnu: String?
+    #if DEBUG
+    /// Dernière position vue, EN MÉMOIRE seulement (jamais écrite sur disque, cf. spec §7).
+    private var dernierePositionVue: (latitude: Double, longitude: Double, date: Date)?
+    #endif
 
     /// Cycle de contact visé (spec §4) et marge : un réveil un peu en avance
     /// ne doit pas faire sauter un contact.
@@ -58,6 +62,17 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         #if DEBUG
         DetectionSelfTest.executer()
         SejoursSelfTest.executer()
+        // PROTOTYPE : séjours remis à zéro à chaque lancement en développement, pour pouvoir
+        // rejouer un scénario (la première position dans la zone redonne une alerte d'entrée).
+        store.etatsZones = [:]
+        // PROTOTYPE : argument de lancement Xcode `-delaiSortieSecondes 300` (Edit Scheme > Run >
+        // Arguments) pour rejouer le cas « retour après une longue absence » sans attendre 12 h.
+        // Absent : délai réel de 12 h. L'auto-test séjours utilise toujours le délai réel.
+        let delaiDebug = UserDefaults.standard.double(forKey: "delaiSortieSecondes")
+        if delaiDebug > 0 {
+            Sejours.delaiSortie = delaiDebug
+            store.journal("DEBUG : délai de sortie réduit à \(Int(delaiDebug)) s (réel : 12 h)")
+        }
         #endif
 
         gestionnaire.delegate = self
@@ -126,6 +141,15 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         } else {
             store.journal("Localisation à changement significatif indisponible sur cet appareil")
         }
+        #if DEBUG
+        // PROTOTYPE : le service à changement significatif ne livre pas de façon fiable les
+        // positions simulées par Xcode (déplacements < ~500 m ignorés, au plus une mise à jour
+        // toutes les ~5 min) : le suivi continu les reçoit toutes, y compris en arrière-plan
+        // (mode « location » déclaré dans Info.plist). Build Debug uniquement.
+        gestionnaire.allowsBackgroundLocationUpdates = true
+        gestionnaire.startUpdatingLocation()
+        store.journal("DEBUG : suivi continu de la position démarré")
+        #endif
     }
 
     private func libelle(_ statut: CLAuthorizationStatus) -> String {
@@ -143,6 +167,18 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let position = locations.last else { return }
+        #if DEBUG
+        // Le suivi continu (Debug) redonne la même position simulée environ chaque seconde, ce qui
+        // noie le journal (qui se tronque au-delà de 256 Ko) : une position identique à la
+        // précédente, vue il y a moins de 5 min, n'est ni journalisée ni réévaluée.
+        if let vue = dernierePositionVue,
+           vue.latitude == position.coordinate.latitude,
+           vue.longitude == position.coordinate.longitude,
+           Date().timeIntervalSince(vue.date) < 300 {
+            return
+        }
+        dernierePositionVue = (position.coordinate.latitude, position.coordinate.longitude, Date())
+        #endif
         let age = Int(Date().timeIntervalSince(position.timestamp))
         // Aucune coordonnée dans le journal.
         store.journal("Position reçue (précision ± \(Int(position.horizontalAccuracy)) m, âgée de \(age) s, appli : \(etatApplication()))")
@@ -285,6 +321,9 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         let maintenant = Date()
         guard contratActif(maintenant) else {
             store.journal("Contrat non actif : silence")
+            store.publierZonesAffichees(ZonesAffichees(
+                misAJourLe: DatesISO.texte(maintenant), contratActif: false, risques: [], conseils: [:]
+            ))
             retirerRappelsProgrammes()
             return
         }
@@ -306,6 +345,7 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
             maintenant: maintenant
         )
         store.etatsZones = resultat.etats
+        publierZonesActuelles(actives: actives, cache: cache, maintenant: maintenant)
         store.journal("Détection (\(origine)) : \(actives.count) endémie(s) active(s), \(resultat.entrees.count) entrée(s)")
         if !resultat.entrees.isEmpty {
             alerter(entrees: resultat.entrees, cache: cache, instant: maintenant)
@@ -356,6 +396,62 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
                 cacheVersion: cache.version
             ))
         }
+    }
+
+    // MARK: - Synthèse pour l'écran d'accueil
+
+    /// À l'ouverture de l'appli : demande une position fraîche pour que l'accueil reflète l'endroit
+    /// où se trouve le voyageur à cet instant (la réponse arrive par `didUpdateLocations`, qui
+    /// réévalue et republie la synthèse).
+    func actualiserPosition() {
+        let statut = statutLocalisation
+        guard statut == .authorizedAlways || statut == .authorizedWhenInUse else { return }
+        gestionnaire.requestLocation()
+    }
+
+    /// Publie, pour l'accueil de la coque Capacitor, les risques présents à la position
+    /// actuelle avec leurs recommandations (un seul bloc par risque, même si plusieurs endémies
+    /// le portent). Aucune coordonnée : la synthèse ne contient que les noms des zones et les
+    /// textes du cache.
+    private func publierZonesActuelles(actives: Set<Int>, cache: CacheMondial, maintenant: Date) {
+        let concernees = cache.endemies.filter { actives.contains($0.id) }
+        let parRisque = Dictionary(grouping: concernees, by: { $0.risque })
+
+        var risques: [RisqueAffiche] = []
+        for (code, endemies) in parRisque.sorted(by: { $0.key < $1.key }) {
+            guard let risque = cache.risques[code] else { continue }
+            var phrasesFr: [String] = []
+            var phrasesEn: [String] = []
+            for endemie in endemies.sorted(by: { $0.id < $1.id }) {
+                guard let cle = endemie.modulation, let modulation = cache.modulations[cle] else { continue }
+                let fr = modulation.fr.trimmingCharacters(in: .whitespacesAndNewlines)
+                let en = modulation.en.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !fr.isEmpty && !phrasesFr.contains(fr) { phrasesFr.append(fr) }
+                if !en.isEmpty && !phrasesEn.contains(en) { phrasesEn.append(en) }
+            }
+            risques.append(RisqueAffiche(
+                code: code,
+                zones: Array(Set(endemies.map { $0.zoneNom })).sorted(),
+                modulationFr: phrasesFr.isEmpty ? nil : phrasesFr.joined(separator: " "),
+                modulationEn: phrasesEn.isEmpty ? nil : phrasesEn.joined(separator: " "),
+                risque: risque
+            ))
+        }
+        // Fiches conseil visées par les recommandations affichées : elles voyagent avec la synthèse,
+        // pour que l'accueil les ouvre hors connexion.
+        var conseils: [String: CacheConseil] = [:]
+        if let toutes = cache.conseils {
+            for entree in risques {
+                for texte in [entree.risque.recommandationFr, entree.risque.recommandationEn] {
+                    for code in CodesConseils.extraire(texte) {
+                        if let conseil = toutes[code] { conseils[code] = conseil }
+                    }
+                }
+            }
+        }
+        store.publierZonesAffichees(ZonesAffichees(
+            misAJourLe: DatesISO.texte(maintenant), contratActif: true, risques: risques, conseils: conseils
+        ))
     }
 
     // MARK: - Rappels programmés
@@ -561,6 +657,29 @@ final class SaintexService: NSObject, CLLocationManagerDelegate {
         // Le cache a pu changer : réévaluer avec la dernière position connue.
         if let derniere = gestionnaire.location {
             evaluerSiRecente(derniere, origine: "après contact")
+        }
+    }
+}
+
+/// Affiche aussi les alertes quand l'appli est au PREMIER PLAN. Sans cela, le routeur de
+/// notifications de Capacitor (qui n'a ici aucun gestionnaire de notifications locales) répond
+/// « ne rien afficher » à iOS : une alerte reçue pendant que le voyageur a l'appli ouverte
+/// serait invisible, même dans le centre de notifications. Installé par
+/// `AppDelegate.applicationDidBecomeActive`, une fois la coque Capacitor chargée (qui
+/// s'attribue le rôle de délégué au chargement). iOS ne garde qu'une référence faible au
+/// délégué : l'instance partagée le maintient en vie.
+final class SaintexNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+    static let shared = SaintexNotificationDelegate()
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        if #available(iOS 14.0, *) {
+            completionHandler([.banner, .list, .sound])
+        } else {
+            completionHandler([.alert, .sound])
         }
     }
 }

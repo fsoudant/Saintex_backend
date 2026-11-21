@@ -118,8 +118,36 @@
       <button id="btn-verification-retour" class="secondary">Modifier mes informations</button>
     </section>
 
-    <!-- Écran 3 : accueil / contrat (spec §6 et §7 : subscription_status, contract_start_date) -->
+    <!-- Écran 3 : accueil — risques présents à la position ACTUELLE du téléphone, avec la conduite
+         à tenir (synthèse écrite par le module natif, cf. screens/zones.ts) -->
     <section id="screen-home" class="screen hidden">
+      <h2>Ma situation</h2>
+      <div id="zones-container">
+        <p class="loading">Analyse de votre position…</p>
+      </div>
+      <p id="zones-updated" class="note"></p>
+      <p class="note">
+        Votre position est analysée uniquement sur votre téléphone : elle n'est jamais envoyée au serveur.
+      </p>
+      <nav class="tabbar">
+        <button id="nav-home" class="active">Accueil</button>
+        <button id="nav-preferences">Préférences</button>
+      </nav>
+    </section>
+
+    <!-- Écran 5 : fiche conseil (cf. risks.models.Conseil) — ouverte depuis un lien d'une
+         recommandation, lue dans le cache : fonctionne hors connexion -->
+    <section id="screen-conseil" class="screen hidden">
+      <button id="btn-conseil-retour" class="back">‹ Retour</button>
+      <h2 id="conseil-titre"></h2>
+      <div id="conseil-contenu" class="risk-html"></div>
+      <p id="conseil-maj" class="note"></p>
+    </section>
+
+    <!-- Écran 4 : préférences — carte « Mon voyage » (spec §6 et §7 : subscription_status,
+         contract_start_date), puis préférences de notification (email_active, push_active,
+         reminder_delay) -->
+    <section id="screen-preferences" class="screen hidden">
       <h2>Mon voyage</h2>
       <div id="balance-card" class="card">
         <p class="loading">Chargement…</p>
@@ -132,14 +160,7 @@
         <button id="btn-home-start-save">Enregistrer la date</button>
         <p id="home-start-status" class="note error"></p>
       </div>
-      <nav class="tabbar">
-        <button id="nav-home" class="active">Accueil</button>
-        <button id="nav-preferences">Préférences</button>
-      </nav>
-    </section>
 
-    <!-- Écran 4 : préférences (spec §7 email_active, push_active, reminder_delay) -->
-    <section id="screen-preferences" class="screen hidden">
       <h2>Préférences de notification</h2>
 
       <label class="consent-row">

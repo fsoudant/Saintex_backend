@@ -23,7 +23,7 @@ from risks.cache import (
     phrase_alerte,
 )
 from risks.detection import zones_actives_pour_point
-from risks.models import Endemie, Modulation, Risque, Zone
+from risks.models import Conseil, Endemie, Modulation, Risque, Zone
 
 UTC = datetime.timezone.utc
 
@@ -227,6 +227,56 @@ class ConstruireCacheTests(_Fixtures, TestCase):
 
         self.risque.recommandation_fr = "<p>Nouvelle recommandation.</p>"
         self.risque.save()
+
+        self.assertNotEqual(construire_cache(self.point)["version"], v1)
+
+    def test_conseils_vises_transmis_avec_leur_contenu(self):
+        Conseil.objects.create(
+            code="moustiques", titre_fr="Moustiques", titre_en="Mosquitoes",
+            contenu_fr="<p>Répulsif.</p><script>x()</script>", contenu_en="<p>Repellent.</p>",
+        )
+        Conseil.objects.create(code="inutilise", titre_fr="Autre", titre_en="Other")
+        self.risque.recommandation_fr = '<p>Évitez les <a href="conseil:moustiques">piqûres</a>.</p>'
+        self.risque.save()
+
+        conseils = construire_cache(self.point)["conseils"]
+
+        # Seule la fiche visée voyage, avec son contenu assaini.
+        self.assertEqual(list(conseils), ["moustiques"])
+        self.assertEqual(conseils["moustiques"]["titre_fr"], "Moustiques")
+        self.assertEqual(conseils["moustiques"]["titre_en"], "Mosquitoes")
+        self.assertEqual(conseils["moustiques"]["contenu_fr"], "<p>Répulsif.</p>")
+        self.assertEqual(conseils["moustiques"]["contenu_en"], "<p>Repellent.</p>")
+        self.assertIn("modifie_le", conseils["moustiques"])
+
+    def test_conseil_vise_par_la_version_anglaise_seule(self):
+        Conseil.objects.create(code="diarrhee", titre_fr="Diarrhée", titre_en="Diarrhoea")
+        self.risque.recommandation_en = '<p>Mind <a href="conseil:diarrhee">water</a>.</p>'
+        self.risque.save()
+
+        self.assertEqual(list(construire_cache(self.point)["conseils"]), ["diarrhee"])
+
+    def test_lien_vers_une_fiche_inexistante_ignore(self):
+        self.risque.recommandation_fr = '<p><a href="conseil:fantome">x</a></p>'
+        self.risque.save()
+
+        self.assertEqual(construire_cache(self.point)["conseils"], {})
+
+    def test_sans_lien_pas_de_conseil(self):
+        Conseil.objects.create(code="moustiques", titre_fr="Moustiques", titre_en="Mosquitoes")
+
+        self.assertEqual(construire_cache(self.point)["conseils"], {})
+
+    def test_modifier_une_fiche_change_la_version_du_cache(self):
+        conseil = Conseil.objects.create(
+            code="moustiques", titre_fr="Moustiques", titre_en="Mosquitoes", contenu_fr="<p>V1</p>",
+        )
+        self.risque.recommandation_fr = '<p><a href="conseil:moustiques">x</a></p>'
+        self.risque.save()
+        v1 = construire_cache(self.point)["version"]
+
+        conseil.contenu_fr = "<p>V2</p>"
+        conseil.save()
 
         self.assertNotEqual(construire_cache(self.point)["version"], v1)
 

@@ -7,7 +7,7 @@ from django.db import models
 from django.test import SimpleTestCase
 
 from risks.models import Risque
-from risks.richtext import html_to_text, looks_like_html, sanitize_html, text_to_html
+from risks.richtext import codes_conseils, html_to_text, looks_like_html, sanitize_html, text_to_html
 from risks.widgets import RichTextWidget
 
 
@@ -74,6 +74,34 @@ class SanitizeHtmlTests(SimpleTestCase):
         premier = sanitize_html("<p>a <b>b</b> <a href=\"https://exemple.org\">c</a></p>")
         self.assertEqual(sanitize_html(premier), premier)
 
+    def test_lien_vers_une_fiche_conseil_conserve(self):
+        propre = sanitize_html('<p>Évitez les <a href="conseil:moustiques">piqûres</a>.</p>')
+        self.assertIn('href="conseil:moustiques"', propre)
+        self.assertEqual(sanitize_html(propre), propre)
+
+    def test_autres_schemas_toujours_refuses(self):
+        propre = sanitize_html('<a href="javascript:alert(1)">a</a><a href="data:text/html,x">b</a>')
+        self.assertNotIn("href", propre)
+
+
+class CodesConseilsTests(SimpleTestCase):
+    def test_extrait_les_codes_sans_doublon_dans_l_ordre(self):
+        html = sanitize_html(
+            '<p><a href="conseil:moustiques">a</a> <a href="https://who.int">b</a> '
+            '<a href="conseil:diarrhee">c</a> <a href="conseil:moustiques">d</a></p>'
+        )
+        self.assertEqual(codes_conseils(html), ["moustiques", "diarrhee"])
+
+    def test_aucun_lien(self):
+        self.assertEqual(codes_conseils("<p>Rien</p>"), [])
+        self.assertEqual(codes_conseils(""), [])
+        self.assertEqual(codes_conseils(None), [])
+
+    def test_code_mal_forme_renvoye_tel_quel(self):
+        # Au contrôle de l'appelant (l'admin le refuse : fiche inconnue).
+        html = sanitize_html('<a href="conseil:Mauvais code">x</a>')
+        self.assertEqual(codes_conseils(html), ["Mauvais code"])
+
 
 class HtmlToTextTests(SimpleTestCase):
     def test_paragraphes_et_br(self):
@@ -89,6 +117,13 @@ class HtmlToTextTests(SimpleTestCase):
         self.assertEqual(
             html_to_text('<a href="https://www.who.int">https://www.who.int</a>'),
             "https://www.who.int",
+        )
+
+    def test_lien_vers_une_fiche_conseil_garde_le_texte_seul(self):
+        # Pas d'adresse « conseil:... » dans un SMS ou une notification.
+        self.assertEqual(
+            html_to_text('<p>Évitez les <a href="conseil:moustiques">piqûres de moustiques</a>.</p>'),
+            "Évitez les piqûres de moustiques.",
         )
 
     def test_liste_a_puces(self):
@@ -148,3 +183,7 @@ class RichTextWidgetTests(SimpleTestCase):
         rendu = RichTextWidget().render("recommandation_fr", "", attrs={"id": "id_recommandation_fr"})
         self.assertIn('name="recommandation_fr"', rendu)
         self.assertIn('data-cmd="link"', rendu)
+
+    def test_pas_de_bouton_conseil_par_defaut(self):
+        rendu = RichTextWidget().render("contenu_fr", "", attrs={"id": "id_contenu_fr"})
+        self.assertNotIn('data-cmd="conseil"', rendu)

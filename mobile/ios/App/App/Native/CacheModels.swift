@@ -73,6 +73,39 @@ struct CacheEndemie: Codable {
     }
 }
 
+struct CacheConseil: Codable {
+    let titreFr: String
+    let titreEn: String
+    let contenuFr: String
+    let contenuEn: String
+    let modifieLe: String?
+
+    enum CodingKeys: String, CodingKey {
+        case titreFr = "titre_fr"
+        case titreEn = "titre_en"
+        case contenuFr = "contenu_fr"
+        case contenuEn = "contenu_en"
+        case modifieLe = "modifie_le"
+    }
+}
+
+/// Liens `conseil:<code>` d'un texte de recommandation (HTML assaini par le serveur, attributs
+/// entre guillemets doubles) : codes des fiches conseil qu'il vise, sans doublon.
+enum CodesConseils {
+    private static let motif = try! NSRegularExpression(pattern: #"href="conseil:([^"]*)""#)
+
+    static func extraire(_ html: String) -> [String] {
+        let plage = NSRange(html.startIndex..., in: html)
+        var codes: [String] = []
+        for resultat in motif.matches(in: html, range: plage) where resultat.numberOfRanges > 1 {
+            guard let intervalle = Range(resultat.range(at: 1), in: html) else { continue }
+            let code = String(html[intervalle])
+            if !codes.contains(code) { codes.append(code) }
+        }
+        return codes
+    }
+}
+
 struct CacheMondial: Codable {
     let version: String
     let genereLe: String
@@ -80,6 +113,8 @@ struct CacheMondial: Codable {
     let rayonKm: Double?
     let risques: [String: CacheRisque]
     let modulations: [String: CacheModulation]
+    /// Fiches conseil visées par les recommandations (absent d'un ancien cache : nil).
+    let conseils: [String: CacheConseil]?
     let geometries: [String: CacheGeometrie]
     let endemies: [CacheEndemie]
 
@@ -90,8 +125,49 @@ struct CacheMondial: Codable {
         case rayonKm = "rayon_km"
         case risques
         case modulations
+        case conseils
         case geometries
         case endemies
+    }
+}
+
+// MARK: - Synthèse pour l'écran d'accueil
+
+/// Un risque présent à la position actuelle du téléphone (plusieurs endémies du même risque
+/// n'en font qu'un), tel que l'affiche l'accueil de la coque Capacitor.
+struct RisqueAffiche: Encodable {
+    let code: String
+    let zones: [String]
+    let modulationFr: String?
+    let modulationEn: String?
+    let risque: CacheRisque
+
+    enum CodingKeys: String, CodingKey {
+        case code
+        case zones
+        case modulationFr = "modulation_fr"
+        case modulationEn = "modulation_en"
+        case risque
+    }
+}
+
+/// Synthèse écrite par le module natif dans UserDefaults (clé lue par @capacitor/preferences).
+/// Aucune coordonnée : seulement les risques et leurs recommandations, issus du cache.
+struct ZonesAffichees: Encodable {
+    let misAJourLe: String
+    /// Faux avant le début et après la fin du contrat : le téléphone est alors muet, et une liste
+    /// vide ne signifie pas « pas de risque ici ».
+    let contratActif: Bool
+    let risques: [RisqueAffiche]
+    /// Fiches conseil visées par les recommandations de `risques` (liens `conseil:<code>`), pour
+    /// que l'accueil les ouvre sans rien demander au serveur.
+    let conseils: [String: CacheConseil]
+
+    enum CodingKeys: String, CodingKey {
+        case misAJourLe = "mis_a_jour_le"
+        case contratActif = "contrat_actif"
+        case risques
+        case conseils
     }
 }
 

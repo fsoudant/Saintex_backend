@@ -20,6 +20,12 @@ Tailles : trois niveaux seulement, portés par des balises sémantiques
 (`<small>`, `<big>`, `<h3>` pour un titre) plutôt que par des tailles libres
 en pixels — cohérent entre email, écran de l'appli et admin, et impossible
 à "casser" depuis l'éditeur.
+
+Fiches conseil (novembre 2026) : un lien de la forme `conseil:<code>` renvoie
+vers une fiche `Conseil` partagée entre plusieurs risques (ex. protection
+contre les moustiques). Ce n'est pas une adresse web : l'appli ouvre la fiche
+depuis son cache, sans réseau. Le schéma est accepté par `sanitize_html` ; les
+canaux sans HTML (cf. `html_to_text`) ne gardent que le texte du lien.
 """
 
 import html
@@ -32,12 +38,28 @@ TAGS_AUTORISES = {
     "p", "br", "strong", "b", "em", "i", "u", "a", "ul", "ol", "li", "h3", "small", "big",
 }
 ATTRIBUTS_AUTORISES = {"a": {"href"}}
-SCHEMES_AUTORISES = {"http", "https", "mailto"}
+# Schéma interne des liens vers une fiche Conseil (ex. « conseil:moustiques »).
+PREFIXE_CONSEIL = "conseil:"
+SCHEMES_AUTORISES = {"http", "https", "mailto", PREFIXE_CONSEIL.rstrip(":")}
+
+_LIEN_CONSEIL_RE = re.compile(r'href="' + re.escape(PREFIXE_CONSEIL) + r'([^"]*)"')
 
 _BALISE_HTML_RE = re.compile(
     r"</?(?:p|br|strong|b|em|i|u|a|ul|ol|li|h[1-6]|small|big|span|div|font)\b", re.IGNORECASE
 )
 _DIV_RE = re.compile(r"<(/?)div\b[^>]*>", re.IGNORECASE)
+
+
+def codes_conseils(value):
+    """Codes des fiches Conseil visées par les liens `conseil:<code>` d'un HTML
+    DÉJÀ ASSAINI (les attributs y sont normalisés entre guillemets doubles).
+    Un code mal formé est renvoyé tel quel : c'est à l'appelant de vérifier qu'il
+    existe. Sans doublon, dans l'ordre d'apparition."""
+    codes = []
+    for code in _LIEN_CONSEIL_RE.findall(value or ""):
+        if code not in codes:
+            codes.append(code)
+    return codes
 
 
 def looks_like_html(value):
@@ -132,7 +154,8 @@ class _ConvertisseurTexte(HTMLParser):
         elif tag == "a" and self._liens:
             href, debut = self._liens.pop()
             texte_lien = self.out[debut:].strip()
-            if href and texte_lien != href:
+            # Un lien vers une fiche Conseil n'a pas d'adresse à montrer : texte seul.
+            if href and not href.startswith(PREFIXE_CONSEIL) and texte_lien != href:
                 self.out += f" ({href})"
 
     def handle_data(self, data):

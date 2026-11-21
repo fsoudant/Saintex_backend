@@ -1,4 +1,5 @@
 import UIKit
+import UserNotifications
 import Capacitor
 
 @UIApplicationMain
@@ -29,6 +30,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        // Les alertes de Saintex doivent aussi s'afficher quand l'appli est ouverte (cf.
+        // SaintexNotificationDelegate). Fait ici et non au lancement : la coque Capacitor
+        // s'attribue le rôle de délégué de notifications en se chargeant, après didFinishLaunching.
+        UNUserNotificationCenter.current().delegate = SaintexNotificationDelegate.shared
+        // Position fraîche à l'ouverture, pour que l'accueil montre les risques d'ici et maintenant.
+        SaintexService.shared.actualiserPosition()
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 

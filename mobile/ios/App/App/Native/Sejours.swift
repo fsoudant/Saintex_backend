@@ -55,7 +55,15 @@ enum Sejours {
     /// Durée dehors au-delà de laquelle un retour compte comme une nouvelle entrée.
     /// 12 h : un aller-retour dans la journée, ou une oscillation de GPS, n'est pas une
     /// nouvelle entrée ; une nuit passée hors de la zone, si.
-    static let delaiSortie: TimeInterval = 12 * 3600
+    static let delaiSortieReel: TimeInterval = 12 * 3600
+
+    #if DEBUG
+    /// Surchargeable en Debug (argument de lancement `-delaiSortieSecondes`, cf. SaintexService.demarrer)
+    /// pour rejouer le cas « retour après une longue absence » sans attendre 12 h.
+    static var delaiSortie: TimeInterval = delaiSortieReel
+    #else
+    static let delaiSortie: TimeInterval = delaiSortieReel
+    #endif
 
     /// Heure locale (de 0 à 23) des rappels : en matinée, jamais en pleine nuit.
     static let heureRappel = 9
@@ -63,12 +71,15 @@ enum Sejours {
     /// - Parameters:
     ///   - actives: endémies dont la zone contient la position actuelle.
     ///   - etats: séjours en cours (résultat de l'appel précédent).
+    ///   - delaiSortie: durée dehors au-delà de laquelle un retour est une nouvelle entrée (par
+    ///     défaut `Sejours.delaiSortie` ; l'auto-test passe `delaiSortieReel` explicitement).
     /// - Returns: les endémies où l'on vient d'ENTRER (à signaler, par ordre croissant
     ///   d'identifiant) et le nouvel état à conserver.
     static func evaluer(
         actives: Set<Int>,
         etats: [Int: EtatZone],
-        maintenant: Date
+        maintenant: Date,
+        delaiSortie: TimeInterval = Sejours.delaiSortie
     ) -> (entrees: [Int], etats: [Int: EtatZone]) {
         var nouveaux = etats
         var entrees: [Int] = []

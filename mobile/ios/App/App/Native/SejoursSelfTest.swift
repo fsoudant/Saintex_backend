@@ -14,7 +14,9 @@ enum SejoursSelfTest {
         var etats: [Int: EtatZone] = [:]
         var resultat: [[Int]] = []
         for (heures, actives) in observations {
-            let sortie = Sejours.evaluer(actives: actives, etats: etats, maintenant: h(heures))
+            let sortie = Sejours.evaluer(
+                actives: actives, etats: etats, maintenant: h(heures), delaiSortie: Sejours.delaiSortieReel
+            )
             etats = sortie.etats
             resultat.append(sortie.entrees)
         }

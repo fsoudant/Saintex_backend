@@ -94,9 +94,23 @@ class RichTextWidget(forms.Textarea):
 
     template_name = "widgets/richtext.html"
 
+    def __init__(self, attrs=None, avec_conseils=False):
+        # avec_conseils : ajoute le bouton « Conseil », qui relie le texte sélectionné à une
+        # fiche Conseil (recommandations des risques ; pas dans les fiches elles-mêmes, qui ne
+        # renvoient pas vers d'autres fiches).
+        super().__init__(attrs)
+        self.avec_conseils = avec_conseils
+
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
         context["widget"]["value_html"] = sanitize_html(value if isinstance(value, str) else "")
+        context["widget"]["avec_conseils"] = self.avec_conseils
+        if self.avec_conseils:
+            from .models import Conseil  # import tardif : évite une dépendance au chargement
+
+            context["widget"]["conseils"] = [
+                {"code": c.code, "titre": c.titre_fr} for c in Conseil.objects.order_by("titre_fr")
+            ]
         return context
 
 

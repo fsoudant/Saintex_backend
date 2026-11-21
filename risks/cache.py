@@ -47,6 +47,14 @@ les textes et géométries partagés entre endémies) :
           "saison": {"debut": 8, "fin": 11} | null
         }
       },
+      "conseils": {                     # fiches conseil visées par les recommandations ci-dessus
+        "moustiques": {                 # (liens `conseil:<code>`, cf. risks.richtext) ; {} si aucune
+          "titre_fr", "titre_en",
+          "contenu_fr": "<p>…</p>",     # HTML assaini, sans renvoi vers une autre fiche
+          "contenu_en": "<p>…</p>",
+          "modifie_le": iso
+        }
+      },
       "geometries": {                   # géométries EFFECTIVES, simplifiées
         "z12": {"type": "MultiPolygon", "coordinates": [...]},   # zone seule
         "e345": {...}                                             # zone moins zone exclue
@@ -91,8 +99,8 @@ from django.db.models import Q
 from django.utils import timezone
 from shapely.validation import make_valid
 
-from .models import Endemie
-from .richtext import sanitize_html
+from .models import Conseil, Endemie
+from .richtext import codes_conseils, sanitize_html
 
 # ≈ 1 km en degrés (cf. spec §5 : précision cible kilométrique, simplification
 # de l'ordre du kilomètre sans perte de sens pour l'utilisateur).
@@ -253,6 +261,31 @@ def message_detail_html(risque, modulation=None, langue="fr"):
     return "".join(blocs)
 
 
+def _conseils_vises(risques):
+    """Fiches Conseil visées par les recommandations des `risques` du cache (dict
+    construit par `construire_cache`) : seules celles-ci voyagent, pas tout le
+    catalogue. Un lien vers une fiche inexistante est simplement ignoré (l'appli
+    l'affiche alors comme du texte)."""
+    codes = []
+    for risque in risques.values():
+        for champ in ("recommandation_fr", "recommandation_en"):
+            for code in codes_conseils(risque[champ]):
+                if code not in codes:
+                    codes.append(code)
+    if not codes:
+        return {}
+    return {
+        conseil.pk: {
+            "titre_fr": conseil.titre_fr,
+            "titre_en": conseil.titre_en,
+            "contenu_fr": sanitize_html(conseil.contenu_fr),
+            "contenu_en": sanitize_html(conseil.contenu_en),
+            "modifie_le": _iso(conseil.modifie_le),
+        }
+        for conseil in Conseil.objects.filter(pk__in=codes).order_by("pk")
+    }
+
+
 def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE_SIMPLIFICATION_DEG):
     """Construit le cache : par défaut le cache MONDIAL (toutes les zones à
     risque). Si `point` (GEOS Point, srid 4326) et `rayon_km` sont fournis,
@@ -337,6 +370,7 @@ def construire_cache(point=None, rayon_km=None, moment=None, tolerance=TOLERANCE
         "rayon_km": rayon_km,
         "risques": risques,
         "modulations": modulations,
+        "conseils": _conseils_vises(risques),
         "geometries": geometries,
         "endemies": entrees,
     }

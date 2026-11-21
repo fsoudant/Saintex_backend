@@ -14,7 +14,7 @@ from django.contrib.gis.db import models as gis_models
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from .richtext import sanitize_html
+from .richtext import PREFIXE_CONSEIL, sanitize_html
 
 MOIS_CHOICES = [
     (1, "Janvier"), (2, "Février"), (3, "Mars"), (4, "Avril"),
@@ -128,6 +128,59 @@ class Risque(models.Model):
         self.recommandation_fr = sanitize_html(self.recommandation_fr)
         self.recommandation_en = sanitize_html(self.recommandation_en)
         super().save(*args, **kwargs)
+
+
+class Conseil(models.Model):
+    """Fiche conseil partagée entre plusieurs risques (novembre 2026).
+
+    Certains conseils valent pour de nombreux risques (ex. se protéger des
+    piqûres de moustiques pour le paludisme, la dengue, le chikungunya...) :
+    plutôt que de les recopier dans chaque recommandation, on les rédige et on
+    les fait valider une seule fois, ici. Une recommandation y renvoie par un
+    lien placé sur le texte voulu : `conseil:<code>` (cf. risks.richtext).
+
+    Les fiches voyagent dans le cache hors ligne avec les risques qui y
+    renvoient (cf. risks.cache). Une fiche ne renvoie pas elle-même vers une
+    autre fiche (pas de chaînage, donc pas de boucle).
+    """
+
+    code = models.SlugField(
+        max_length=40,
+        primary_key=True,
+        help_text=(
+            "Identifiant court sans espace ni accent (ex. moustiques, diarrhee). Il sert dans "
+            "les liens des recommandations : il ne peut plus être modifié une fois la fiche créée."
+        ),
+    )
+    titre_fr = models.CharField(max_length=256)
+    titre_en = models.CharField(max_length=256)
+    contenu_fr = models.TextField(
+        blank=True,
+        help_text="Texte enrichi validé par l'équipe médicale (cf. risks.richtext).",
+    )
+    contenu_en = models.TextField(blank=True)
+    modifie_le = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["titre_fr"]
+        verbose_name = "fiche conseil"
+        verbose_name_plural = "fiches conseil"
+
+    def __str__(self):
+        return self.titre_fr
+
+    def save(self, *args, **kwargs):
+        # Même assainissement que les recommandations, quelle que soit la source d'écriture.
+        self.contenu_fr = sanitize_html(self.contenu_fr)
+        self.contenu_en = sanitize_html(self.contenu_en)
+        super().save(*args, **kwargs)
+
+    def risques_utilisateurs(self):
+        """Risques dont une recommandation renvoie vers cette fiche."""
+        lien = f'href="{PREFIXE_CONSEIL}{self.pk}"'
+        return Risque.objects.filter(
+            models.Q(recommandation_fr__contains=lien) | models.Q(recommandation_en__contains=lien)
+        )
 
 
 class Modulation(models.Model):

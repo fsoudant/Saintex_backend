@@ -27,6 +27,9 @@ final class SaintexStore {
         static let etatsZones = "saintex.native.etatsZones"
         static let delaiRappel = "saintex.native.delaiRappel"
         static let rapports = "saintex.native.rapportsEnAttente"
+        // Synthèse des risques à la position actuelle, lue par l'accueil de la coque Capacitor
+        // (même préfixe que le jeton ; clé JS : "saintex_zones_actuelles").
+        static let zonesAffichees = "CapacitorStorage.saintex_zones_actuelles"
     }
 
     private init() {
@@ -113,6 +116,15 @@ final class SaintexStore {
     var delaiRappel: DelaiRappel {
         get { DelaiRappel(rawValue: defaults.string(forKey: Cle.delaiRappel) ?? "") ?? .defaut }
         set { defaults.set(newValue.rawValue, forKey: Cle.delaiRappel) }
+    }
+
+    // MARK: - Synthèse pour l'écran d'accueil
+
+    /// Écrit les risques de la position actuelle (JSON) pour l'accueil. Aucune coordonnée.
+    func publierZonesAffichees(_ zones: ZonesAffichees) {
+        guard let data = try? JSONEncoder().encode(zones),
+              let texte = String(data: data, encoding: .utf8) else { return }
+        defaults.set(texte, forKey: Cle.zonesAffichees)
     }
 
     // MARK: - Rapports d'alerte en attente de remontée

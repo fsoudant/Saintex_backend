@@ -145,3 +145,31 @@ export interface Contrat {
   horizon_max_mois: number;
   subscription_status: string; // trial | active | expired | cancelled
 }
+
+// Synthèse écrite par le module natif (UserDefaults, clé « saintex_zones_actuelles », lue via
+// @capacitor/preferences) : les risques présents à la position ACTUELLE du téléphone, avec
+// leurs textes tirés du cache. Aucune coordonnée. Reflet de `ZonesAffichees` (CacheModels.swift).
+export interface RisqueAffiche {
+  code: string;
+  zones: string[]; // noms des zones concernées
+  modulation_fr?: string; // précision saisonnière ou locale, facultative
+  modulation_en?: string;
+  risque: RisqueCache;
+}
+
+export interface ZonesAffichees {
+  mis_a_jour_le: string; // ISO 8601 : dernier calcul fait par le téléphone
+  contrat_actif: boolean; // faux : téléphone muet (avant le début / après la fin du contrat)
+  risques: RisqueAffiche[]; // vide et contrat actif : aucune zone à risque ici
+  conseils?: Record<string, ConseilCache>; // fiches visées par les recommandations ci-dessus
+}
+
+// Fiche conseil partagée entre plusieurs risques (cf. risks.models.Conseil), telle qu'elle est
+// transmise dans le cache puis dans la synthèse ci-dessus.
+export interface ConseilCache {
+  titre_fr: string;
+  titre_en: string;
+  contenu_fr: string; // HTML assaini
+  contenu_en: string;
+  modifie_le?: string; // ISO 8601
+}

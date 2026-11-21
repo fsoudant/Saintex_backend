@@ -5,6 +5,7 @@ import { initTunnelScreen } from './screens/tunnel';
 import { initVerificationScreen } from './screens/verification';
 import { initHomeScreen, renderBalanceCard } from './screens/home';
 import { initPreferencesScreen, loadPreferencesIntoForm } from './screens/preferences';
+import { initZonesScreen, renderZones } from './screens/zones';
 
 // Point d'entrée de la coque Capacitor. Ne fait QUE de l'UI : le vrai
 // travail (polling GPS 6h, démarrage au boot, notification locale hors
@@ -16,12 +17,14 @@ async function bootstrap(): Promise<void> {
   initVerificationScreen();
   initHomeScreen();
   initPreferencesScreen();
+  initZonesScreen();
 
   const alreadyOnboarded = await isOnboardingDone();
   if (alreadyOnboarded) {
     showScreen('home');
-    await renderBalanceCard();
-    await loadPreferencesIntoForm();
+    // Accueil : risques à la position actuelle ; carte « Mon voyage » et préférences :
+    // onglet Préférences.
+    await Promise.all([renderZones(), renderBalanceCard(), loadPreferencesIntoForm()]);
   } else {
     showScreen('onboarding');
   }

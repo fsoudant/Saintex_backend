@@ -10,6 +10,13 @@
     <button type="button" data-cmd="indent" title="Descendre d'un niveau (sous-liste) — ou touche Tab dans une liste">→ Niveau</button>
     <button type="button" data-cmd="outdent" title="Remonter d'un niveau — ou Maj+Tab dans une liste">← Niveau</button>
     <button type="button" data-cmd="link" title="Insérer un lien (sélectionner d'abord le texte)">🔗 Lien</button>
+    {% if widget.avec_conseils %}
+    <button type="button" data-cmd="conseil" title="Relier le texte sélectionné à une fiche conseil (ex. protection contre les moustiques)">🔗 Conseil</button>
+    <select class="saintex-rte-conseil" hidden>
+      <option value="">— Choisir la fiche conseil —</option>
+      {% for conseil in widget.conseils %}<option value="{{ conseil.code }}">{{ conseil.titre }}</option>{% endfor %}
+    </select>
+    {% endif %}
     <button type="button" data-cmd="unlink" title="Retirer le lien">Retirer le lien</button>
     <button type="button" data-cmd="clear" title="Effacer la mise en forme de la sélection">Effacer le format</button>
   </div>
@@ -23,6 +30,8 @@
   .saintex-rte-area { min-height: 8em; padding: 8px; background: var(--body-bg, #fff); color: var(--body-fg, #000); border: 1px solid var(--border-color, #ccc); overflow: auto; }
   .saintex-rte-area p { margin: 0 0 .7em; }
   .saintex-rte-area a { color: #2563eb; text-decoration: underline; }
+  /* Lien vers une fiche conseil (et non vers un site) : soulignement pointillé. */
+  .saintex-rte-area a[href^="conseil:"] { text-decoration-style: dotted; }
   /* Retrait des listes : le défaut du navigateur (40px par niveau) est large. */
   .saintex-rte-area ul, .saintex-rte-area ol { margin: 0 0 .5em; padding-left: 1.3em; }
   .saintex-rte-area li ul, .saintex-rte-area li ol { margin: 0; padding-left: 1.1em; }
@@ -148,6 +157,39 @@
         return true;
       }
 
+      // --- Lien vers une fiche conseil --------------------------------------
+      // Le bouton « Conseil » mémorise la sélection, affiche la liste des fiches, puis pose
+      // un lien `conseil:<code>` sur le texte mémorisé (l'ouverture de la liste ferait
+      // perdre la sélection au champ).
+      var conseilSelect = root.querySelector(".saintex-rte-conseil");
+      var savedRange = null;
+
+      function addConseilLink() {
+        if (!conseilSelect) return;
+        if (selectedHtml() === null) { alert("Sélectionnez d'abord le texte qui servira de lien (ex. « piqûres de moustiques »)."); return; }
+        if (conseilSelect.options.length < 2) { alert("Aucune fiche conseil n'existe encore : créez-en une dans la rubrique « Fiches conseil »."); return; }
+        savedRange = window.getSelection().getRangeAt(0).cloneRange();
+        conseilSelect.value = "";
+        conseilSelect.hidden = false;
+        conseilSelect.focus();
+      }
+
+      if (conseilSelect) {
+        conseilSelect.addEventListener("change", function () {
+          var code = conseilSelect.value;
+          conseilSelect.hidden = true;
+          if (!code || !savedRange) return;
+          area.focus();
+          var sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(savedRange);
+          savedRange = null;
+          document.execCommand("createLink", false, "conseil:" + code);
+          sync();
+        });
+        conseilSelect.addEventListener("blur", function () { conseilSelect.hidden = true; });
+      }
+
       var actions = {
         bold: function () { document.execCommand("bold"); },
         italic: function () { document.execCommand("italic"); },
@@ -159,6 +201,7 @@
         indent: function () { if (!indentItem()) alert("Placez d'abord le curseur dans un élément de liste."); },
         outdent: function () { if (!outdentItem()) alert("Placez d'abord le curseur dans un élément de liste."); },
         link: addLink,
+        conseil: addConseilLink,
         unlink: function () { document.execCommand("unlink"); },
         clear: function () { document.execCommand("removeFormat"); document.execCommand("formatBlock", false, "p"); }
       };

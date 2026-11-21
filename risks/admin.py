@@ -20,8 +20,8 @@ import shapely.wkt
 
 from . import geojson_io
 from .geo_utils import _shift_west_parts, touches_antimeridian, zone_center_lonlat
-from .models import MOIS_CHOICES, Endemie, Modulation, Pays, Risque, Zone
-from .richtext import html_to_text
+from .models import MOIS_CHOICES, Conseil, Endemie, Modulation, Pays, Risque, Zone
+from .richtext import codes_conseils, html_to_text, sanitize_html
 from .widgets import OSMFrWidget, RGBColorField, RichTextWidget
 
 _MOIS_LABELS = dict(MOIS_CHOICES)
@@ -322,8 +322,34 @@ class ZoneAdmin(admin.ModelAdmin):
         )
 
 
+class RisqueAdminForm(forms.ModelForm):
+    """Vérifie que chaque lien `conseil:<code>` d'une recommandation vise une fiche
+    Conseil qui existe (un code mal tapé ou une fiche supprimée donnerait sinon un lien
+    mort dans l'appli)."""
+
+    def _verifier_conseils(self, champ):
+        valeur = self.cleaned_data.get(champ) or ""
+        demandes = codes_conseils(sanitize_html(valeur))
+        if demandes:
+            connus = set(Conseil.objects.filter(pk__in=demandes).values_list("pk", flat=True))
+            inconnus = [code for code in demandes if code not in connus]
+            if inconnus:
+                raise ValidationError(
+                    "Fiche conseil inconnue : %(codes)s. Retirez ce lien ou créez la fiche.",
+                    params={"codes": ", ".join(inconnus)},
+                )
+        return valeur
+
+    def clean_recommandation_fr(self):
+        return self._verifier_conseils("recommandation_fr")
+
+    def clean_recommandation_en(self):
+        return self._verifier_conseils("recommandation_en")
+
+
 @admin.register(Risque)
 class RisqueAdmin(admin.ModelAdmin):
+    form = RisqueAdminForm
     list_display = ("code", "libelle_fr", "libelle_en", "recommandation_fr_courte", "ordre")
     search_fields = ("code", "libelle_fr", "libelle_en")
     ordering = ("ordre", "code")
@@ -332,8 +358,8 @@ class RisqueAdmin(admin.ModelAdmin):
         if db_field.name == "couleur_legende":
             return RGBColorField(help_text=db_field.help_text)
         if db_field.name in ("recommandation_fr", "recommandation_en"):
-            # Texte enrichi (gras, italique, taille, liens...) — cf. risks.richtext.
-            kwargs["widget"] = RichTextWidget
+            # Texte enrichi (gras, italique, taille, liens, fiches conseil...) — cf. risks.richtext.
+            kwargs["widget"] = RichTextWidget(avec_conseils=True)
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     @admin.display(description="Recommandation (fr)", ordering="recommandation_fr")
@@ -346,6 +372,52 @@ class RisqueAdmin(admin.ModelAdmin):
             texte,
             Truncator(texte).chars(80),
         )
+
+
+class ConseilAdminForm(forms.ModelForm):
+    """Une fiche conseil ne renvoie pas vers une autre fiche (pas de chaînage : pas de
+    boucle possible, et une seule profondeur de lecture dans l'appli)."""
+
+    def _sans_renvoi(self, champ):
+        valeur = self.cleaned_data.get(champ) or ""
+        if codes_conseils(sanitize_html(valeur)):
+            raise ValidationError("Une fiche conseil ne peut pas renvoyer vers une autre fiche conseil.")
+        return valeur
+
+    def clean_contenu_fr(self):
+        return self._sans_renvoi("contenu_fr")
+
+    def clean_contenu_en(self):
+        return self._sans_renvoi("contenu_en")
+
+
+@admin.register(Conseil)
+class ConseilAdmin(admin.ModelAdmin):
+    form = ConseilAdminForm
+    list_display = ("titre_fr", "code", "utilisee_par", "modifie_le")
+    search_fields = ("code", "titre_fr", "titre_en")
+    ordering = ("titre_fr",)
+
+    def get_readonly_fields(self, request, obj=None):
+        # Le code sert dans les liens des recommandations : il est figé après la création.
+        champs = ("modifie_le",)
+        return ("code", *champs) if obj is not None else champs
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name in ("contenu_fr", "contenu_en"):
+            kwargs["widget"] = RichTextWidget()  # sans bouton « Conseil » : pas de renvoi entre fiches
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+    @admin.display(description="Utilisée par")
+    def utilisee_par(self, obj):
+        codes = [risque.code for risque in obj.risques_utilisateurs()]
+        return ", ".join(codes) if codes else "—"
+
+    def has_delete_permission(self, request, obj=None):
+        # Supprimer une fiche encore visée par une recommandation laisserait un lien mort.
+        if obj is not None and obj.risques_utilisateurs().exists():
+            return False
+        return super().has_delete_permission(request, obj)
 
 
 @admin.register(Modulation)
