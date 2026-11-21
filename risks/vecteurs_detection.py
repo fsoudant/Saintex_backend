@@ -94,6 +94,8 @@ CACHE_TEST = {
         "SAISON_ETE": _modulation({"debut": 6, "fin": 9}, "Juin à septembre"),
         "SAISON_HIVER": _modulation({"debut": 11, "fin": 2}, "Novembre à février"),
     },
+    # Fiches conseil visées par les recommandations (aucune ici : la détection n'en dépend pas).
+    "conseils": {},
     "geometries": {
         # Carré simple.
         "z1": {"type": "MultiPolygon", "coordinates": [[_rect(10, 10, 12, 12)]]},
